@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'keep_up'
+
+def run_or_raise(command)
+  puts "Running #{command}"
+  success = system command
+  raise unless success
+end
+
+def run
+  run_or_raise 'bundle'
+  run_or_raise 'bundle exec rake'
+end
+
+run
