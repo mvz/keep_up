@@ -1,6 +1,13 @@
 #!/usr/bin/env ruby
 
 require 'keep_up'
+require 'bundler'
+
+@local = true
+
+def bundle(command)
+  system "bundle #{command} #{'--local' if @local}"
+end
 
 def run_or_raise(command)
   puts "Running #{command}"
@@ -8,12 +15,31 @@ def run_or_raise(command)
   raise unless success
 end
 
+def bundle_outdated?
+  success = bundle 'outdated'
+  if success
+    puts 'Bundle up to date!'
+  else
+    puts 'Bundle is outdated!'
+  end
+  !success
+end
+
 def run
-  run_or_raise 'bundle'
-  #
-  # bundle outdated
-  # return if nothing_to_do
-  #
+  bundle 'install' or raise
+
+  current_lock_file = Bundler.default_lockfile.read
+
+  return unless bundle_outdated?
+
+  bundle 'update' or raise
+
+  new_lock_file = Bundler.default_lockfile.read
+
+  if new_lock_file == current_lock_file
+    puts 'Update had no effect!'
+  end
+
   run_or_raise 'bundle exec rake'
 
   # create branch
