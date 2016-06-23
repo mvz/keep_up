@@ -28,8 +28,8 @@ KeepUp will do its thing and create a pull request or bug report.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run
-`rake spec` to run the tests. You can also run `bin/console` for an interactive
+After checking out the repo, run `script/setup` to install dependencies. Then, run
+`rake spec` to run the tests. You can also run `script/console` for an interactive
 prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To
