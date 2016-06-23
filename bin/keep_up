@@ -15,32 +15,40 @@ def run_or_raise(command)
   raise unless success
 end
 
-def bundle_outdated?
+def bundle_up_to_date?
   success = bundle 'outdated'
   if success
     puts 'Bundle up to date!'
   else
     puts 'Bundle is outdated!'
   end
-  !success
+  success
 end
 
 def run
+  # Sanity check
   bundle 'install' or raise
+  run_or_raise 'bundle exec rake'
 
+  # Try bundle update
   current_lock_file = Bundler.default_lockfile.read
-
-  return unless bundle_outdated?
-
+  if bundle_up_to_date?
+    puts 'All done!'
+    return
+  end
   bundle 'update' or raise
-
   new_lock_file = Bundler.default_lockfile.read
-
   if new_lock_file == current_lock_file
     puts 'Update had no effect!'
+  else
+    run_or_raise 'bundle exec rake'
+    if bundle_up_to_date?
+      puts 'All done!'
+      return
+    end
   end
 
-  run_or_raise 'bundle exec rake'
+  puts 'More work to do!'
 
   # create branch
   # git status
