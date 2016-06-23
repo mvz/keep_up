@@ -10,7 +10,16 @@ end
 
 def run
   run_or_raise 'bundle'
+  #
+  # bundle outdated
+  # return if nothing_to_do
+  #
   run_or_raise 'bundle exec rake'
+
+  # create branch
+  # git status
+  # git commit
+  #
 end
 
 run
