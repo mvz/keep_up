@@ -9,14 +9,17 @@ module KeepUp
 
     def bundle(command)
       full_command = "bundle #{command} #{'--local' if @local}"
+      run_quietly full_command
+    end
+
+    def run_quietly(full_command)
       puts "Running #{full_command}"
       _out, _err, status = Open3.capture3(full_command)
       status == 0
     end
 
     def run_or_raise(command)
-      puts "Running #{command}"
-      success = system command
+      success = run_quietly(command)
       raise unless success
     end
 
