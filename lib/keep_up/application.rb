@@ -15,16 +15,20 @@ module KeepUp
       run_quietly full_command
     end
 
+    def bundle_install
+      bundle 'install' or raise BailOut, 'bundle install failed'
+    end
+
     def run_quietly(full_command)
       puts "Running #{full_command}"
       _out, _err, status = Open3.capture3(full_command)
       status == 0
     end
 
-    def run_or_raise(command)
-      success = run_quietly(command)
+    def run_test_suite
+      success = run_quietly('bundle exec rake')
       unless success
-        raise BailOut, "#{command} failed"
+        raise BailOut, "Running the test suite failed"
       end
     end
 
@@ -38,8 +42,17 @@ module KeepUp
       success
     end
 
+    def bundle_update
+      bundle 'update' or raise BailOut, 'Bundle update failed'
+    end
+
+    def sanity_check
+      bundle_install
+      run_test_suite
+    end
+
     def run
-      sanity_check or return
+      sanity_check
 
       # Try bundle update
       current_lock_file = Bundler.default_lockfile.read
@@ -47,12 +60,13 @@ module KeepUp
         puts 'All done!'
         return
       end
-      bundle 'update' or raise
+      bundle_update
+
       new_lock_file = Bundler.default_lockfile.read
       if new_lock_file == current_lock_file
         puts 'Update had no effect!'
       else
-        run_or_raise 'bundle exec rake'
+        run_test_suite
         if bundle_up_to_date?
           puts 'All done!'
           return
@@ -65,11 +79,6 @@ module KeepUp
       # git status
       # git commit
       #
-    end
-
-    def sanity_check
-      bundle 'install' or raise BailOut, 'bundle install failed'
-      run_or_raise 'bundle exec rake'
     end
   end
 end
