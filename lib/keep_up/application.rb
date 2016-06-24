@@ -1,10 +1,10 @@
 require 'bundler'
 require 'open3'
 
-class BailOut < RuntimeError
-end
-
 module KeepUp
+  class BailOut < RuntimeError
+  end
+
   class Application
     def initialize(local)
       @local = local
@@ -65,8 +65,6 @@ module KeepUp
       # git status
       # git commit
       #
-    rescue BailOut => e
-      puts "Failure: #{e.message}"
     end
 
     def sanity_check

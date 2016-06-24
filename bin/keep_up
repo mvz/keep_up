@@ -2,4 +2,8 @@
 
 require 'keep_up'
 
-KeepUp::Application.new(true).run
+begin
+  KeepUp::Application.new(true).run
+rescue KeepUp::BailOut => e
+  puts "Failure: #{e.message}"
+end
