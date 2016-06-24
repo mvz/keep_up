@@ -1,4 +1,6 @@
 require 'bundler'
+require 'open3'
+
 module KeepUp
   class Application
     def initialize(local)
@@ -6,7 +8,10 @@ module KeepUp
     end
 
     def bundle(command)
-      system "bundle #{command} #{'--local' if @local}"
+      full_command = "bundle #{command} #{'--local' if @local}"
+      puts "Running #{full_command}"
+      _out, _err, status = Open3.capture3(full_command)
+      status == 0
     end
 
     def run_or_raise(command)
