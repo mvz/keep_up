@@ -1,6 +1,9 @@
 require 'bundler'
 require 'open3'
 
+class BailOut < RuntimeError
+end
+
 module KeepUp
   class Application
     def initialize(local)
@@ -20,7 +23,9 @@ module KeepUp
 
     def run_or_raise(command)
       success = run_quietly(command)
-      raise unless success
+      unless success
+        raise BailOut, "#{command} failed"
+      end
     end
 
     def bundle_up_to_date?
@@ -34,9 +39,7 @@ module KeepUp
     end
 
     def run
-      # Sanity check
-      bundle 'install' or raise
-      run_or_raise 'bundle exec rake'
+      sanity_check or return
 
       # Try bundle update
       current_lock_file = Bundler.default_lockfile.read
@@ -62,7 +65,13 @@ module KeepUp
       # git status
       # git commit
       #
+    rescue BailOut => e
+      puts "Failure: #{e.message}"
     end
 
+    def sanity_check
+      bundle 'install' or raise BailOut, 'bundle install failed'
+      run_or_raise 'bundle exec rake'
+    end
   end
 end
