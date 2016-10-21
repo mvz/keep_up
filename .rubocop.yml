@@ -1,0 +1,46 @@
+# Allow if (foo = get_foo) style
+Lint/AssignmentInCondition:
+  AllowSafeAssignment: true
+
+# Require lines to fit in pull requests.
+Metrics/LineLength:
+  Max: 92
+
+# Allow and/or for control flow only
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+# Dot at end of line makes it clearer that the line is not done
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+# Require at least two dependent lines before suggesting a guard clause
+Style/GuardClause:
+  MinBodyLength: 2
+
+# Don't use if or unless as modifier if the line gets too long
+Style/IfUnlessModifier:
+  MaxLineLength: 60
+
+# Multi-line assignment should be simply indented. Aligning them makes it even
+# harder to keep a sane line length.
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Style/MultilineMethodCallBraceLayout:
+  EnforcedStyle: same_line
+
+# Multi-line method calls should be simply indented. Aligning them makes it
+# even harder to keep a sane line length.
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+# Explicite numbers are often clearer, and more robust.
+Style/NumericPredicate:
+  Enabled: false
+
+# Allow explicit return with multiple return values
+Style/RedundantReturn:
+  AllowMultipleReturnValues: true
+
+inherit_from: .rubocop_todo.yml
