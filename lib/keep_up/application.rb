@@ -26,10 +26,7 @@ module KeepUp
     end
 
     def run_test_suite
-      success = run_quietly('bundle exec rake')
-      unless success
-        raise BailOut, 'Running the test suite failed'
-      end
+      run_quietly('bundle exec rake') or raise BailOut, 'Running the test suite failed'
     end
 
     def bundle_up_to_date?
