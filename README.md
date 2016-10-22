@@ -4,17 +4,8 @@ Automatically update your dependencies.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'keep_up'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+KeepUp is not intended to be part of your application's bundle. You should
+install it yourself as:
 
     $ gem install keep_up
 
