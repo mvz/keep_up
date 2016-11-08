@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'keep_up'
+require_relative '../lib/keep_up'
 
 begin
   KeepUp::Application.new(true).run
