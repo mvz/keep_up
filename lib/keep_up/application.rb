@@ -6,8 +6,9 @@ module KeepUp
   end
 
   class Application
-    def initialize(local)
+    def initialize(local:, test_command:)
       @local = local
+      @test_command = test_command
     end
 
     def bundle(command)
@@ -26,7 +27,7 @@ module KeepUp
     end
 
     def run_test_suite
-      run_quietly('bundle exec rake') or raise BailOut, 'Running the test suite failed'
+      run_quietly(@test_command) or raise BailOut, 'Running the test suite failed'
     end
 
     def bundle_up_to_date?

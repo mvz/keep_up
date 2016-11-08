@@ -1,5 +1,5 @@
 Given(/^a Gemfile specifying:$/) do |string|
-  contents = "source 'https://rubygems.org'\npath 'libs'\n\n#{string}"
+  contents = "path 'libs'\n\n#{string}"
   write_file 'Gemfile', contents
 end
 

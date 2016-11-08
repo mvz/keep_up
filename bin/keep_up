@@ -1,9 +1,24 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require_relative '../lib/keep_up'
 
+options = {
+  local: false,
+  test_command: 'bundle exec rake'
+}
+OptionParser.new do |parser|
+  parser.on('--[no-]local') do |local|
+    options[:local] = local
+  end
+
+  parser.on('--test-command=COMMAND') do |command|
+    options[:test_command] = command
+  end
+end.parse!
+
 begin
-  KeepUp::Application.new(true).run
+  KeepUp::Application.new(options).run
 rescue KeepUp::BailOut => e
   puts "Failure: #{e.message}"
 end

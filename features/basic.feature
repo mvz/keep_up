@@ -6,15 +6,9 @@ Feature: Update bundle
   Scenario: Nothing to do
     Given a Gemfile specifying:
       """
-      gem 'rake'
       gem 'foo', '1.0.0'
       """
     And a gem named "foo" at version 1.0.0
-    And a file named "Rakefile" with:
-      """
-      task :default do
-      end
-      """
     When I run `bundle install`
     Then the output should contain:
       """
@@ -23,7 +17,7 @@ Feature: Update bundle
     When I run `git init`
     And I run `git add .`
     And I run `git ci -am 'Initial'`
-    And I run `keep_up`
+    And I run `keep_up --test-command true`
     Then the output should contain:
       """
       Bundle up to date!
