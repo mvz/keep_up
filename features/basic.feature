@@ -23,3 +23,20 @@ Feature: Update bundle
       Bundle up to date!
       All done!
       """
+
+  Scenario: Updating a gem with a fixed version
+    Given a Gemfile specifying:
+      """
+      gem 'foo', '1.0.0'
+      """
+    And a gem named "foo" at version 1.0.0
+    And a gem named "foo" at version 1.0.1
+    When I run `bundle install`
+    And I run `git init`
+    And I run `git add .`
+    And I run `git ci -am 'Initial'`
+    When I run `keep_up --test-command true`
+    Then the output should contain:
+      """
+      Updating foo to 1.0.1
+      """
