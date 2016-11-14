@@ -2,9 +2,11 @@ require 'bundler'
 require 'open3'
 
 module KeepUp
+  # Error thrown when we can't go any further.
   class BailOut < RuntimeError
   end
 
+  # Main application
   class Application
     def initialize(local:, test_command:)
       @local = local
@@ -31,13 +33,7 @@ module KeepUp
     end
 
     def bundle_up_to_date?
-      success = bundle 'outdated'
-      if success
-        puts 'Bundle up to date!'
-      else
-        puts 'Bundle is outdated!'
-      end
-      success
+      bundle 'outdated'
     end
 
     def bundle_update
@@ -52,31 +48,32 @@ module KeepUp
     def run
       sanity_check
 
-      # Try bundle update
-      current_lock_file = Bundler.default_lockfile.read
       if bundle_up_to_date?
+        puts 'Bundle up to date!'
         puts 'All done!'
         return
       end
-      bundle_update
 
-      new_lock_file = Bundler.default_lockfile.read
+      # Try bundle update
+      current_lock_file = read_lockfile
+      bundle_update
+      new_lock_file = read_lockfile
       if new_lock_file == current_lock_file
         puts 'Update had no effect!'
       else
         run_test_suite
-        if bundle_up_to_date?
-          puts 'All done!'
-          return
-        end
       end
 
-      puts 'More work to do!'
+      if bundle_up_to_date?
+        puts 'Bundle up to date!'
+        puts 'All done!'
+      else
+        puts 'More work to do!'
+      end
+    end
 
-      # create branch
-      # git status
-      # git commit
-      #
+    def read_lockfile
+      Bundler.default_lockfile.read
     end
   end
 end
