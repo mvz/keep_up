@@ -11,5 +11,5 @@ Given(/^a gem named "([^']+)" at version ([0-9.]+)$/) do |gemname, version|
     s.authors = ['John Doe']
   end
   write_file "#{base_path}/#{gemname}.gemspec", spec.to_ruby
-  write_file "#{base_path}/lib/#{gemname}.rb", "true"
+  write_file "#{base_path}/lib/#{gemname}.rb", 'true'
 end
