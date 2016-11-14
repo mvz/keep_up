@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - 'tmp/**/*'
+
 # Allow if (foo = get_foo) style
 Lint/AssignmentInCondition:
   AllowSafeAssignment: true
