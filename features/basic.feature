@@ -3,7 +3,7 @@ Feature: Update bundle
   In order to avoid tedious work
   I want to automatically update dependencies
 
-  Scenario: Nothing to do
+  Background: A project with fixed dependency versions
     Given a Gemfile specifying:
       """
       gem 'foo', '1.0.0'
@@ -17,7 +17,9 @@ Feature: Update bundle
     When I run `git init`
     And I run `git add .`
     And I run `git ci -am 'Initial'`
-    And I run `keep_up --test-command true`
+
+  Scenario: Nothing to do
+    When I run `keep_up --test-command true`
     Then the output should contain:
       """
       Bundle up to date!
@@ -25,16 +27,7 @@ Feature: Update bundle
       """
 
   Scenario: Updating a gem with a fixed version
-    Given a Gemfile specifying:
-      """
-      gem 'foo', '1.0.0'
-      """
-    And a gem named "foo" at version 1.0.0
-    And a gem named "foo" at version 1.0.1
-    When I run `bundle install`
-    And I run `git init`
-    And I run `git add .`
-    And I run `git ci -am 'Initial'`
+    Given a gem named "foo" at version 1.0.1
     When I run `keep_up --test-command true`
     Then the output should contain:
       """
