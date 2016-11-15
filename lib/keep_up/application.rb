@@ -1,5 +1,8 @@
 require 'bundler'
 require 'open3'
+require_relative 'updater'
+require_relative 'gemfile'
+require_relative 'repository'
 
 module KeepUp
   # Error thrown when we can't go any further.
@@ -14,7 +17,12 @@ module KeepUp
     end
 
     def run
+      update_all_dependencies
       report_up_to_date
+    end
+
+    def update_all_dependencies
+      Updater.new(gemfile: Gemfile.new, repository: Repository.new).run
     end
 
     def report_up_to_date
