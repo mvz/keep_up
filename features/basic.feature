@@ -33,3 +33,7 @@ Feature: Update bundle
       """
       Updating foo to 1.0.1
       """
+    And the file "Gemfile" should contain:
+      """
+      gem 'foo', '1.0.1'
+      """
