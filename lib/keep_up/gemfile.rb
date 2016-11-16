@@ -9,7 +9,7 @@ module KeepUp
     end
 
     def apply_updated_dependency(dependency)
-
+      puts "Updating #{dependency.name} to #{dependency.version}"
     end
   end
 end
