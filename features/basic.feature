@@ -39,5 +39,7 @@ Feature: Update bundle
       """
     And the file "Gemfile" should contain:
       """
+      path 'libs'
+
       gem 'foo', '1.0.1'
       """

@@ -29,5 +29,6 @@ Feature: Update bundle with bundler as a dependency
     And the file "Gemfile" should contain:
       """
       gem 'foo', '1.0.1'
+      gem 'bundler'
       """
 

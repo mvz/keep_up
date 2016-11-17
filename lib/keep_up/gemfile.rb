@@ -29,12 +29,12 @@ module KeepUp
       contents = File.read 'Gemfile'
       updated_contents = contents.each_line.map do |line|
         if line =~ /gem ['"]#{dependency_name}['"],/
-          "gem '#{dependency_name}', '#{new_version}'"
+          "gem '#{dependency_name}', '#{new_version}'\n"
         else
           line
         end
       end
-      File.write 'Gemfile', updated_contents
+      File.write 'Gemfile', updated_contents.join
     end
 
     private
