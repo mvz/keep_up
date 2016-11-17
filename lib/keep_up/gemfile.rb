@@ -9,7 +9,20 @@ module KeepUp
     end
 
     def apply_updated_dependency(dependency)
-      puts "Updating #{dependency.name} to #{dependency.version}"
+      dependency_name = dependency.name
+      new_version = dependency.version
+
+      puts "Updating #{dependency_name} to #{new_version}"
+
+      contents = File.read 'Gemfile'
+      updated_contents = contents.each_line.map do |line|
+        if line =~ /gem ['"]#{dependency_name}['"],/
+          "gem '#{dependency_name}', '#{new_version}'"
+        else
+          line
+        end
+      end
+      File.write 'Gemfile', updated_contents
     end
   end
 end
