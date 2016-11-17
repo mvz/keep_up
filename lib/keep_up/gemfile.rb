@@ -4,10 +4,6 @@ module KeepUp
       bundler_lockfile.dependencies
     end
 
-    def bundler_lockfile
-      @bundler_lockfile ||= Bundler::LockfileParser.new(File.read 'Gemfile.lock')
-    end
-
     def apply_updated_dependency(dependency)
       dependency_name = dependency.name
       new_version = dependency.version
@@ -23,6 +19,12 @@ module KeepUp
         end
       end
       File.write 'Gemfile', updated_contents
+    end
+
+    private
+
+    def bundler_lockfile
+      @bundler_lockfile ||= Bundler::LockfileParser.new(File.read 'Gemfile.lock')
     end
   end
 end
