@@ -8,9 +8,14 @@ module KeepUp
     end
 
     def run
-      gemfile.direct_dependencies.each do |dep|
-        gemfile.apply_updated_dependency repository.updated_dependency_for dep
+      possible_updates.each do |update|
+        gemfile.apply_updated_dependency update
       end
+    end
+
+    def possible_updates
+      gemfile.direct_dependencies.
+        map { |dep| repository.updated_dependency_for dep }.compact
     end
   end
 end
