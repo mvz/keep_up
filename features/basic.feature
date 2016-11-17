@@ -20,7 +20,11 @@ Feature: Update bundle
 
   Scenario: Nothing to do
     When I run `keep_up --test-command true`
-    Then the output should contain:
+    Then the output should not contain:
+      """
+      Updating foo to 1.0.0
+      """
+    And the output should contain:
       """
       Bundle up to date!
       All done!
