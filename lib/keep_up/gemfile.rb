@@ -15,8 +15,9 @@ module KeepUp
     def direct_dependencies
       bundler_lockfile.dependencies.map do |dep|
         spec = bundler_lockfile.specs.find { |it| it.name == dep.name }
+        next unless spec
         Dependency.new(name: dep.name, version: dep.requirements_list.first, locked_version: spec.version)
-      end
+      end.compact
     end
 
     def apply_updated_dependency(dependency)
