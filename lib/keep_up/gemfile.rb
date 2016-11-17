@@ -1,7 +1,22 @@
+require 'bundler'
+
 module KeepUp
+  class Dependency
+    def initialize(name:, version:, locked_version:)
+      @name = name
+      @version = version
+      @locked_version = locked_version
+    end
+
+    attr_reader :name, :version, :locked_version
+  end
+
   class Gemfile
     def direct_dependencies
-      bundler_lockfile.dependencies
+      bundler_lockfile.dependencies.map do |dep|
+        spec = bundler_lockfile.specs.find { |it| it.name == dep.name }
+        Dependency.new(name: dep.name, version: dep.requirements_list.first, locked_version: spec.version)
+      end
     end
 
     def apply_updated_dependency(dependency)
