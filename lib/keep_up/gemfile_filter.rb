@@ -5,8 +5,9 @@ module KeepUp
       new_version = dependency.version
 
       updated_contents = contents.each_line.map do |line|
-        if line =~ /gem ['"]#{dependency_name}['"],/
-          line.sub /gem.*/, "gem '#{dependency_name}', '#{new_version}'"
+        if line =~ /^(\s*gem ['"]#{dependency_name}['"], ['"](~> *)?)[^'"]*(['"].*)/m
+          match = Regexp.last_match
+          "#{match[1]}#{new_version}#{match[3]}"
         else
           line
         end
