@@ -31,15 +31,9 @@ module KeepUp
 
     def apply_updated_dependency(dependency)
       puts "Updating #{dependency.name} to #{dependency.version}"
-      current_dependency = direct_dependencies.find { |it| it.name == dependency.name }
-      if current_dependency && current_dependency.matches?(dependency)
-        return
-      end
-      contents = File.read 'Gemfile'
-      updated_contents = GemfileFilter.apply(contents, dependency)
-      File.write 'Gemfile', updated_contents
-      Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).lock('Gemfile.lock')
-      `git ci -am "Update #{dependency.name} to #{dependency.version}"`
+      update_gemfile_contents(dependency)
+      update_lockfile(dependency)
+      commit_changes(dependency)
     end
 
     private
@@ -50,6 +44,24 @@ module KeepUp
 
     def bundler_lockfile
       @bundler_lockfile ||= Bundler::LockfileParser.new(File.read('Gemfile.lock'))
+    end
+
+    def update_gemfile_contents(dependency)
+      current_dependency = direct_dependencies.find { |it| it.name == dependency.name }
+      if current_dependency && current_dependency.matches?(dependency)
+        return
+      end
+      contents = File.read 'Gemfile'
+      updated_contents = GemfileFilter.apply(contents, dependency)
+      File.write 'Gemfile', updated_contents
+    end
+
+    def update_lockfile(dependency)
+      Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).lock('Gemfile.lock')
+    end
+
+    def commit_changes(dependency)
+      `git ci -am "Update #{dependency.name} to #{dependency.version}"`
     end
   end
 end

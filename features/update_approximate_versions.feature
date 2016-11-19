@@ -31,6 +31,10 @@ Feature: Update bundle with approximate versions
 
       gem 'foo', '~> 1.0.0'
       """
+    And the file "Gemfile.lock" should contain:
+      """
+      foo (1.0.1)
+      """
 
   Scenario: Updating to a version that exceeds the current spec
     Given a gem named "foo" at version 1.1.2
@@ -44,4 +48,8 @@ Feature: Update bundle with approximate versions
       path 'libs'
 
       gem 'foo', '~> 1.1.2'
+      """
+    And the file "Gemfile.lock" should contain:
+      """
+      foo (1.1.2)
       """
