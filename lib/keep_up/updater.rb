@@ -11,8 +11,11 @@ module KeepUp
 
     def run
       possible_updates.each do |update|
-        gemfile.apply_updated_dependency update
-        version_control.commit_changes update
+        if gemfile.apply_updated_dependency update
+          version_control.commit_changes update
+        else
+          version_control.revert_changes
+        end
       end
     end
 

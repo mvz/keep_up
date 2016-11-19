@@ -13,6 +13,7 @@ describe KeepUp::Updater do
 
     before do
       allow(version_control).to receive(:commit_changes)
+      allow(version_control).to receive(:revert_changes)
     end
 
     context 'when an update is available' do
@@ -23,17 +24,43 @@ describe KeepUp::Updater do
           to receive(:updated_dependency_for).
           with(dependency).
           and_return updated_dependency
-        allow(gemfile).to receive(:apply_updated_dependency)
       end
 
-      it 'lets the gemfile update to the new dependency' do
-        updater.run
-        expect(gemfile).to have_received(:apply_updated_dependency).with updated_dependency
+      context 'when applying the update succeeds' do
+        before do
+          allow(gemfile).to receive(:apply_updated_dependency).and_return true
+        end
+
+        it 'lets the gemfile update to the new dependency' do
+          updater.run
+          expect(gemfile).to have_received(:apply_updated_dependency).with updated_dependency
+        end
+
+        it 'commits the changes' do
+          updater.run
+          expect(version_control).to have_received(:commit_changes).with updated_dependency
+        end
       end
 
-      it 'commits the changes' do
-        updater.run
-        expect(version_control).to have_received(:commit_changes).with updated_dependency
+      context 'when applying the update fails' do
+        before do
+          allow(gemfile).to receive(:apply_updated_dependency).and_return false
+        end
+
+        it 'lets the gemfile try to update to the new dependency' do
+          updater.run
+          expect(gemfile).to have_received(:apply_updated_dependency).with updated_dependency
+        end
+
+        it 'does not commit the changes' do
+          updater.run
+          expect(version_control).not_to have_received(:commit_changes)
+        end
+
+        it 'reverts the changes' do
+          updater.run
+          expect(version_control).to have_received(:revert_changes)
+        end
       end
     end
 
