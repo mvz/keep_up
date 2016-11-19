@@ -39,7 +39,7 @@ module KeepUp
     private
 
     def bundler_lockfile
-      @bundler_lockfile ||= Bundler::LockfileParser.new(File.read 'Gemfile.lock')
+      @bundler_lockfile ||= Bundler::LockfileParser.new(File.read('Gemfile.lock'))
     end
   end
 end

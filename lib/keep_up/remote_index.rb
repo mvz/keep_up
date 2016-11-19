@@ -6,9 +6,7 @@ module KeepUp
 
     def remote_definition
       @remote_definition ||=
-        Bundler::Definition.build('Gemfile', 'Gemfile.lock', true).tap do |dfn|
-          dfn.resolve_remotely!
-        end
+        Bundler::Definition.build('Gemfile', 'Gemfile.lock', true).tap(&:resolve_remotely!)
     end
 
     def remote_index

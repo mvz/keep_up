@@ -12,7 +12,8 @@ describe KeepUp::Repository do
         and_return [
           double('dep09', version: '0.9.0'),
           double('dep10', version: '1.0.0'),
-          double('dep11', version: '1.1.0') ]
+          double('dep11', version: '1.1.0')
+        ]
     end
 
     context 'when the current version is not the latest' do
