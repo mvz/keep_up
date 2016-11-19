@@ -3,6 +3,7 @@ require 'open3'
 require_relative 'updater'
 require_relative 'gemfile'
 require_relative 'repository'
+require_relative 'version_control'
 
 module KeepUp
   # Error thrown when we can't go any further.
@@ -22,7 +23,9 @@ module KeepUp
     end
 
     def update_all_dependencies
-      Updater.new(gemfile: Gemfile.new, repository: Repository.new).run
+      Updater.new(gemfile: Gemfile.new,
+                  repository: Repository.new,
+                  version_control: VersionControl.new).run
     end
 
     def report_up_to_date
