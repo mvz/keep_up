@@ -4,6 +4,8 @@ Automatically update your dependencies.
 
 ## Installation
 
+THIS GEM IS HIGHLY EXPERIMENTAL AND WILL EAT YOUR HOMEWORK!
+
 KeepUp is not intended to be part of your application's bundle. You should
 install it yourself as:
 
