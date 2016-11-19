@@ -1,4 +1,5 @@
 require 'bundler'
+require_relative 'gemfile_filter'
 
 module KeepUp
   class Dependency
@@ -6,6 +7,10 @@ module KeepUp
       @name = name
       @version = version
       @locked_version = locked_version
+    end
+
+    def matches?(spec)
+      Gem::Dependency.new(name, version).matches_spec? spec
     end
 
     attr_reader :name, :version, :locked_version
@@ -21,20 +26,14 @@ module KeepUp
     end
 
     def apply_updated_dependency(dependency)
-      dependency_name = dependency.name
-      new_version = dependency.version
-
-      puts "Updating #{dependency_name} to #{new_version}"
-
-      contents = File.read 'Gemfile'
-      updated_contents = contents.each_line.map do |line|
-        if line =~ /gem ['"]#{dependency_name}['"],/
-          "gem '#{dependency_name}', '#{new_version}'\n"
-        else
-          line
-        end
+      puts "Updating #{dependency.name} to #{dependency.version}"
+      current_dependency = direct_dependencies.find { |it| it.name == dependency.name }
+      if current_dependency && current_dependency.matches?(dependency)
+        return
       end
-      File.write 'Gemfile', updated_contents.join
+      contents = File.read 'Gemfile'
+      updated_contents = GemfileFilter.apply(contents, dependency)
+      File.write 'Gemfile', updated_contents
     end
 
     private
