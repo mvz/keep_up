@@ -1,4 +1,5 @@
 module KeepUp
+  # Apply potential updates to a Gemfile.
   class Updater
     attr_reader :gemfile, :repository
 

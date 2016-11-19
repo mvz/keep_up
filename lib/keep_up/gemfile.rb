@@ -2,6 +2,7 @@ require 'bundler'
 require_relative 'gemfile_filter'
 
 module KeepUp
+  # Single dependency with its current locked version.
   class Dependency
     def initialize(name:, version:, locked_version:)
       @name = name
@@ -16,12 +17,15 @@ module KeepUp
     attr_reader :name, :version, :locked_version
   end
 
+  # A Gemfile with its current set of locked dependencies.
   class Gemfile
     def direct_dependencies
       bundler_lockfile.dependencies.map do |dep|
-        spec = bundler_lockfile.specs.find { |it| it.name == dep.name }
+        spec = locked_spec dep
         next unless spec
-        Dependency.new(name: dep.name, version: dep.requirements_list.first, locked_version: spec.version)
+        Dependency.new(name: dep.name,
+                       version: dep.requirements_list.first,
+                       locked_version: spec.version)
       end.compact
     end
 
@@ -37,6 +41,10 @@ module KeepUp
     end
 
     private
+
+    def locked_spec(dep)
+      bundler_lockfile.specs.find { |it| it.name == dep.name }
+    end
 
     def bundler_lockfile
       @bundler_lockfile ||= Bundler::LockfileParser.new(File.read('Gemfile.lock'))

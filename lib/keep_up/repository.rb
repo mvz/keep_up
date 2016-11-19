@@ -1,6 +1,7 @@
 require_relative 'remote_index'
 
 module KeepUp
+  # Picks updated versions for dependencies.
   class Repository
     attr_reader :remote_index
 

@@ -46,5 +46,3 @@ Style/NumericPredicate:
 # Allow explicit return with multiple return values
 Style/RedundantReturn:
   AllowMultipleReturnValues: true
-
-inherit_from: .rubocop_todo.yml

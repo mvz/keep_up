@@ -4,7 +4,11 @@ describe KeepUp::Repository do
   describe '#updated_dependency_for' do
     let(:remote_index) { double('remote index') }
     let(:repository) { described_class.new(remote_index: remote_index) }
-    let(:locked_dependency) { double('locked dependency', version: version, locked_version: locked_version) }
+    let(:locked_dependency) do
+      double('locked dependency',
+             version: version,
+             locked_version: locked_version)
+    end
 
     before do
       allow(remote_index).
