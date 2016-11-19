@@ -9,6 +9,10 @@ module KeepUp
       @locked_version = locked_version
     end
 
+    def matches?(spec)
+      Gem::Dependency.new(name, version).matches_spec? spec
+    end
+
     attr_reader :name, :version, :locked_version
   end
 
@@ -23,6 +27,10 @@ module KeepUp
 
     def apply_updated_dependency(dependency)
       puts "Updating #{dependency.name} to #{dependency.version}"
+      current_dependency = direct_dependencies.find { |it| it.name == dependency.name }
+      if current_dependency && current_dependency.matches?(dependency)
+        return
+      end
       contents = File.read 'Gemfile'
       updated_contents = GemfileFilter.apply(contents, dependency)
       File.write 'Gemfile', updated_contents
