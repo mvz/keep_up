@@ -29,6 +29,10 @@ Feature: Update bundle
       Bundle up to date!
       All done!
       """
+    And the file "Gemfile.lock" should contain:
+      """
+      foo (1.0.0)
+      """
 
   Scenario: Updating a gem with a fixed version
     Given a gem named "foo" at version 1.0.1
@@ -42,4 +46,8 @@ Feature: Update bundle
       path 'libs'
 
       gem 'foo', '1.0.1'
+      """
+    And the file "Gemfile.lock" should contain:
+      """
+      foo (1.0.1)
       """
