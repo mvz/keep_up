@@ -39,6 +39,7 @@ module KeepUp
       updated_contents = GemfileFilter.apply(contents, dependency)
       File.write 'Gemfile', updated_contents
       Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).lock('Gemfile.lock')
+      `git ci -am "Update #{dependency.name} to #{dependency.version}"`
     end
 
     private
