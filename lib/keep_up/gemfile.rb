@@ -56,13 +56,11 @@ module KeepUp
     end
 
     def update_lockfile(dependency)
-      begin
-        Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).lock('Gemfile.lock')
-        true
-      rescue Bundler::VersionConflict
-        puts 'Update failed'
-        false
-      end
+      Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).lock('Gemfile.lock')
+      true
+    rescue Bundler::VersionConflict
+      puts 'Update failed'
+      false
     end
   end
 end
