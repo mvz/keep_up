@@ -38,6 +38,7 @@ module KeepUp
       contents = File.read 'Gemfile'
       updated_contents = GemfileFilter.apply(contents, dependency)
       File.write 'Gemfile', updated_contents
+      `bundle update`
     end
 
     private
