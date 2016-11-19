@@ -33,7 +33,6 @@ module KeepUp
       puts "Updating #{dependency.name} to #{dependency.version}"
       update_gemfile_contents(dependency)
       update_lockfile(dependency)
-      commit_changes(dependency)
     end
 
     private
@@ -57,11 +56,13 @@ module KeepUp
     end
 
     def update_lockfile(dependency)
-      Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).lock('Gemfile.lock')
-    end
-
-    def commit_changes(dependency)
-      `git ci -am "Update #{dependency.name} to #{dependency.version}"`
+      begin
+        Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).lock('Gemfile.lock')
+        true
+      rescue Bundler::VersionConflict
+        puts 'Update failed'
+        false
+      end
     end
   end
 end
