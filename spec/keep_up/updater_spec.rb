@@ -8,7 +8,9 @@ describe KeepUp::Updater do
     let(:version_control) { double('version_control') }
 
     let(:updater) do
-      described_class.new(gemfile: gemfile, repository: repository, version_control: version_control)
+      described_class.new(gemfile: gemfile,
+                          repository: repository,
+                          version_control: version_control)
     end
 
     before do
@@ -33,12 +35,16 @@ describe KeepUp::Updater do
 
         it 'lets the gemfile update to the new dependency' do
           updater.run
-          expect(gemfile).to have_received(:apply_updated_dependency).with updated_dependency
+          expect(gemfile).
+            to have_received(:apply_updated_dependency).
+            with updated_dependency
         end
 
         it 'commits the changes' do
           updater.run
-          expect(version_control).to have_received(:commit_changes).with updated_dependency
+          expect(version_control).
+            to have_received(:commit_changes).
+            with updated_dependency
         end
       end
 
@@ -49,7 +55,9 @@ describe KeepUp::Updater do
 
         it 'lets the gemfile try to update to the new dependency' do
           updater.run
-          expect(gemfile).to have_received(:apply_updated_dependency).with updated_dependency
+          expect(gemfile).
+            to have_received(:apply_updated_dependency).
+            with updated_dependency
         end
 
         it 'does not commit the changes' do

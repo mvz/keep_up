@@ -31,9 +31,6 @@ Style/IfUnlessModifier:
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
 
-Style/MultilineMethodCallBraceLayout:
-  EnforcedStyle: same_line
-
 # Multi-line method calls should be simply indented. Aligning them makes it
 # even harder to keep a sane line length.
 Style/MultilineMethodCallIndentation:

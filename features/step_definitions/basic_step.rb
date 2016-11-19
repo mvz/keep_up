@@ -14,7 +14,9 @@ Given(/^a gem named "([^'"]+)" at version ([0-9.]+)$/) do |gemname, version|
   write_file "#{base_path}/lib/#{gemname}.rb", 'true'
 end
 
-Given(/^a gem named "([^"]*)" at version ([0-9.]+) depending on "([^"]*)" at version ([0-9.]+)$/) do |gemname, version, depname, depversion|
+Given(
+  /^a gem named "([^"]*)" at version ([0-9.]+) depending on "([^"]*)" at version ([0-9.]+)$/
+) do |gemname, version, depname, depversion|
   base_path = "libs/#{gemname}-#{version}"
   spec = Gem::Specification.new do |s|
     s.name = gemname
