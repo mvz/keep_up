@@ -1,8 +1,8 @@
 require 'bundler'
 require 'open3'
-require_relative 'updater'
-require_relative 'gemfile'
+require_relative 'bundle'
 require_relative 'repository'
+require_relative 'updater'
 require_relative 'version_control'
 
 module KeepUp
@@ -23,7 +23,7 @@ module KeepUp
     end
 
     def update_all_dependencies
-      Updater.new(gemfile: Gemfile.new,
+      Updater.new(bundle: Bundle.new,
                   repository: Repository.new,
                   version_control: VersionControl.new).run
     end

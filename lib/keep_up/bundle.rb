@@ -4,7 +4,7 @@ require_relative 'dependency'
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
-  class Gemfile
+  class Bundle
     def direct_dependencies
       bundler_lockfile.dependencies.map do |dep|
         spec = locked_spec dep

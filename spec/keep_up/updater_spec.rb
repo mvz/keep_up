@@ -3,12 +3,12 @@ require 'spec_helper'
 describe KeepUp::Updater do
   describe '#run' do
     let(:dependency) { double('dependency') }
-    let(:gemfile) { double('gemfile', direct_dependencies: [dependency]) }
+    let(:bundle) { double('bundle', direct_dependencies: [dependency]) }
     let(:repository) { double('repository') }
     let(:version_control) { double('version_control') }
 
     let(:updater) do
-      described_class.new(gemfile: gemfile,
+      described_class.new(bundle: bundle,
                           repository: repository,
                           version_control: version_control)
     end
@@ -30,12 +30,12 @@ describe KeepUp::Updater do
 
       context 'when applying the update succeeds' do
         before do
-          allow(gemfile).to receive(:apply_updated_dependency).and_return true
+          allow(bundle).to receive(:apply_updated_dependency).and_return true
         end
 
-        it 'lets the gemfile update to the new dependency' do
+        it 'lets the bundle update to the new dependency' do
           updater.run
-          expect(gemfile).
+          expect(bundle).
             to have_received(:apply_updated_dependency).
             with updated_dependency
         end
@@ -50,12 +50,12 @@ describe KeepUp::Updater do
 
       context 'when applying the update fails' do
         before do
-          allow(gemfile).to receive(:apply_updated_dependency).and_return false
+          allow(bundle).to receive(:apply_updated_dependency).and_return false
         end
 
-        it 'lets the gemfile try to update to the new dependency' do
+        it 'lets the bundle try to update to the new dependency' do
           updater.run
-          expect(gemfile).
+          expect(bundle).
             to have_received(:apply_updated_dependency).
             with updated_dependency
         end
@@ -80,8 +80,8 @@ describe KeepUp::Updater do
           and_return nil
       end
 
-      it 'does not let the gemfile update anything' do
-        expect(gemfile).not_to receive(:apply_updated_dependency)
+      it 'does not let the bundle update anything' do
+        expect(bundle).not_to receive(:apply_updated_dependency)
         updater.run
       end
     end
