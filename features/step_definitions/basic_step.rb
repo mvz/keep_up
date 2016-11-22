@@ -3,11 +3,12 @@ Given(/^a Gemfile specifying:$/) do |string|
   write_file 'Gemfile', contents
 end
 
-Given(/^a gemspec for "([^"]*)" specifying:$/) do |gemname, string|
+Given(/^a gemspec for "([^"]*)" depending on "([^"]*)" at version ([0-9.]+)$/) do |gemname, depname, depversion|
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = '0.0.1'
     s.authors = ['John Doe']
+    s.add_dependency depname, depversion
   end
   write_file "#{gemname}.gemspec", spec.to_ruby
 end

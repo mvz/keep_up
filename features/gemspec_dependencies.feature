@@ -8,13 +8,14 @@ Feature: Gemspec dependencies
       """
       gemspec
       """
-    And a gemspec for "bar" specifying:
-      """
-      spec.add_runtime_dependency 'foo', '1.0.0'
-      """
+    And a gemspec for "bar" depending on "foo" at version 1.0.0
     And a gem named "foo" at version 1.0.0
     And the initial bundle install committed
-    And a gem named "foo" at version 1.0.1
+    Then the file "Gemfile.lock" should contain:
+      """
+      foo (1.0.0)
+      """
+    Given a gem named "foo" at version 1.0.1
     When I run `keep_up --test-command true`
     Then the output should contain:
       """
