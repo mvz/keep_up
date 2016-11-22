@@ -6,7 +6,7 @@ module KeepUp
   # A Gemfile with its current set of locked dependencies.
   class Bundle
     def direct_dependencies
-      bundler_lockfile.dependencies.map do |dep|
+      (gemspec_dependencies + gemfile_dependencies).map do |dep|
         spec = locked_spec dep
         next unless spec
         Dependency.new(name: dep.name,
@@ -23,12 +23,26 @@ module KeepUp
 
     private
 
+    def gemfile_dependencies
+      bundler_lockfile.dependencies
+    end
+
+    def gemspec_dependencies
+      gemspec_source = bundler_lockfile.sources.find { |it| it.is_a? Bundler::Source::Gemspec }
+      return [] unless gemspec_source
+      gemspec_source.gemspec.dependencies
+    end
+
     def locked_spec(dep)
       bundler_lockfile.specs.find { |it| it.name == dep.name }
     end
 
     def bundler_lockfile
-      @bundler_lockfile ||= Bundler::LockfileParser.new(File.read('Gemfile.lock'))
+      @bundler_lockfile ||= bundler_definition.locked_gems
+    end
+
+    def bundler_definition
+      @bundler_definition ||= Bundler::Definition.build('Gemfile', 'Gemfile.lock', false)
     end
 
     def update_gemfile_contents(dependency)
