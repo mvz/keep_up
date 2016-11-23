@@ -46,10 +46,9 @@ module KeepUp
     end
 
     def update_gemfile_contents(dependency)
-      current_dependency = direct_dependencies.find { |it| it.name == dependency.name }
-      if current_dependency && current_dependency.matches?(dependency)
-        return
-      end
+      current_dependency = gemfile_dependencies.find { |it| it.name == dependency.name }
+      return if !current_dependency
+      return if current_dependency.matches_spec?(dependency)
       contents = File.read 'Gemfile'
       updated_contents = GemfileFilter.apply(contents, dependency)
       File.write 'Gemfile', updated_contents
