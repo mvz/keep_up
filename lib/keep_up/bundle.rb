@@ -1,5 +1,6 @@
 require 'bundler'
 require_relative 'gemfile_filter'
+require_relative 'gemspec_filter'
 require_relative 'dependency'
 
 module KeepUp
@@ -18,6 +19,7 @@ module KeepUp
     def apply_updated_dependency(dependency)
       puts "Updating #{dependency.name} to #{dependency.version}"
       update_gemfile_contents(dependency)
+      update_gemspec_contents(dependency)
       update_lockfile(dependency)
     end
 
@@ -52,6 +54,27 @@ module KeepUp
       contents = File.read 'Gemfile'
       updated_contents = GemfileFilter.apply(contents, dependency)
       File.write 'Gemfile', updated_contents
+    end
+
+    def update_gemspec_contents(dependency)
+      current_dependency = gemspec_dependencies.find { |it| it.name == dependency.name }
+      return if !current_dependency
+      return if current_dependency.matches_spec?(dependency)
+      contents = File.read gemspec_name
+      updated_contents = GemspecFilter.apply(contents, dependency)
+      File.write gemspec_name, updated_contents
+    end
+
+    def gemspec_name
+      @gemspec_name ||= begin
+                          gemspecs = Dir.glob('*.gemspec')
+                          case gemspecs.count
+                          when 1
+                            gemspecs.first
+                          else
+                            raise '???'
+                          end
+                        end
     end
 
     def update_lockfile(dependency)

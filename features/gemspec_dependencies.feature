@@ -23,7 +23,7 @@ Feature: Gemspec dependencies
       """
     And the file "bar.gemspec" should contain:
       """
-      spec.add_runtime_dependency 'foo', '1.0.1'
+      s.add_runtime_dependency(%q<foo>, ["= 1.0.1"])
       """
     And the file "Gemfile.lock" should contain:
       """
