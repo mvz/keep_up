@@ -38,5 +38,14 @@ describe KeepUp::Repository do
         expect(repository.updated_dependency_for(locked_dependency)).to be_nil
       end
     end
+
+    context 'when the current locked version higher than the latest' do
+      let(:version) { '~> 1.0' }
+      let(:locked_version) { '1.2.0' }
+
+      it 'returns nil' do
+        expect(repository.updated_dependency_for(locked_dependency)).to be_nil
+      end
+    end
   end
 end

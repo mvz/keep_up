@@ -12,7 +12,7 @@ module KeepUp
     def updated_dependency_for(dependency)
       candidates = remote_index.search(dependency)
       latest = candidates.sort_by(&:version).last
-      latest unless latest.version == dependency.locked_version
+      latest unless latest.version <= dependency.locked_version
     end
   end
 end
