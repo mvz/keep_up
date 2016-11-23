@@ -7,10 +7,6 @@ module KeepUp
       @locked_version = locked_version
     end
 
-    def matches?(spec)
-      Gem::Dependency.new(name, version).matches_spec? spec
-    end
-
     attr_reader :name, :version, :locked_version
   end
 end
