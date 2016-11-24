@@ -12,7 +12,7 @@ module KeepUp
 
   # Main application
   class Application
-    def initialize(local:, test_command:)
+    def initialize(local:, test_command:, skip:)
       @test_command = test_command
       @local = local
     end
