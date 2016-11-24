@@ -42,6 +42,7 @@ to find any updates that cause problems and remove or fix them.
 * Re-try with combinations of updates if single updates don't work: Sometimes
   two or more dependencies need to be updated together due to their
   interdependencies.
+* Allow specifying gems to skip and not to attempt updates for.
 
 ## Development
 
