@@ -13,11 +13,35 @@ install it yourself as:
 
 ## Usage
 
+KeepUp only works with git at the moment!
+
+First, make sure your checkout directory is clean. KeepUp will currently not
+check this for you and may throw away your changes!
+
+Next, it's probably nice to start a new branch.
+
 Run keep_up in your project directory:
 
     $ keep_up
 
-KeepUp will do its thing and create a pull request or bug report.
+KeepUp will do its thing.
+
+Next, run `bundle install` and run your tests or whatever. Since KeepUp
+generates a separate commit for each succesful update, you can use `git bisect`
+to find any updates that cause problems and remove or fix them.
+
+## Planned Features
+
+* Check the starting situation (clean checkout, Gemfile.lock up to date)
+* Allow some check for each change. My feeling at the moment is that for local,
+  supervised use it's best to test everything at once at the end and then go
+  back and fix things. However, for automation it may be helpful to fully check
+  each commit.
+* Automaticall set up a new branch so you don't have to.
+* Create a pull request with the created commits.
+* Re-try with combinations of updates if single updates don't work: Sometimes
+  two or more dependencies need to be updated together due to their
+  interdependencies.
 
 ## Development
 
