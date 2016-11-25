@@ -1,12 +1,15 @@
+require_relative 'null_filter'
+
 module KeepUp
   # Apply potential updates to a Gemfile.
   class Updater
-    attr_reader :bundle, :repository, :version_control
+    attr_reader :bundle, :repository, :version_control, :filter
 
-    def initialize(bundle:, repository:, version_control:)
+    def initialize(bundle:, repository:, version_control:, filter: NullFilter.new)
       @bundle = bundle
       @repository = repository
       @version_control = version_control
+      @filter = filter
     end
 
     def run
@@ -21,6 +24,7 @@ module KeepUp
 
     def possible_updates
       bundle.direct_dependencies.
+        select { |dep| filter.call dep }.
         map { |dep| repository.updated_dependency_for dep }.compact
     end
   end

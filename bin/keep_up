@@ -5,7 +5,8 @@ require_relative '../lib/keep_up'
 
 options = {
   local: false,
-  test_command: 'bundle exec rake'
+  test_command: 'bundle exec rake',
+  skip: []
 }
 OptionParser.new do |parser|
   parser.on('--[no-]local') do |local|
@@ -14,6 +15,10 @@ OptionParser.new do |parser|
 
   parser.on('--test-command=COMMAND') do |command|
     options[:test_command] = command
+  end
+
+  parser.on('--skip=SKIPPED_GEM') do |gemname|
+    options[:skip] << gemname
   end
 end.parse!
 
