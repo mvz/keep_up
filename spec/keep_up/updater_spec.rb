@@ -116,14 +116,12 @@ describe KeepUp::Updater do
         end
 
         it 'lets the bundle update to the new dependency' do
-          updater.run
           expect(bundle).
             to have_received(:apply_updated_dependency).
             with updated_dependency
         end
 
         it 'commits the changes' do
-          updater.run
           expect(version_control).
             to have_received(:commit_changes).
             with updated_dependency
