@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Allow specifying gems to skip and not to attempt updates for.
+
 ## 0.2.0 / 2016-11-24
 
 * Resolve remotely to ensure list of available gems is fetched
