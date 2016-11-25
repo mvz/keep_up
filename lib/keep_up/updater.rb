@@ -1,15 +1,11 @@
+require_relative 'null_filter'
+
 module KeepUp
   # Apply potential updates to a Gemfile.
   class Updater
     attr_reader :bundle, :repository, :version_control, :filter
 
-    class PassFilter
-      def call(_dep)
-        true
-      end
-    end
-
-    def initialize(bundle:, repository:, version_control:, filter: PassFilter.new)
+    def initialize(bundle:, repository:, version_control:, filter: NullFilter.new)
       @bundle = bundle
       @repository = repository
       @version_control = version_control

@@ -4,6 +4,8 @@ require_relative 'bundle'
 require_relative 'repository'
 require_relative 'updater'
 require_relative 'version_control'
+require_relative 'null_filter'
+require_relative 'skip_filter'
 
 module KeepUp
   # Error thrown when we can't go any further.
@@ -12,9 +14,12 @@ module KeepUp
 
   # Main application
   class Application
+    attr_reader :skip
+
     def initialize(local:, test_command:, skip:)
       @test_command = test_command
       @local = local
+      @skip = skip
     end
 
     def run
@@ -22,15 +27,27 @@ module KeepUp
       report_up_to_date
     end
 
+    private
+
     def update_all_dependencies
       Updater.new(bundle: Bundle.new,
                   repository: Repository.new,
-                  version_control: VersionControl.new).run
+                  version_control: VersionControl.new,
+                  filter: filter).run
     end
 
     def report_up_to_date
       puts 'Bundle up to date!'
       puts 'All done!'
+    end
+
+    def filter
+      @filter ||= if skip.any?
+                    SkipFilter.new(skip)
+                  else
+                    NullFilter.new
+                  end
+
     end
   end
 end
