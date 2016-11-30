@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 / 2016-11-30
 
 * Allow specifying gems to skip and not to attempt updates for.
 
