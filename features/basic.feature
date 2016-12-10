@@ -9,14 +9,7 @@ Feature: Update bundle
       gem 'foo', '1.0.0'
       """
     And a gem named "foo" at version 1.0.0
-    When I run `bundle install`
-    Then the output should contain:
-      """
-      Using foo 1.0.0
-      """
-    When I run `git init`
-    And I run `git add .`
-    And I run `git ci -am 'Initial'`
+    And the initial bundle install committed
 
   Scenario: Nothing to do
     When I run `keep_up --test-command true`
