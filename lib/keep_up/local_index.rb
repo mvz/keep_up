@@ -9,7 +9,7 @@ module KeepUp
 
     def definition
       @definition ||=
-        Bundler::Definition.build('Gemfile', 'Gemfile.lock', true)
+        Bundler::Definition.build('Gemfile', 'Gemfile.lock', true).tap(&:resolve_with_cache!)
     end
 
     def index
