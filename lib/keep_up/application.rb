@@ -1,12 +1,13 @@
 require 'bundler'
 require 'open3'
 require_relative 'bundle'
-require_relative 'repository'
-require_relative 'updater'
-require_relative 'version_control'
+require_relative 'local_index'
 require_relative 'null_filter'
 require_relative 'remote_index'
+require_relative 'repository'
 require_relative 'skip_filter'
+require_relative 'updater'
+require_relative 'version_control'
 
 module KeepUp
   # Error thrown when we can't go any further.
@@ -32,7 +33,7 @@ module KeepUp
 
     def update_all_dependencies
       Updater.new(bundle: Bundle.new,
-                  repository: Repository.new(index: RemoteIndex.new),
+                  repository: Repository.new(index: index),
                   version_control: VersionControl.new,
                   filter: filter).run
     end
@@ -50,5 +51,10 @@ module KeepUp
                   end
 
     end
+
+    def index
+      @local ? LocalIndex.new : RemoteIndex.new
+    end
+
   end
 end

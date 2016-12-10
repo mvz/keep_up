@@ -1,6 +1,6 @@
 module KeepUp
-  # Searches possibly remote gem index to find potential dependency updates.
-  class RemoteIndex
+  # Searches possibly remote gem index o find potential dependency updates.
+  class LocalIndex
     def search(dependency)
       index.search(Bundler::Dependency.new(dependency.name, nil))
     end
@@ -9,7 +9,7 @@ module KeepUp
 
     def definition
       @definition ||=
-        Bundler::Definition.build('Gemfile', 'Gemfile.lock', true).tap(&:resolve_remotely!)
+        Bundler::Definition.build('Gemfile', 'Gemfile.lock', true)
     end
 
     def index
@@ -17,3 +17,4 @@ module KeepUp
     end
   end
 end
+
