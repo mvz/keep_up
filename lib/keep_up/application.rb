@@ -1,6 +1,7 @@
 require 'bundler'
 require 'open3'
 require_relative 'bundle'
+require_relative 'bundler_definition_builder'
 require_relative 'local_index'
 require_relative 'null_filter'
 require_relative 'remote_index'
@@ -16,8 +17,6 @@ module KeepUp
 
   # Main application
   class Application
-    attr_reader :skip
-
     def initialize(local:, test_command:, skip:)
       @test_command = test_command
       @local = local
@@ -31,11 +30,17 @@ module KeepUp
 
     private
 
+    attr_reader :skip, :local
+
     def update_all_dependencies
-      Updater.new(bundle: Bundle.new,
+      Updater.new(bundle: bundle,
                   repository: Repository.new(index: index),
                   version_control: VersionControl.new,
                   filter: filter).run
+    end
+
+    def bundle
+      Bundle.new(definition_builder: BundlerDefinitionBuilder.new(local: local))
     end
 
     def report_up_to_date
@@ -53,8 +58,7 @@ module KeepUp
     end
 
     def index
-      @local ? LocalIndex.new : RemoteIndex.new
+      local ? LocalIndex.new : RemoteIndex.new
     end
-
   end
 end
