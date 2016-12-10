@@ -3,7 +3,7 @@ module KeepUp
   module GemspecFilter
     def self.apply(contents, dependency)
       contents.each_line.map do |line|
-        if line =~ /^(.*_dependency[ (](?:['"]|%q.)#{dependency.name}., \[?['"](?:~>|=)? *)[^'"]*(['"].*)/m
+        if line =~ /^(.*_dependency[ (](?:['"]|%q.)#{dependency.name}.(?:\.freeze)?, \[?['"](?:~>|=)? *)[^'"]*(['"].*)/m
           match = Regexp.last_match
           "#{match[1]}#{dependency.version}#{match[2]}"
         else

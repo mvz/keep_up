@@ -21,10 +21,7 @@ Feature: Gemspec dependencies
       """
       Updating foo to 1.0.1
       """
-    And the file "bar.gemspec" should contain:
-      """
-      s.add_runtime_dependency(%q<foo>, ["= 1.0.1"])
-      """
+    And the gemspec for "bar" should depend on "foo" at version 1.0.1
     And the file "Gemfile.lock" should contain:
       """
       foo (1.0.1)
