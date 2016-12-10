@@ -5,6 +5,7 @@ require_relative 'repository'
 require_relative 'updater'
 require_relative 'version_control'
 require_relative 'null_filter'
+require_relative 'remote_index'
 require_relative 'skip_filter'
 
 module KeepUp
@@ -31,7 +32,7 @@ module KeepUp
 
     def update_all_dependencies
       Updater.new(bundle: Bundle.new,
-                  repository: Repository.new,
+                  repository: Repository.new(index: RemoteIndex.new),
                   version_control: VersionControl.new,
                   filter: filter).run
     end

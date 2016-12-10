@@ -5,6 +5,8 @@ module KeepUp
       remote_index.search(Bundler::Dependency.new(dependency.name, nil))
     end
 
+    private
+
     def remote_definition
       @remote_definition ||=
         Bundler::Definition.build('Gemfile', 'Gemfile.lock', true).tap(&:resolve_remotely!)
