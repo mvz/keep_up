@@ -40,12 +40,16 @@ module KeepUp
     end
 
     def bundle
-      Bundle.new(definition_builder: BundlerDefinitionBuilder.new(local: local))
+      Bundle.new(definition_builder: definition_builder)
     end
 
     def report_up_to_date
       puts 'Bundle up to date!'
       puts 'All done!'
+    end
+
+    def definition_builder
+      @definition_builder ||= BundlerDefinitionBuilder.new(local: local)
     end
 
     def filter
