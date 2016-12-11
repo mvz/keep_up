@@ -2,9 +2,8 @@ require 'bundler'
 require 'open3'
 require_relative 'bundle'
 require_relative 'bundler_definition_builder'
-require_relative 'local_index'
+require_relative 'gem_index'
 require_relative 'null_filter'
-require_relative 'remote_index'
 require_relative 'repository'
 require_relative 'skip_filter'
 require_relative 'updater'
@@ -62,7 +61,7 @@ module KeepUp
     end
 
     def index
-      local ? LocalIndex.new : RemoteIndex.new
+      GemIndex.new(definition_builder: definition_builder)
     end
   end
 end
