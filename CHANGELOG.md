@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* Allow local operation
+* Handle explicitely frozen strings in gemspecs
+
 ## 0.3.0 / 2016-11-30
 
 * Allow specifying gems to skip and not to attempt updates for.

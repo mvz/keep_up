@@ -11,7 +11,7 @@ install it yourself as:
 
     $ gem install keep_up
 
-## Usage
+## Basic Usage
 
 KeepUp only works with git at the moment!
 
@@ -29,6 +29,14 @@ KeepUp will do its thing.
 Next, run `bundle install` and run your tests or whatever. Since KeepUp
 generates a separate commit for each succesful update, you can use `git bisect`
 to find any updates that cause problems and remove or fix them.
+
+## Options
+
+* You can pass `--skip <GEMNAME>` to make KeepUp not consider the named gem for
+  upgrades. This is helpful if you know a given upgrade is problematic. This
+  option can be passed multiple times.
+* You can pass `--local` to make KeepUp not try to fetch remote gem version
+  information.
 
 ## Planned Features
 
