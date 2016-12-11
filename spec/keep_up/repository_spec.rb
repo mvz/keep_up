@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe KeepUp::Repository do
   describe '#updated_dependency_for' do
-    let(:remote_index) { double('remote index') }
-    let(:repository) { described_class.new(remote_index: remote_index) }
+    let(:index) { double('index') }
+    let(:repository) { described_class.new(index: index) }
     let(:locked_dependency) do
       double('locked dependency',
              version: version,
@@ -11,7 +11,7 @@ describe KeepUp::Repository do
     end
 
     before do
-      allow(remote_index).
+      allow(index).
         to receive(:search).with(locked_dependency).
         and_return [
           double('dep09', version: '0.9.0'),

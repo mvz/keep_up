@@ -1,11 +1,13 @@
 require 'bundler'
 require 'open3'
 require_relative 'bundle'
+require_relative 'bundler_definition_builder'
+require_relative 'gem_index'
+require_relative 'null_filter'
 require_relative 'repository'
+require_relative 'skip_filter'
 require_relative 'updater'
 require_relative 'version_control'
-require_relative 'null_filter'
-require_relative 'skip_filter'
 
 module KeepUp
   # Error thrown when we can't go any further.
@@ -14,8 +16,6 @@ module KeepUp
 
   # Main application
   class Application
-    attr_reader :skip
-
     def initialize(local:, test_command:, skip:)
       @test_command = test_command
       @local = local
@@ -29,16 +29,26 @@ module KeepUp
 
     private
 
+    attr_reader :skip, :local
+
     def update_all_dependencies
-      Updater.new(bundle: Bundle.new,
-                  repository: Repository.new,
+      Updater.new(bundle: bundle,
+                  repository: Repository.new(index: index),
                   version_control: VersionControl.new,
                   filter: filter).run
+    end
+
+    def bundle
+      Bundle.new(definition_builder: definition_builder)
     end
 
     def report_up_to_date
       puts 'Bundle up to date!'
       puts 'All done!'
+    end
+
+    def definition_builder
+      @definition_builder ||= BundlerDefinitionBuilder.new(local: local)
     end
 
     def filter
@@ -48,6 +58,10 @@ module KeepUp
                     NullFilter.new
                   end
 
+    end
+
+    def index
+      GemIndex.new(definition_builder: definition_builder)
     end
   end
 end

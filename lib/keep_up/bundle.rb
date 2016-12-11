@@ -6,6 +6,10 @@ require_relative 'dependency'
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
   class Bundle
+    def initialize(definition_builder:)
+      @definition_builder = definition_builder
+    end
+
     def direct_dependencies
       (gemspec_dependencies + gemfile_dependencies).map do |dep|
         spec = locked_spec dep
@@ -24,6 +28,8 @@ module KeepUp
     end
 
     private
+
+    attr_reader :definition_builder
 
     def gemfile_dependencies
       bundler_lockfile.dependencies
@@ -44,7 +50,7 @@ module KeepUp
     end
 
     def bundler_definition
-      @bundler_definition ||= Bundler::Definition.build('Gemfile', 'Gemfile.lock', false)
+      @bundler_definition ||= definition_builder.build(false)
     end
 
     def update_gemfile_contents(dependency)
@@ -79,9 +85,7 @@ module KeepUp
 
     def update_lockfile(dependency)
       Bundler.clear_gemspec_cache
-      Bundler::Definition.build('Gemfile', 'Gemfile.lock', gems: [dependency.name]).
-        tap(&:resolve_remotely!).
-        lock('Gemfile.lock')
+      definition_builder.build(gems: [dependency.name]).lock('Gemfile.lock')
       true
     rescue Bundler::VersionConflict
       puts 'Update failed'
