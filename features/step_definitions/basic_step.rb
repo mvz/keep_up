@@ -3,7 +3,9 @@ Given(/^a Gemfile specifying:$/) do |string|
   write_file 'Gemfile', contents
 end
 
-Given(/^a gemspec for "([^"]*)" depending on "([^"]*)" at version ([0-9.]+)$/) do |gemname, depname, depversion|
+Given(
+  /^a gemspec for "([^"]*)" depending on "([^"]*)" at version ([0-9.]+)$/
+) do |gemname, depname, depversion|
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = '0.0.1'
@@ -45,7 +47,9 @@ Given(/^the initial bundle install committed$/) do
   run_simple "git ci -am 'Initial'"
 end
 
-Then(/^the gemspec for "([^"]*)" should depend on "([^"]*)" at version ([0-9.]+)$/) do |gemname, depname, depversion|
+Then(
+  /^the gemspec for "([^"]*)" should depend on "([^"]*)" at version ([0-9.]+)$/
+) do |gemname, depname, depversion|
   matcher = /s.add_runtime_dependency\(%q<#{depname}>(.freeze)?, \["= #{depversion}"\]\)/
   expect("#{gemname}.gemspec").to have_file_content matcher
 end

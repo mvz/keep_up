@@ -18,4 +18,3 @@ describe KeepUp::SkipFilter do
     end
   end
 end
-

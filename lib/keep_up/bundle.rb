@@ -36,7 +36,8 @@ module KeepUp
     end
 
     def gemspec_dependencies
-      gemspec_source = bundler_lockfile.sources.find { |it| it.is_a? Bundler::Source::Gemspec }
+      gemspec_source = bundler_lockfile.sources.
+        find { |it| it.is_a? Bundler::Source::Gemspec }
       return [] unless gemspec_source
       gemspec_source.gemspec.dependencies
     end
@@ -55,7 +56,7 @@ module KeepUp
 
     def update_gemfile_contents(dependency)
       current_dependency = gemfile_dependencies.find { |it| it.name == dependency.name }
-      return if !current_dependency
+      return unless current_dependency
       return if current_dependency.matches_spec?(dependency)
       contents = File.read 'Gemfile'
       updated_contents = GemfileFilter.apply(contents, dependency)
@@ -64,7 +65,7 @@ module KeepUp
 
     def update_gemspec_contents(dependency)
       current_dependency = gemspec_dependencies.find { |it| it.name == dependency.name }
-      return if !current_dependency
+      return unless current_dependency
       return if current_dependency.matches_spec?(dependency)
       contents = File.read gemspec_name
       updated_contents = GemspecFilter.apply(contents, dependency)
