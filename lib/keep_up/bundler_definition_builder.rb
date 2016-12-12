@@ -1,6 +1,7 @@
 require 'bundler'
 
 module KeepUp
+  # Creates Bunder::Definition objects.
   class BundlerDefinitionBuilder
     def initialize(local: false)
       @local = local
