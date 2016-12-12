@@ -36,7 +36,8 @@ module KeepUp
     end
 
     def gemspec_dependencies
-      gemspec_source = bundler_lockfile.sources.find { |it| it.is_a? Bundler::Source::Gemspec }
+      gemspec_source = bundler_lockfile.sources.
+        find { |it| it.is_a? Bundler::Source::Gemspec }
       return [] unless gemspec_source
       gemspec_source.gemspec.dependencies
     end
