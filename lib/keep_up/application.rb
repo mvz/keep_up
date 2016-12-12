@@ -57,7 +57,6 @@ module KeepUp
                   else
                     NullFilter.new
                   end
-
     end
 
     def index
