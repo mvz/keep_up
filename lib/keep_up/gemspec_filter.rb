@@ -2,10 +2,7 @@ module KeepUp
   # Filter to update dependency information in a Gemspec.
   module GemspecFilter
     def self.apply(contents, dependency)
-      matcher = /^(.*_dependency
-                 [\ (](?:['"]|%q.)#{dependency.name}.(?:\.freeze)?,
-                 \ \[?['"](?:~>|=)?\ *)[^'"]*(['"].*)
-                /mx
+      matcher = dependency_matcher(dependency)
       contents.each_line.map do |line|
         if line =~ matcher
           match = Regexp.last_match
@@ -14,6 +11,14 @@ module KeepUp
           line
         end
       end.join
+    end
+
+    def self.dependency_matcher(dependency)
+      /
+        ^(.*_dependency
+        [\ (](?:['"]|%q.)#{dependency.name}.(?:\.freeze)?,
+        \ \[?['"](?:~>|=)?\ *)[^'"]*(['"].*)
+      /mx
     end
   end
 end
