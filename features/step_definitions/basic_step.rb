@@ -50,6 +50,9 @@ end
 Then(
   /^the gemspec for "([^"]*)" should depend on "([^"]*)" at version "([^"]*)"$/
 ) do |gemname, depname, depversion|
-  matcher = /s.add_runtime_dependency\(%q<#{depname}>(.freeze)?, \["= #{depversion}"\]\)/
+  unless depversion =~ /^[~<>=]/
+    depversion = "= #{depversion}"
+  end
+  matcher = /s.add_runtime_dependency\(%q<#{depname}>(.freeze)?, \["#{depversion}"\]\)/
   expect("#{gemname}.gemspec").to have_file_content matcher
 end
