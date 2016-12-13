@@ -8,7 +8,7 @@ Feature: Update bundle
       """
       gem 'foo', '1.0.0'
       """
-    And a gem named "foo" at version 1.0.0
+    And a gem named "foo" at version "1.0.0"
     And the initial bundle install committed
 
   Scenario: Nothing to do
@@ -28,7 +28,7 @@ Feature: Update bundle
       """
 
   Scenario: Updating a gem with a fixed version
-    Given a gem named "foo" at version 1.0.1
+    Given a gem named "foo" at version "1.0.1"
     When I run `keep_up --test-command true`
     Then the output should contain:
       """

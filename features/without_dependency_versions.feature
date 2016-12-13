@@ -8,9 +8,9 @@ Feature: Update bundle with no depenency versions
       """
       gem 'foo'
       """
-    And a gem named "foo" at version 1.0.0
+    And a gem named "foo" at version "1.0.0"
     And the initial bundle install committed
-    And a gem named "foo" at version 1.0.1
+    And a gem named "foo" at version "1.0.1"
     When I run `keep_up --test-command true`
     Then the output should contain:
       """

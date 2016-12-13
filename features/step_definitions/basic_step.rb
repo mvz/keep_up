@@ -4,7 +4,7 @@ Given(/^a Gemfile specifying:$/) do |string|
 end
 
 Given(
-  /^a gemspec for "([^"]*)" depending on "([^"]*)" at version ([0-9.]+)$/
+  /^a gemspec for "([^"]*)" depending on "([^"]*)" at version "([^"]*)"$/
 ) do |gemname, depname, depversion|
   spec = Gem::Specification.new do |s|
     s.name = gemname
@@ -15,7 +15,7 @@ Given(
   write_file "#{gemname}.gemspec", spec.to_ruby
 end
 
-Given(/^a gem named "([^'"]+)" at version ([0-9.]+)$/) do |gemname, version|
+Given(/^a gem named "([^'"]+)" at version "([^"]*)"$/) do |gemname, version|
   base_path = "libs/#{gemname}-#{version}"
   spec = Gem::Specification.new do |s|
     s.name = gemname
@@ -27,7 +27,7 @@ Given(/^a gem named "([^'"]+)" at version ([0-9.]+)$/) do |gemname, version|
 end
 
 Given(
-  /^a gem named "([^"]*)" at version ([0-9.]+) depending on "([^"]*)" at version ([0-9.]+)$/
+  /^a gem named "([^"]*)" at version "([^"]*)" depending on "([^"]*)" at version "([^"]*)"$/
 ) do |gemname, version, depname, depversion|
   base_path = "libs/#{gemname}-#{version}"
   spec = Gem::Specification.new do |s|
@@ -48,7 +48,7 @@ Given(/^the initial bundle install committed$/) do
 end
 
 Then(
-  /^the gemspec for "([^"]*)" should depend on "([^"]*)" at version ([0-9.]+)$/
+  /^the gemspec for "([^"]*)" should depend on "([^"]*)" at version "([^"]*)"$/
 ) do |gemname, depname, depversion|
   matcher = /s.add_runtime_dependency\(%q<#{depname}>(.freeze)?, \["= #{depversion}"\]\)/
   expect("#{gemname}.gemspec").to have_file_content matcher

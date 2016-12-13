@@ -8,11 +8,11 @@ Feature: Update bundle with approximate versions
       """
       gem 'foo', '~> 1.0.0'
       """
-    And a gem named "foo" at version 1.0.0
+    And a gem named "foo" at version "1.0.0"
     And the initial bundle install committed
 
   Scenario: Updating to a version that matches the current spec
-    Given a gem named "foo" at version 1.0.1
+    Given a gem named "foo" at version "1.0.1"
     When I run `keep_up --test-command true`
     Then the output should contain:
       """
@@ -30,7 +30,7 @@ Feature: Update bundle with approximate versions
       """
 
   Scenario: Updating to a version that exceeds the current spec
-    Given a gem named "foo" at version 1.1.2
+    Given a gem named "foo" at version "1.1.2"
     When I run `keep_up --test-command true`
     Then the output should contain:
       """
