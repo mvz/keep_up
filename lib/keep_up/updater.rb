@@ -25,7 +25,7 @@ module KeepUp
     def possible_updates
       bundle.direct_dependencies.
         select { |dep| filter.call dep }.
-        map { |dep| repository.updated_dependency_for dep }.compact
+        map { |dep| repository.updated_dependency_for dep }.compact.uniq
     end
   end
 end

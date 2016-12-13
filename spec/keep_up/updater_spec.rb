@@ -3,7 +3,8 @@ require 'spec_helper'
 describe KeepUp::Updater do
   describe '#run' do
     let(:dependency) { double('dependency') }
-    let(:bundle) { double('bundle', direct_dependencies: [dependency]) }
+    let(:dependencies) { [dependency] }
+    let(:bundle) { double('bundle', direct_dependencies: dependencies) }
     let(:repository) { double('repository') }
     let(:version_control) { double('version_control') }
 
@@ -140,6 +141,56 @@ describe KeepUp::Updater do
       it 'does not let the bundle update anything' do
         expect(bundle).not_to receive(:apply_updated_dependency)
         updater.run
+      end
+    end
+
+    context 'when several dependencies are present with an available update' do
+      let(:other_dependency) { double('other dependency') }
+      let(:dependencies) { [dependency, other_dependency] }
+      let(:updated_dependency) { double('updated dependency') }
+      let(:updated_other_dependency) { double('updated other dependency') }
+
+      before do
+        allow(repository).
+          to receive(:updated_dependency_for).with(dependency).
+          and_return updated_dependency
+        allow(repository).
+          to receive(:updated_dependency_for).with(other_dependency).
+          and_return updated_other_dependency
+        allow(bundle).to receive(:apply_updated_dependency).and_return true
+      end
+
+      it 'applies each update' do
+        updater.run
+        expect(bundle).
+          to have_received(:apply_updated_dependency).
+          with(updated_dependency)
+        expect(bundle).
+          to have_received(:apply_updated_dependency).
+          with(updated_other_dependency)
+      end
+    end
+
+    context 'when two dependencies result in the same update' do
+      let(:other_dependency) { double('other dependency') }
+      let(:dependencies) { [dependency, other_dependency] }
+      let(:updated_dependency) { double('updated dependency') }
+
+      before do
+        allow(repository).
+          to receive(:updated_dependency_for).with(dependency).
+          and_return updated_dependency
+        allow(repository).
+          to receive(:updated_dependency_for).with(other_dependency).
+          and_return updated_dependency
+        allow(bundle).to receive(:apply_updated_dependency).and_return true
+      end
+
+      it 'applies the update only once' do
+        updater.run
+        expect(bundle).
+          to have_received(:apply_updated_dependency).
+          with(updated_dependency).once
       end
     end
   end
