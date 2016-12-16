@@ -25,5 +25,6 @@ end.parse!
 begin
   KeepUp::Application.new(options).run
 rescue KeepUp::BailOut => e
-  puts "Failure: #{e.message}"
+  warn e.message
+  exit 1
 end

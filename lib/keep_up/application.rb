@@ -23,6 +23,7 @@ module KeepUp
     end
 
     def run
+      sanity_check
       update_all_dependencies
       report_up_to_date
     end
@@ -31,11 +32,20 @@ module KeepUp
 
     attr_reader :skip, :local
 
+    def sanity_check
+      version_control.clean? or
+        raise BailOut, "Commit or stash your work before running 'keep_up'"
+    end
+
     def update_all_dependencies
       Updater.new(bundle: bundle,
                   repository: Repository.new(index: index),
-                  version_control: VersionControl.new,
+                  version_control: version_control,
                   filter: filter).run
+    end
+
+    def version_control
+      @version_control ||= VersionControl.new
     end
 
     def bundle

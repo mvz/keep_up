@@ -42,9 +42,14 @@ end
 
 Given(/^the initial bundle install committed$/) do
   run_simple 'bundle install'
+  write_file '.gitignore', 'libs/'
   run_simple 'git init'
   run_simple 'git add .'
   run_simple "git ci -am 'Initial'"
+end
+
+When(/^I add a file without checking it in$/) do
+  write_file 'some_file.rb', '# This is a new file'
 end
 
 Then(
