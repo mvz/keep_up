@@ -12,11 +12,7 @@ module KeepUp
 
     def direct_dependencies
       (gemspec_dependencies + gemfile_dependencies).map do |dep|
-        spec = locked_spec dep
-        next unless spec
-        Dependency.new(name: dep.name,
-                       version: dep.requirements_list.first,
-                       locked_version: spec.version)
+        build_dependency dep
       end.compact
     end
 
@@ -40,6 +36,14 @@ module KeepUp
         find { |it| it.is_a? Bundler::Source::Gemspec }
       return [] unless gemspec_source
       gemspec_source.gemspec.dependencies
+    end
+
+    def build_dependency(dep)
+      spec = locked_spec dep
+      return unless spec
+      Dependency.new(name: dep.name,
+                     version: dep.requirements_list.first,
+                     locked_version: spec.version)
     end
 
     def locked_spec(dep)
