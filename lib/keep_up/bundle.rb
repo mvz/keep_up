@@ -67,12 +67,15 @@ module KeepUp
       File.write 'Gemfile', updated_contents
     end
 
-    def update_gemspec_contents(dependency)
-      current_dependency = gemspec_dependencies.find { |it| it.name == dependency.name }
+    def update_gemspec_contents(update)
+      current_dependency = gemspec_dependencies.find { |it| it.name == update.name }
       return unless current_dependency
-      return if current_dependency.matches_spec?(dependency)
+      return if current_dependency.matches_spec?(update)
+
+      update = current_dependency.generalize_specification(update)
+
       contents = File.read gemspec_name
-      updated_contents = GemspecFilter.apply(contents, dependency)
+      updated_contents = GemspecFilter.apply(contents, update)
       File.write gemspec_name, updated_contents
     end
 
@@ -88,9 +91,9 @@ module KeepUp
                         end
     end
 
-    def update_lockfile(dependency)
+    def update_lockfile(update)
       Bundler.clear_gemspec_cache
-      definition_builder.build(gems: [dependency.name]).lock('Gemfile.lock')
+      definition_builder.build(gems: [update.name]).lock('Gemfile.lock')
       true
     rescue Bundler::VersionConflict
       puts 'Update failed'
