@@ -21,6 +21,10 @@ module KeepUp
       update_lockfile(dependency)
     end
 
+    def check?
+      bundler_definition.to_lock == File.read('Gemfile.lock')
+    end
+
     private
 
     attr_reader :definition_builder

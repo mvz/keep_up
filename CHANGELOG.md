@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Match existing specificity of versions when updating them
+* Stop eating people's homework by doing some sanity checks at the start
 
 ## 0.4.0 / 2016-12-11
 

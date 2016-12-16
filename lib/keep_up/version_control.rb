@@ -8,5 +8,9 @@ module KeepUp
     def revert_changes
       `git reset --hard`
     end
+
+    def clean?
+      `git status -s` == ''
+    end
   end
 end
