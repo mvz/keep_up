@@ -58,12 +58,15 @@ module KeepUp
       @bundler_definition ||= definition_builder.build(false)
     end
 
-    def update_gemfile_contents(dependency)
-      current_dependency = gemfile_dependencies.find { |it| it.name == dependency.name }
+    def update_gemfile_contents(update)
+      current_dependency = gemfile_dependencies.find { |it| it.name == update.name }
       return unless current_dependency
-      return if current_dependency.matches_spec?(dependency)
+      return if current_dependency.matches_spec?(update)
+
+      update = current_dependency.generalize_specification(update)
+
       contents = File.read 'Gemfile'
-      updated_contents = GemfileFilter.apply(contents, dependency)
+      updated_contents = GemfileFilter.apply(contents, update)
       File.write 'Gemfile', updated_contents
     end
 
