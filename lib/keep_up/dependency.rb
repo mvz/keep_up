@@ -20,14 +20,9 @@ module KeepUp
 
     def generalize_specification(specification)
       return specification if requirement.exact?
-
-      _, ver = requirement.requirements.first
-      segment_count = ver.segments.count
-      new_segment_count = specification.version.segments.count
-
-      return specification if new_segment_count <= segment_count
-
-      version = specification.version.segments.take(segment_count).join('.')
+      segments = specification.version.segments
+      return specification if segments.count <= segment_count
+      version = segments.take(segment_count).join('.')
       Gem::Specification.new(specification.name, version)
     end
 
@@ -35,6 +30,13 @@ module KeepUp
 
     def requirement
       @dependency.requirement
+    end
+
+    def segment_count
+      @segment_count ||= begin
+                           _, ver = requirement.requirements.first
+                           ver.segments.count
+                         end
     end
   end
 end
