@@ -4,8 +4,6 @@ Automatically update your dependencies.
 
 ## Installation
 
-THIS GEM IS HIGHLY EXPERIMENTAL AND WILL EAT YOUR HOMEWORK!
-
 KeepUp is not intended to be part of your application's bundle. You should
 install it yourself as:
 
@@ -15,16 +13,16 @@ install it yourself as:
 
 KeepUp only works with git at the moment!
 
-First, make sure your checkout directory is clean. KeepUp will currently not
-check this for you and may throw away your changes!
-
-Next, it's probably nice to start a new branch.
+Before running KeepUp, it's probably nice to start a new branch. Also, KeepUp
+will refuse to run if your checkout directory is not clean, or if your
+Gemfile.lock is not up-to-date.
 
 Run keep_up in your project directory:
 
     $ keep_up
 
-KeepUp will do its thing.
+KeepUp will proceed to update your dependencies one by one, committing each
+change if updating the bundle is succesful.
 
 Next, run `bundle install` and run your tests or whatever. Since KeepUp
 generates a separate commit for each succesful update, you can use `git bisect`
@@ -40,7 +38,6 @@ to find any updates that cause problems and remove or fix them.
 
 ## Planned Features
 
-* Check the starting situation (clean checkout, Gemfile.lock up to date)
 * Allow some check for each change. My feeling at the moment is that for local,
   supervised use it's best to test everything at once at the end and then go
   back and fix things. However, for automation it may be helpful to fully check
