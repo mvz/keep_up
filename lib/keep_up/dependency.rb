@@ -10,10 +10,6 @@ module KeepUp
       @dependency.name
     end
 
-    def version
-      @dependency.requirements_list.first
-    end
-
     def locked_version
       @locked_spec.version
     end
