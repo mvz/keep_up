@@ -11,9 +11,7 @@ module KeepUp
     end
 
     def direct_dependencies
-      (gemspec_dependencies + gemfile_dependencies).map do |dep|
-        build_dependency dep
-      end.compact
+      gemspec_dependencies + gemfile_dependencies
     end
 
     def apply_updated_dependency(dependency)
@@ -28,22 +26,24 @@ module KeepUp
     attr_reader :definition_builder
 
     def gemfile_dependencies
-      bundler_lockfile.dependencies
+      build_dependencies bundler_lockfile.dependencies
     end
 
     def gemspec_dependencies
       gemspec_source = bundler_lockfile.sources.
         find { |it| it.is_a? Bundler::Source::Gemspec }
       return [] unless gemspec_source
-      gemspec_source.gemspec.dependencies
+      build_dependencies gemspec_source.gemspec.dependencies
+    end
+
+    def build_dependencies(deps)
+      deps.map { |dep| build_dependency dep }.compact
     end
 
     def build_dependency(dep)
       spec = locked_spec dep
       return unless spec
-      Dependency.new(name: dep.name,
-                     version: dep.requirements_list.first,
-                     locked_version: spec.version)
+      Dependency.new(dependency: dep, locked_spec: spec)
     end
 
     def locked_spec(dep)
