@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Match existing specificity of versions when updating them
+
 ## 0.4.0 / 2016-12-11
 
 * Allow local operation
