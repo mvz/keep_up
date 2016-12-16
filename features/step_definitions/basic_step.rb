@@ -1,6 +1,10 @@
-Given(/^a Gemfile specifying:$/) do |string|
+def write_local_gemfile(string)
   contents = "path 'libs'\n\n#{string}"
   write_file 'Gemfile', contents
+end
+
+Given(/^a Gemfile specifying:$/) do |string|
+  write_local_gemfile(string)
 end
 
 Given(
@@ -50,6 +54,14 @@ end
 
 When(/^I add a file without checking it in$/) do
   write_file 'some_file.rb', '# This is a new file'
+end
+
+When(/^I update the Gemfile to specify:$/) do |string|
+  write_local_gemfile(string)
+end
+
+When(/^I commit the changes without updating the bundle$/) do
+  run_simple "git ci -am 'YOLO!'"
 end
 
 Then(
