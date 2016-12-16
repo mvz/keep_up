@@ -6,7 +6,6 @@ describe KeepUp::Repository do
     let(:repository) { described_class.new(index: index) }
     let(:locked_dependency) do
       double('locked dependency',
-             version: version,
              locked_version: locked_version)
     end
 
@@ -21,7 +20,6 @@ describe KeepUp::Repository do
     end
 
     context 'when the current version is not the latest' do
-      let(:version) { '~> 1.0' }
       let(:locked_version) { '1.0.0' }
 
       it 'returns the latest version found on the remote index' do
@@ -31,7 +29,6 @@ describe KeepUp::Repository do
     end
 
     context 'when the current locked version is the latest' do
-      let(:version) { '~> 1.0' }
       let(:locked_version) { '1.1.0' }
 
       it 'returns nil' do
@@ -40,7 +37,6 @@ describe KeepUp::Repository do
     end
 
     context 'when the current locked version higher than the latest' do
-      let(:version) { '~> 1.0' }
       let(:locked_version) { '1.2.0' }
 
       it 'returns nil' do

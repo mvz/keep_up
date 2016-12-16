@@ -9,11 +9,11 @@ Feature: Update bundle with bundler as a dependency
       gem 'foo', '1.0.0'
       gem 'bundler'
       """
-    And a gem named "foo" at version 1.0.0
+    And a gem named "foo" at version "1.0.0"
     And the initial bundle install committed
 
   Scenario: Updating foo
-    Given a gem named "foo" at version 1.0.1
+    Given a gem named "foo" at version "1.0.1"
     When I run `keep_up --test-command true`
     Then the output should contain:
       """
