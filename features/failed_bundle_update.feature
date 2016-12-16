@@ -14,7 +14,7 @@ Feature: Skip failing updates
     And the initial bundle install committed
     And a gem named "bar" at version "1.2.0" depending on "foo" at version "1.2.0"
     And a gem named "foo" at version "1.2.0"
-    When I run `keep_up --test-command true`
+    When I run `keep_up`
     Then the output should contain:
       """
       Updating bar to 1.2.0

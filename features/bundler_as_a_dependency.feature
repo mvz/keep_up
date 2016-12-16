@@ -14,7 +14,7 @@ Feature: Update bundle with bundler as a dependency
 
   Scenario: Updating foo
     Given a gem named "foo" at version "1.0.1"
-    When I run `keep_up --test-command true`
+    When I run `keep_up`
     Then the output should contain:
       """
       Updating foo to 1.0.1

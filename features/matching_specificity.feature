@@ -12,7 +12,7 @@ Feature: Matching specificity correctly
     And a gem named "foo" at version "1.0.0"
     And the initial bundle install committed
     And a gem named "foo" at version "2.1.1"
-    When I run `keep_up --test-command true`
+    When I run `keep_up`
     Then the output should contain:
       """
       Updating foo to 2.1.1
@@ -36,7 +36,7 @@ Feature: Matching specificity correctly
     And a gem named "foo" at version "1.0.0"
     And the initial bundle install committed
     And a gem named "foo" at version "2.1.1"
-    When I run `keep_up --test-command true`
+    When I run `keep_up`
     Then the output should contain:
       """
       Updating foo to 2.1.1
