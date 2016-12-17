@@ -24,5 +24,19 @@ describe KeepUp::GemfileFilter do
       result = described_class.apply(contents, dependency)
       expect(result).to eq "  gem 'foo', '~> 1.2.0'"
     end
+
+    it 'handles extra white space' do
+      contents = "gem  'foo',  '1.1.0' "
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "gem  'foo',  '1.2.0' "
+    end
+
+    it 'handles tabs' do
+      contents = "\tgem\t'foo',\t'1.1.0'\t"
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "\tgem\t'foo',\t'1.2.0'\t"
+    end
   end
 end

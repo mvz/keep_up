@@ -16,8 +16,9 @@ module KeepUp
     def self.dependency_matcher(dependency)
       /
         ^(.*_dependency
-        [\ (](?:['"]|%q.)#{dependency.name}.(?:\.freeze)?,
-        \ \[?['"](?:~>|=)?\ *)[^'"]*(['"].*)
+        \s*(?:\(\s*)?
+        (?:['"]|%q.)#{dependency.name}.(?:\.freeze)?,
+        \s+\[?['"](?:~>|=)?\ *)[^'"]*(['"].*)
       /mx
     end
   end
