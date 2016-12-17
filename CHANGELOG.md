@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.1 / 2016-12-17
 
 * Handle extra and unusual whitespace when updating Gemfile and gemspec
 
