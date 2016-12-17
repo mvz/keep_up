@@ -73,5 +73,26 @@ describe KeepUp::GemspecFilter do
       result = described_class.apply(contents, dependency)
       expect(result).to eq "  spec.add_runtime_dependency 'foo', '~> 1.2.0'"
     end
+
+    it 'handles extra white space' do
+      contents = "spec.add_runtime_dependency  'foo',  '1.1.0' "
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "spec.add_runtime_dependency  'foo',  '1.2.0' "
+    end
+
+    it 'handles extra white space with brackets' do
+      contents = "spec.add_runtime_dependency ( 'foo', '1.1.0' )"
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "spec.add_runtime_dependency ( 'foo', '1.2.0' )"
+    end
+
+    it 'handles tabs' do
+      contents = "spec.add_runtime_dependency\t'foo',\t'1.1.0'\t"
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "spec.add_runtime_dependency\t'foo',\t'1.2.0'\t"
+    end
   end
 end
