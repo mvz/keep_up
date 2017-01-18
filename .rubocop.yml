@@ -6,6 +6,10 @@ AllCops:
 Lint/AssignmentInCondition:
   AllowSafeAssignment: true
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
 # Require lines to fit in pull requests.
 Metrics/LineLength:
   Max: 92
