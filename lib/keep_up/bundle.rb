@@ -120,7 +120,7 @@ module KeepUp
       definition.lock('Gemfile.lock')
       current = locked_spec(update)
       result = definition.specs.find { |it| it.name == update.name }
-      result if result.version != current.version
+      result if result.version > current.version
     rescue Bundler::VersionConflict
       false
     end
