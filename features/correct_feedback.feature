@@ -16,7 +16,6 @@ Feature: Correct feedback
     Then the output should contain:
       """
       Updating bar to 1.1.0
-      Bundle up to date!
       All done!
       """
 
@@ -43,6 +42,5 @@ Feature: Correct feedback
       """
       Updating bar to 1.2.0
       Update failed
-      Bundle up to date!
       All done!
       """
