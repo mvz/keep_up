@@ -15,16 +15,11 @@ module KeepUp
     end
 
     def apply_updated_dependency(dependency)
-      print "Updating #{dependency.name}"
+      report_intent dependency
       update_gemfile_contents(dependency)
       update_gemspec_contents(dependency)
       result = update_lockfile(dependency)
-      if result
-        puts " to #{result.version}"
-      else
-        puts " to #{dependency.version}"
-        puts 'Update failed'
-      end
+      report_result dependency, result
       result
     end
 
@@ -35,6 +30,19 @@ module KeepUp
     private
 
     attr_reader :definition_builder
+
+    def report_intent(dependency)
+      print "Updating #{dependency.name}"
+    end
+
+    def report_result(dependency, result)
+      if result
+        puts " to #{result.version}"
+      else
+        puts " to #{dependency.version}"
+        puts 'Update failed'
+      end
+    end
 
     def gemfile_dependencies
       build_dependencies bundler_lockfile.dependencies
