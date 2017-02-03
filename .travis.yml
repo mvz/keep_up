@@ -10,6 +10,8 @@ before_install:
   - gem uninstall bundler -x
   - gem install bundler --version=1.13.7
   - bundler --version
+  - git config --global user.email "you@example.com"
+  - git config --global user.name "Your Name"
 
 branches:
   only:
