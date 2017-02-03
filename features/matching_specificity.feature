@@ -25,7 +25,7 @@ Feature: Matching specificity correctly
     When I run `git log`
     Then the output should contain:
       """
-      Update foo to 2.1
+      Auto-update foo to 2.1
       """
 
   Scenario: Matching specificity while updating a Gemfile
@@ -52,5 +52,5 @@ Feature: Matching specificity correctly
     When I run `git log`
     Then the output should contain:
       """
-      Update foo to 2.1
+      Auto-update foo to 2.1
       """

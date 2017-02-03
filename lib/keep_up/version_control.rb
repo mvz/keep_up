@@ -2,7 +2,7 @@ module KeepUp
   # Interface to the version control system (only Git is supported).
   class VersionControl
     def commit_changes(dependency)
-      `git ci -am "Update #{dependency.name} to #{dependency.version}"`
+      `git ci -am "Auto-update #{dependency.name} to #{dependency.version}"`
     end
 
     def revert_changes

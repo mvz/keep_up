@@ -27,5 +27,5 @@ Feature: Correct feedback
     When I run `git log`
     Then the output should contain:
       """
-      Update bar to 1.1.0
+      Auto-update bar to 1.1.0
       """
