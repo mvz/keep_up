@@ -5,6 +5,11 @@ rvm:
   - 2.3.3
   - 2.4.0
 
+before_install:
+  - gem uninstall bundler -x
+  - gem install bundler --version=1.13.7
+  - bundler --version
+
 branches:
   only:
     - master
