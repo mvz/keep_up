@@ -14,8 +14,9 @@ module KeepUp
 
     def run
       possible_updates.each do |update|
-        if bundle.apply_updated_dependency update
-          version_control.commit_changes update
+        result = bundle.apply_updated_dependency update
+        if result
+          version_control.commit_changes result
         else
           version_control.revert_changes
         end

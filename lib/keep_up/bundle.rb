@@ -15,10 +15,12 @@ module KeepUp
     end
 
     def apply_updated_dependency(dependency)
-      puts "Updating #{dependency.name} to #{dependency.version}"
+      report_intent dependency
       update_gemfile_contents(dependency)
       update_gemspec_contents(dependency)
-      update_lockfile(dependency)
+      result = update_lockfile(dependency)
+      report_result dependency, result
+      result
     end
 
     def check?
@@ -28,6 +30,19 @@ module KeepUp
     private
 
     attr_reader :definition_builder
+
+    def report_intent(dependency)
+      print "Updating #{dependency.name}"
+    end
+
+    def report_result(dependency, result)
+      if result
+        puts " to #{result.version}"
+      else
+        puts " to #{dependency.version}"
+        puts 'Update failed'
+      end
+    end
 
     def gemfile_dependencies
       build_dependencies bundler_lockfile.dependencies
@@ -98,12 +113,13 @@ module KeepUp
                         end
     end
 
+    # Update lockfile and return resulting spec, or false in case of failure
     def update_lockfile(update)
       Bundler.clear_gemspec_cache
-      definition_builder.build(gems: [update.name]).lock('Gemfile.lock')
-      true
+      definition = definition_builder.build(gems: [update.name])
+      definition.lock('Gemfile.lock')
+      definition.specs.find { |it| it.name == update.name }
     rescue Bundler::VersionConflict
-      puts 'Update failed'
       false
     end
   end
