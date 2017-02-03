@@ -46,4 +46,3 @@ Feature: Correct feedback
       Bundle up to date!
       All done!
       """
-

@@ -36,7 +36,7 @@ module KeepUp
     end
 
     def report_result(dependency, result)
-      if result && result.version != dependency.version
+      if result
         puts " to #{result.version}"
       else
         puts " to #{dependency.version}"
@@ -118,7 +118,9 @@ module KeepUp
       Bundler.clear_gemspec_cache
       definition = definition_builder.build(gems: [update.name])
       definition.lock('Gemfile.lock')
-      definition.specs.find { |it| it.name == update.name }
+      current = locked_spec(update)
+      result = definition.specs.find { |it| it.name == update.name }
+      result if result.version != current.version
     rescue Bundler::VersionConflict
       false
     end
