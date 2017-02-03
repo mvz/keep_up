@@ -36,7 +36,7 @@ module KeepUp
     end
 
     def report_result(dependency, result)
-      if result
+      if result && result.version != dependency.version
         puts " to #{result.version}"
       else
         puts " to #{dependency.version}"

@@ -29,3 +29,21 @@ Feature: Correct feedback
       """
       Auto-update bar to 1.1.0
       """
+
+  Scenario: Gem not updated at all
+    Given a Gemfile specifying:
+      """
+      gem 'bar', ['>= 1.0.0', '< 1.2.0']
+      """
+    And a gem named "bar" at version "1.0.0"
+    And the initial bundle install committed
+    And a gem named "bar" at version "1.2.0"
+    When I run `keep_up`
+    Then the output should contain:
+      """
+      Updating bar to 1.2.0
+      Update failed
+      Bundle up to date!
+      All done!
+      """
+
