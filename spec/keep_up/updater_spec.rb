@@ -21,6 +21,7 @@ describe KeepUp::Updater do
 
     context 'when an update is available' do
       let(:updated_dependency) { double('updated_dependency') }
+      let(:actual_update) { double('actual_update') }
 
       before do
         allow(repository).
@@ -31,7 +32,7 @@ describe KeepUp::Updater do
 
       context 'when applying the update succeeds' do
         before do
-          allow(bundle).to receive(:apply_updated_dependency).and_return true
+          allow(bundle).to receive(:apply_updated_dependency).and_return actual_update
         end
 
         it 'lets the bundle update to the new dependency' do
@@ -45,7 +46,7 @@ describe KeepUp::Updater do
           updater.run
           expect(version_control).
             to have_received(:commit_changes).
-            with updated_dependency
+            with actual_update
         end
       end
 
@@ -75,6 +76,7 @@ describe KeepUp::Updater do
 
     context 'when a filter is provided' do
       let(:updated_dependency) { double('updated_dependency') }
+      let(:actual_update) { double('actual_update') }
       let(:filter) { double('filter') }
       let(:updater) do
         described_class.new(bundle: bundle,
@@ -88,7 +90,7 @@ describe KeepUp::Updater do
           to receive(:updated_dependency_for).
           with(dependency).
           and_return updated_dependency
-        allow(bundle).to receive(:apply_updated_dependency).and_return true
+        allow(bundle).to receive(:apply_updated_dependency).and_return actual_update
       end
 
       context 'when the updateable dependency is filtered out' do
@@ -125,7 +127,7 @@ describe KeepUp::Updater do
         it 'commits the changes' do
           expect(version_control).
             to have_received(:commit_changes).
-            with updated_dependency
+            with actual_update
         end
       end
     end
