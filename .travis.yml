@@ -6,6 +6,7 @@ rvm:
   - 2.4.0
 
 before_install:
+  - rvm use @global
   - gem uninstall bundler -x
   - gem install bundler --version=1.13.7
   - bundler --version
