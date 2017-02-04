@@ -19,7 +19,6 @@ Feature: Update bundle
       """
     And the output should contain:
       """
-      Bundle up to date!
       All done!
       """
     And the file "Gemfile.lock" should contain:
@@ -33,6 +32,7 @@ Feature: Update bundle
     Then the output should contain:
       """
       Updating foo to 1.0.1
+      All done!
       """
     And the file "Gemfile" should contain:
       """

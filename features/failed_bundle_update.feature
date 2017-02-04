@@ -23,7 +23,6 @@ Feature: Skip failing updates
       """
     And the output should contain:
       """
-      Bundle up to date!
       All done!
       """
     And the file "Gemfile.lock" should contain:

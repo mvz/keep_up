@@ -25,7 +25,7 @@ module KeepUp
     def run
       sanity_check
       update_all_dependencies
-      report_up_to_date
+      report_done
     end
 
     private
@@ -54,8 +54,7 @@ module KeepUp
       @bundle ||= Bundle.new(definition_builder: definition_builder)
     end
 
-    def report_up_to_date
-      puts 'Bundle up to date!'
+    def report_done
       puts 'All done!'
     end
 

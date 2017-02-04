@@ -18,10 +18,6 @@ Feature: Skipping dependencies
     Then the output should contain:
       """
       Updating foo to 1.2.0
-      """
-    And the output should contain:
-      """
-      Bundle up to date!
       All done!
       """
     And the file "Gemfile.lock" should contain:
