@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.6.0 / 2017-02-04
 
 * Show actual resulting new version for each update
 * Fail if only dependencies were updated
