@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+* Show actual resulting new version for each update
+* Fail if only dependencies were updated
+* Fail if Bundler downgrades the selected dependency
+* Replace use of custom 'ci' git alias with 'commit'
+
 ## 0.5.1 / 2016-12-17
 
 * Handle extra and unusual whitespace when updating Gemfile and gemspec
