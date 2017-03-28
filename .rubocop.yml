@@ -47,3 +47,7 @@ Style/NumericPredicate:
 # Allow explicit return with multiple return values
 Style/RedundantReturn:
   AllowMultipleReturnValues: true
+
+# I prefer to have symbols look like symbols
+Style/SymbolArray:
+  Enabled: false
