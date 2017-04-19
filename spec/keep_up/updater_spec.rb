@@ -4,7 +4,7 @@ describe KeepUp::Updater do
   describe '#run' do
     let(:dependency) { double('dependency') }
     let(:dependencies) { [dependency] }
-    let(:bundle) { double('bundle', direct_dependencies: dependencies, transitive_dependencies: []) }
+    let(:bundle) { double('bundle', dependencies: dependencies) }
     let(:repository) { double('repository') }
     let(:version_control) { double('version_control') }
 
