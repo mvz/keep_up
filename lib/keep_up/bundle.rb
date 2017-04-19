@@ -14,6 +14,10 @@ module KeepUp
       gemspec_dependencies + gemfile_dependencies
     end
 
+    def transitive_dependencies
+      build_dependencies bundler_lockfile.specs.flat_map(&:dependencies).uniq
+    end
+
     def apply_updated_dependency(dependency)
       report_intent dependency
       update_gemfile_contents(dependency)
