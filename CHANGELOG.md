@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 / 2017-04-19
+
+* Update indirect dependencies in addition to direct ones
+
 ## 0.6.0 / 2017-02-04
 
 * Show actual resulting new version for each update
