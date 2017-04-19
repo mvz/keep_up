@@ -10,8 +10,8 @@ module KeepUp
       @definition_builder = definition_builder
     end
 
-    def direct_dependencies
-      gemspec_dependencies + gemfile_dependencies
+    def dependencies
+      gemspec_dependencies + gemfile_dependencies + transitive_dependencies
     end
 
     def apply_updated_dependency(dependency)
@@ -53,6 +53,10 @@ module KeepUp
         find { |it| it.is_a? Bundler::Source::Gemspec }
       return [] unless gemspec_source
       build_dependencies gemspec_source.gemspec.dependencies
+    end
+
+    def transitive_dependencies
+      build_dependencies bundler_lockfile.specs.flat_map(&:dependencies).uniq
     end
 
     def build_dependencies(deps)
