@@ -63,10 +63,6 @@ module KeepUp
       build_dependencies gemspec_source.gemspec.dependencies
     end
 
-    def transitive_dependencies
-      build_dependencies bundler_lockfile.specs.flat_map(&:dependencies).uniq
-    end
-
     def build_dependencies(deps)
       deps.map { |dep| build_dependency dep }.compact
     end
