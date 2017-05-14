@@ -4,7 +4,7 @@ module KeepUp
     def initialize(name:, requirement_list:, locked_version:)
       @name = name
       @requirement_list = requirement_list
-      @locked_version = locked_version
+      @locked_version = Gem::Version.new locked_version
     end
 
     attr_reader :name, :locked_version
