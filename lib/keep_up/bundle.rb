@@ -71,7 +71,9 @@ module KeepUp
     def build_dependency(dep)
       spec = locked_spec dep
       return unless spec
-      Dependency.new(dependency: dep, locked_spec: spec)
+      Dependency.new(name: dep.name,
+                     requirement_list: dep.requirement.as_list,
+                     locked_version: spec.version)
     end
 
     def locked_spec(dep)
