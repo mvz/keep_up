@@ -25,8 +25,10 @@ module KeepUp
       Gem::Specification.new(specification.name, version)
     end
 
-    def == other
-      other.name == name && other.locked_version == locked_version && other.requirement == requirement
+    def ==(other)
+      other.name == name &&
+        other.locked_version == locked_version &&
+        other.requirement == requirement
     end
 
     private
