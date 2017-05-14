@@ -8,12 +8,24 @@ require_relative 'dependency'
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
   class Bundle
-    def initialize(definition_builder:)
+    OUTDATED_MATCHER = /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/
+
+    def initialize(definition_builder:, runner: Kernel)
       @definition_builder = definition_builder
+      @runner = runner
     end
 
     def dependencies
-      gemspec_dependencies + gemfile_dependencies + transitive_dependencies
+      result = @runner.` 'bundle outdated --parseable' # `
+      lines = result.split("\n").reject(&:empty?)
+      lines.map do |line|
+        matchdata = OUTDATED_MATCHER.match line
+        name = matchdata[1]
+        version = matchdata[3]
+        requirement_list = [matchdata[4]] if matchdata[4]
+        Dependency.new(name: name, locked_version: version,
+                       requirement_list: requirement_list)
+      end
     end
 
     def apply_updated_dependency(dependency)
