@@ -1,21 +1,16 @@
 module KeepUp
   # Single dependency with its current locked version.
   class Dependency
-    def initialize(dependency:, locked_spec:)
-      @dependency = dependency
-      @locked_spec = locked_spec
+    def initialize(name:, requirement_list:, locked_version:)
+      @name = name
+      @requirement_list = requirement_list
+      @locked_version = locked_version
     end
 
-    def name
-      @dependency.name
-    end
-
-    def locked_version
-      @locked_spec.version
-    end
+    attr_reader :name, :locked_version
 
     def matches_spec?(spec)
-      @dependency.matches_spec? spec
+      dependency.matches_spec? spec
     end
 
     def generalize_specification(specification)
@@ -29,7 +24,11 @@ module KeepUp
     private
 
     def requirement
-      @dependency.requirement
+      @requirement ||= Gem::Requirement.new @requirement_list
+    end
+
+    def dependency
+      @dependency ||= Gem::Dependency.new name, requirement
     end
 
     def segment_count
