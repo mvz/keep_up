@@ -9,6 +9,10 @@ module KeepUp
 
     attr_reader :name, :locked_version
 
+    def requirement
+      @requirement ||= Gem::Requirement.new @requirement_list
+    end
+
     def matches_spec?(spec)
       dependency.matches_spec? spec
     end
@@ -21,11 +25,11 @@ module KeepUp
       Gem::Specification.new(specification.name, version)
     end
 
-    private
-
-    def requirement
-      @requirement ||= Gem::Requirement.new @requirement_list
+    def == other
+      other.name == name && other.locked_version == locked_version && other.requirement == requirement
     end
+
+    private
 
     def dependency
       @dependency ||= Gem::Dependency.new name, requirement
