@@ -45,7 +45,12 @@ module KeepUp
     end
 
     def gemfile_dependencies
-      build_dependencies bundler_lockfile.dependencies
+      raw = if Bundler::VERSION >= '0.15.'
+              bundler_lockfile.dependencies.values
+            else
+              bundler_lockfile.dependencies
+            end
+      build_dependencies raw
     end
 
     def gemspec_dependencies
