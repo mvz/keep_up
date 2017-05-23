@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.2 / 2017-05-23
+
+* Support Bundler 1.15
+
 ## 0.6.1 / 2017-04-19
 
 * Update indirect dependencies in addition to direct ones
