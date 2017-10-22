@@ -20,6 +20,7 @@ Layout/MultilineMethodCallIndentation:
 Lint/AssignmentInCondition:
   AllowSafeAssignment: true
 
+# Spec describe blocks can be any size
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
@@ -50,4 +51,4 @@ Style/RedundantReturn:
 
 # I prefer to have symbols look like symbols
 Style/SymbolArray:
-  Enabled: false
+  EnforcedStyle: brackets
