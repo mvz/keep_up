@@ -2,6 +2,7 @@ require 'bundler'
 require_relative 'gemfile_filter'
 require_relative 'gemspec_filter'
 require_relative 'dependency'
+require_relative 'one'
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
@@ -113,15 +114,7 @@ module KeepUp
     end
 
     def gemspec_name
-      @gemspec_name ||= begin
-                          gemspecs = Dir.glob('*.gemspec')
-                          case gemspecs.count
-                          when 1
-                            gemspecs.first
-                          else
-                            raise '???'
-                          end
-                        end
+      @gemspec_name ||= One.fetch(Dir.glob('*.gemspec'))
     end
 
     # Update lockfile and return resulting spec, or false in case of failure
