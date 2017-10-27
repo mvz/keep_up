@@ -4,32 +4,38 @@ describe KeepUp::Repository do
   describe '#updated_dependency_for' do
     let(:index) { double('index') }
     let(:repository) { described_class.new(index: index) }
-    let(:locked_dependency) do
-      double('locked dependency',
-             locked_version: locked_version)
-    end
+    let(:locked_version) { Gem::Version.new locked_version_string }
+    let(:locked_dependency) { double('locked dependency', locked_version: locked_version) }
+    let(:version_strings) { ['0.9.0', '1.0.0', '1.1.0'] }
+    let(:versions) { version_strings.map { |it| Gem::Version.new it } }
+    let(:specs) { versions.map { |it| double("dep#{it}", version: it) } }
 
     before do
       allow(index).
         to receive(:search).with(locked_dependency).
-        and_return [
-          double('dep09', version: '0.9.0'),
-          double('dep10', version: '1.0.0'),
-          double('dep11', version: '1.1.0')
-        ]
+        and_return specs
     end
 
     context 'when the current version is not the latest' do
-      let(:locked_version) { '1.0.0' }
+      let(:locked_version_string) { '1.0.0' }
 
       it 'returns the latest version found on the remote index' do
         result = repository.updated_dependency_for(locked_dependency)
-        expect(result.version).to eq '1.1.0'
+        expect(result.version.to_s).to eq '1.1.0'
+      end
+
+      context 'when a pre-release is also available' do
+        let(:version_strings) { ['1.0.0', '1.1.0', '1.2.0.pre.1'] }
+
+        it 'returns the latest regular version found on the remote index' do
+          result = repository.updated_dependency_for(locked_dependency)
+          expect(result.version.to_s).to eq '1.1.0'
+        end
       end
     end
 
     context 'when the current locked version is the latest' do
-      let(:locked_version) { '1.1.0' }
+      let(:locked_version_string) { '1.1.0' }
 
       it 'returns nil' do
         expect(repository.updated_dependency_for(locked_dependency)).to be_nil
@@ -37,7 +43,7 @@ describe KeepUp::Repository do
     end
 
     context 'when the current locked version higher than the latest' do
-      let(:locked_version) { '1.2.0' }
+      let(:locked_version_string) { '1.2.0' }
 
       it 'returns nil' do
         expect(repository.updated_dependency_for(locked_dependency)).to be_nil

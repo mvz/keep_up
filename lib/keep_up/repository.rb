@@ -8,7 +8,7 @@ module KeepUp
     end
 
     def updated_dependency_for(dependency)
-      candidates = index.search(dependency)
+      candidates = index.search(dependency).reject { |it| it.version.prerelease? }
       latest = candidates.sort_by(&:version).last
       latest unless latest.version <= dependency.locked_version
     end
