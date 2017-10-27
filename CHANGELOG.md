@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.3 / 2017-10-27
+
+* Filter out pre-releases when searching for dependencies to support
+  Bundler 1.16.
+
 ## 0.6.2 / 2017-05-23
 
 * Support Bundler 1.15
