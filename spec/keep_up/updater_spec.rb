@@ -2,11 +2,14 @@ require 'spec_helper'
 
 describe KeepUp::Updater do
   describe '#run' do
-    let(:dependency) { double('dependency') }
-    let(:dependencies) { [dependency] }
-    let(:bundle) { double('bundle', dependencies: dependencies) }
-    let(:repository) { double('repository') }
-    let(:version_control) { double('version_control') }
+    let(:dependency) { 'a dependency' }
+    let(:other_dependency) { 'another dependency' }
+    let(:bundle) { instance_double(KeepUp::Bundle, dependencies: dependencies) }
+    let(:repository) { instance_double(KeepUp::Repository) }
+    let(:version_control) { instance_double(KeepUp::VersionControl) }
+    let(:updated_dependency) { 'the updated dependency' }
+    let(:updated_other_dependency) { 'updated other dependency' }
+    let(:update_result) { 'update result' }
 
     let(:updater) do
       described_class.new(bundle: bundle,
@@ -17,24 +20,17 @@ describe KeepUp::Updater do
     before do
       allow(version_control).to receive(:commit_changes)
       allow(version_control).to receive(:revert_changes)
+      allow(bundle).to receive(:apply_updated_dependency).and_return update_result
+      allow(repository).
+        to receive(:updated_dependency_for).
+        with(dependency).
+        and_return updated_dependency
     end
 
     context 'when an update is available' do
-      let(:updated_dependency) { double('updated_dependency') }
-      let(:actual_update) { double('actual_update') }
-
-      before do
-        allow(repository).
-          to receive(:updated_dependency_for).
-          with(dependency).
-          and_return updated_dependency
-      end
+      let(:dependencies) { [dependency] }
 
       context 'when applying the update succeeds' do
-        before do
-          allow(bundle).to receive(:apply_updated_dependency).and_return actual_update
-        end
-
         it 'lets the bundle update to the new dependency' do
           updater.run
           expect(bundle).
@@ -46,7 +42,7 @@ describe KeepUp::Updater do
           updater.run
           expect(version_control).
             to have_received(:commit_changes).
-            with actual_update
+            with update_result
         end
       end
 
@@ -75,9 +71,8 @@ describe KeepUp::Updater do
     end
 
     context 'when a filter is provided' do
-      let(:updated_dependency) { double('updated_dependency') }
-      let(:actual_update) { double('actual_update') }
-      let(:filter) { double('filter') }
+      let(:dependencies) { [dependency] }
+      let(:filter) { instance_double(KeepUp::SkipFilter) }
       let(:updater) do
         described_class.new(bundle: bundle,
                             repository: repository,
@@ -90,7 +85,7 @@ describe KeepUp::Updater do
           to receive(:updated_dependency_for).
           with(dependency).
           and_return updated_dependency
-        allow(bundle).to receive(:apply_updated_dependency).and_return actual_update
+        allow(bundle).to receive(:apply_updated_dependency).and_return update_result
       end
 
       context 'when the updateable dependency is filtered out' do
@@ -127,12 +122,14 @@ describe KeepUp::Updater do
         it 'commits the changes' do
           expect(version_control).
             to have_received(:commit_changes).
-            with actual_update
+            with update_result
         end
       end
     end
 
     context 'when no update is available' do
+      let(:dependencies) { [dependency] }
+
       before do
         allow(repository).
           to receive(:updated_dependency_for).
@@ -147,10 +144,7 @@ describe KeepUp::Updater do
     end
 
     context 'when several dependencies are present with an available update' do
-      let(:other_dependency) { double('other dependency') }
       let(:dependencies) { [dependency, other_dependency] }
-      let(:updated_dependency) { double('updated dependency') }
-      let(:updated_other_dependency) { double('updated other dependency') }
 
       before do
         allow(repository).
@@ -174,9 +168,7 @@ describe KeepUp::Updater do
     end
 
     context 'when two dependencies result in the same update' do
-      let(:other_dependency) { double('other dependency') }
       let(:dependencies) { [dependency, other_dependency] }
-      let(:updated_dependency) { double('updated dependency') }
 
       before do
         allow(repository).

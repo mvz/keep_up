@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe KeepUp::GemspecFilter do
   describe '.apply' do
-    let(:dependency) { double('dep', name: 'foo', version: '1.2.0') }
+    let(:dependency) { instance_double(Gem::Specification, name: 'foo', version: '1.2.0') }
 
     it 'works with old-stype dependency specifications' do
       contents = "spec.add_dependency 'foo', '1.1.0'"

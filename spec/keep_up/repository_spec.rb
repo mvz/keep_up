@@ -2,15 +2,16 @@ require 'spec_helper'
 
 describe KeepUp::Repository do
   describe '#updated_dependency_for' do
-    let(:index) { double('index') }
+    let(:index) { instance_double(KeepUp::GemIndex) }
     let(:repository) { described_class.new(index: index) }
     let(:locked_version) { Gem::Version.new locked_version_string }
-    let(:locked_dependency) { double('locked dependency', locked_version: locked_version) }
+    let(:locked_dependency) { instance_double(KeepUp::Dependency) }
     let(:version_strings) { ['0.9.0', '1.0.0', '1.1.0'] }
     let(:versions) { version_strings.map { |it| Gem::Version.new it } }
-    let(:specs) { versions.map { |it| double("dep#{it}", version: it) } }
+    let(:specs) { versions.map { |it| instance_double(Gem::Specification, version: it) } }
 
     before do
+      allow(locked_dependency).to receive(:locked_version).and_return locked_version
       allow(index).
         to receive(:search).with(locked_dependency).
         and_return specs
