@@ -138,8 +138,8 @@ describe KeepUp::Updater do
       end
 
       it 'does not let the bundle update anything' do
-        expect(bundle).not_to receive(:apply_updated_dependency)
         updater.run
+        expect(bundle).not_to have_received(:apply_updated_dependency)
       end
     end
 
