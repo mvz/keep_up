@@ -153,17 +153,11 @@ describe KeepUp::Updater do
         allow(repository).
           to receive(:updated_dependency_for).with(other_dependency).
           and_return updated_other_dependency
-        allow(bundle).to receive(:apply_updated_dependency).and_return true
       end
 
       it 'applies each update' do
         updater.run
-        expect(bundle).
-          to have_received(:apply_updated_dependency).
-          with(updated_dependency)
-        expect(bundle).
-          to have_received(:apply_updated_dependency).
-          with(updated_other_dependency)
+        expect(bundle).to have_received(:apply_updated_dependency).twice
       end
     end
 
@@ -177,7 +171,6 @@ describe KeepUp::Updater do
         allow(repository).
           to receive(:updated_dependency_for).with(other_dependency).
           and_return updated_dependency
-        allow(bundle).to receive(:apply_updated_dependency).and_return true
       end
 
       it 'applies the update only once' do
