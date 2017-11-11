@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe KeepUp::GemfileFilter do
   describe '.apply' do
-    let(:dependency) { double('dep', name: 'foo', version: '1.2.0') }
+    let(:dependency) { instance_double(Gem::Specification, name: 'foo', version: '1.2.0') }
 
     it 'keeps line endings intact' do
       contents = "gem 'foo', '1.1.0'\n"

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe KeepUp::SkipFilter do
   describe '#call' do
-    let(:accepted_dependency) { double('dependency', name: 'foo') }
-    let(:rejected_dependency) { double('dependency', name: 'bar') }
+    let(:accepted_dependency) { instance_double(KeepUp::Dependency, name: 'foo') }
+    let(:rejected_dependency) { instance_double(KeepUp::Dependency, name: 'bar') }
 
     let(:filter) do
       described_class.new(['bar'])

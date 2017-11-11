@@ -1,3 +1,6 @@
+require:
+  - rubocop-rspec
+
 AllCops:
   Exclude:
     - 'tmp/**/*'
@@ -28,6 +31,10 @@ Metrics/BlockLength:
 # Require lines to fit in pull requests.
 Metrics/LineLength:
   Max: 92
+
+# Allow deeper nesting for spec organization
+RSpec/NestedGroups:
+  Max: 4
 
 # Allow and/or for control flow only
 Style/AndOr:
