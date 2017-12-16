@@ -44,10 +44,6 @@ Style/AndOr:
 Style/GuardClause:
   MinBodyLength: 2
 
-# Don't use if or unless as modifier if the line gets too long
-Style/IfUnlessModifier:
-  MaxLineLength: 60
-
 # Explicite numbers are often clearer, and more robust.
 Style/NumericPredicate:
   Enabled: false

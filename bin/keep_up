@@ -8,19 +8,14 @@ options = {
   test_command: 'bundle exec rake',
   skip: []
 }
-OptionParser.new do |parser|
-  parser.on('--[no-]local') do |local|
-    options[:local] = local
-  end
 
-  parser.on('--test-command=COMMAND') do |command|
-    options[:test_command] = command
-  end
+opt_parser = OptionParser.new do |parser|
+  parser.on('--[no-]local') { |local| options[:local] = local }
+  parser.on('--test-command=COMMAND') { |command| options[:test_command] = command }
+  parser.on('--skip=SKIPPED_GEM') { |gemname| options[:skip] << gemname }
+end
 
-  parser.on('--skip=SKIPPED_GEM') do |gemname|
-    options[:skip] << gemname
-  end
-end.parse!
+opt_parser.parse!
 
 begin
   KeepUp::Application.new(options).run
