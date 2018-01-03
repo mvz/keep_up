@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'keep_up/version'
 require_relative 'keep_up/application'
 

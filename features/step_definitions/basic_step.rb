@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def write_local_gemfile(string)
   contents = "path 'libs'\n\n#{string}"
   write_file 'Gemfile', contents
