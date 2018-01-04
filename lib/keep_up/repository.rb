@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KeepUp
   # Picks updated versions for dependencies.
   class Repository

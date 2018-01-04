@@ -1,13 +1,20 @@
 sudo: false
 language: ruby
-rvm:
-  - 2.2.6
-  - 2.3.3
-  - 2.4.0
 
 before_install:
   - git config --global user.email "you@example.com"
   - git config --global user.name "Your Name"
+  - gem update --system
+
+rvm:
+  - 2.3
+  - 2.4
+  - 2.5
+  - ruby-head
+
+matrix:
+  allow_failures:
+    - rvm: ruby-head
 
 branches:
   only:

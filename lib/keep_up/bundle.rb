@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler'
 require_relative 'gemfile_filter'
 require_relative 'gemspec_filter'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KeepUp
   # Searches possibly remote gem index to find potential dependency updates.
   class GemIndex

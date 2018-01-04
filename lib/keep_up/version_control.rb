@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KeepUp
   # Interface to the version control system (only Git is supported).
   class VersionControl

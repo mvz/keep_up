@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KeepUp
   # Single dependency with its current locked version.
   class Dependency

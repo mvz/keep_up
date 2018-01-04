@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KeepUp
   # Filter to update dependency information in a Gemspec.
   module GemspecFilter

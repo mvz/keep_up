@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KeepUp
   # Fetch value from an array with exactly one element
   module One
