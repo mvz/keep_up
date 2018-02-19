@@ -4,7 +4,6 @@ require 'bundler'
 require_relative 'gemfile_filter'
 require_relative 'gemspec_filter'
 require_relative 'dependency'
-require_relative 'one'
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
@@ -70,8 +69,7 @@ module KeepUp
     def build_dependency(dep)
       spec = locked_spec dep
       return unless spec
-      Dependency.new(name: dep.name,
-                     requirement_list: dep.requirement.as_list,
+      Dependency.new(name: dep.name, requirement_list: dep.requirement.as_list,
                      locked_version: spec.version)
     end
 
@@ -88,31 +86,24 @@ module KeepUp
     end
 
     def update_gemfile_contents(update)
-      current_dependency = gemfile_dependencies.find { |it| it.name == update.name }
-      return unless current_dependency
-      return if current_dependency.matches_spec?(update)
-
-      update = current_dependency.generalize_specification(update)
-
-      contents = File.read 'Gemfile'
-      updated_contents = GemfileFilter.apply(contents, update)
-      File.write 'Gemfile', updated_contents
+      update_specification_contents(gemfile_dependencies, update,
+                                    'Gemfile', GemfileFilter)
     end
 
     def update_gemspec_contents(update)
-      current_dependency = gemspec_dependencies.find { |it| it.name == update.name }
-      return unless current_dependency
-      return if current_dependency.matches_spec?(update)
+      update_specification_contents(gemspec_dependencies, update,
+                                    gemspec_name, GemspecFilter)
+    end
 
+    def update_specification_contents(current_dependencies, update, file, filter)
+      current_dependency = current_dependencies.find { |it| it.name == update.name }
+      return if !current_dependency || current_dependency.matches_spec?(update)
       update = current_dependency.generalize_specification(update)
-
-      contents = File.read gemspec_name
-      updated_contents = GemspecFilter.apply(contents, update)
-      File.write gemspec_name, updated_contents
+      File.write file, filter.apply(File.read(file), update)
     end
 
     def gemspec_name
-      @gemspec_name ||= One.fetch(Dir.glob('*.gemspec'))
+      @gemspec_name ||= Dir.glob('*.gemspec').first
     end
 
     # Update lockfile and return resulting spec, or false in case of failure
