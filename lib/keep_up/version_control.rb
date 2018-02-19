@@ -1,18 +1,24 @@
 # frozen_string_literal: true
 
+require_relative 'runner'
+
 module KeepUp
   # Interface to the version control system (only Git is supported).
   class VersionControl
+    def initialize(runner: Runner)
+      @runner = runner
+    end
+
     def commit_changes(dependency)
-      `git commit -am "Auto-update #{dependency.name} to #{dependency.version}"`
+      @runner.run "git commit -am 'Auto-update #{dependency.name} to #{dependency.version}'"
     end
 
     def revert_changes
-      `git reset --hard`
+      @runner.run 'git reset --hard'
     end
 
     def clean?
-      `git status -s` == ''
+      @runner.run('git status -s') == ''
     end
   end
 end

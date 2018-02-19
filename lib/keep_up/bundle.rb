@@ -4,19 +4,20 @@ require 'bundler'
 require_relative 'gemfile_filter'
 require_relative 'gemspec_filter'
 require_relative 'dependency'
+require_relative 'runner'
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
   class Bundle
     OUTDATED_MATCHER = /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/
 
-    def initialize(definition_builder:, runner: Kernel)
+    def initialize(definition_builder:, runner: Runner)
       @definition_builder = definition_builder
       @runner = runner
     end
 
     def dependencies
-      result = @runner.` 'bundle outdated --parseable' # `
+      result = @runner.run 'bundle outdated --parseable'
       lines = result.split("\n").reject(&:empty?)
       lines.map do |line|
         matchdata = OUTDATED_MATCHER.match line

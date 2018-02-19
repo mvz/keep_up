@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe KeepUp::Bundle do
   let(:definition_builder) { instance_double KeepUp::BundlerDefinitionBuilder }
-  let(:runner) { class_double Kernel }
+  let(:runner) { class_double KeepUp::Runner }
   let(:bundle) do
     described_class.new definition_builder: definition_builder, runner: runner
   end
@@ -25,12 +25,12 @@ describe KeepUp::Bundle do
     end
 
     before do
-      allow(runner).to receive(:`).and_return(outdated_result)
+      allow(runner).to receive(:run).and_return(outdated_result)
     end
 
     it 'runs bundle outdated with parseable results' do
       bundle.dependencies
-      expect(runner).to have_received(:`).with('bundle outdated --parseable')
+      expect(runner).to have_received(:run).with('bundle outdated --parseable')
     end
 
     it 'returns the correct set of dependencies' do
