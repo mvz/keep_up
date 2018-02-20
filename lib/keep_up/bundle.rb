@@ -100,19 +100,24 @@ module KeepUp
     end
 
     def update_gemfile_contents(update)
-      update_specification_contents(gemfile_dependencies, update,
-                                    'Gemfile', GemfileFilter)
+      update = find_specification_update(gemfile_dependencies, update)
+      return unless update
+      update_specification_contents(update, 'Gemfile', GemfileFilter)
     end
 
     def update_gemspec_contents(update)
-      update_specification_contents(gemspec_dependencies, update,
-                                    gemspec_name, GemspecFilter)
+      update = find_specification_update(gemspec_dependencies, update)
+      return unless update
+      update_specification_contents(update, gemspec_name, GemspecFilter)
     end
 
-    def update_specification_contents(current_dependencies, update, file, filter)
+    def find_specification_update(current_dependencies, update)
       current_dependency = current_dependencies.find { |it| it.name == update.name }
       return if !current_dependency || current_dependency.matches_spec?(update)
-      update = current_dependency.generalize_specification(update)
+      current_dependency.generalize_specification(update)
+    end
+
+    def update_specification_contents(update, file, filter)
       File.write file, filter.apply(File.read(file), update)
     end
 
