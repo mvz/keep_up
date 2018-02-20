@@ -30,35 +30,44 @@ module KeepUp
       end
     end
 
-    def apply_updated_dependency(dependency)
-      report_intent dependency
-      update_gemfile_contents(dependency)
-      update_gemspec_contents(dependency)
-      result = update_lockfile(dependency)
-      report_result dependency, result
-      result
-    end
-
     def check?
       bundler_definition.to_lock == File.read('Gemfile.lock')
+    end
+
+    def update_gemfile_contents(update)
+      update = find_specification_update(gemfile_dependencies, update)
+      return unless update
+      update_specification_contents(update, 'Gemfile', GemfileFilter)
+    end
+
+    def update_gemspec_contents(update)
+      update = find_specification_update(gemspec_dependencies, update)
+      return unless update
+      update_specification_contents(update, gemspec_name, GemspecFilter)
+    end
+
+    # Update lockfile and return resulting spec, or false in case of failure
+    def update_lockfile(update)
+      result = @runner.run "bundle update --conservative #{update.name}"
+      lines = result.split("\n").reject(&:empty?)
+      lines.each do |line|
+        matchdata = UPDATE_MATCHER.match line
+        next unless matchdata
+        name = matchdata[1]
+        next unless name == update.name
+        version = matchdata[2]
+        old_version = matchdata[3]
+        next unless old_version
+        current = Gem::Specification.new(name, old_version)
+        result = Gem::Specification.new(name, version)
+        return result if result.version > current.version
+      end
+      nil
     end
 
     private
 
     attr_reader :definition_builder
-
-    def report_intent(dependency)
-      print "Updating #{dependency.name}"
-    end
-
-    def report_result(dependency, result)
-      if result
-        puts " to #{result.version}"
-      else
-        puts " to #{dependency.version}"
-        puts 'Update failed'
-      end
-    end
 
     def gemfile_dependencies
       raw = if Bundler::VERSION >= '1.15.'
@@ -99,18 +108,6 @@ module KeepUp
       @bundler_definition ||= definition_builder.build(false)
     end
 
-    def update_gemfile_contents(update)
-      update = find_specification_update(gemfile_dependencies, update)
-      return unless update
-      update_specification_contents(update, 'Gemfile', GemfileFilter)
-    end
-
-    def update_gemspec_contents(update)
-      update = find_specification_update(gemspec_dependencies, update)
-      return unless update
-      update_specification_contents(update, gemspec_name, GemspecFilter)
-    end
-
     def find_specification_update(current_dependencies, update)
       current_dependency = current_dependencies.find { |it| it.name == update.name }
       return if !current_dependency || current_dependency.matches_spec?(update)
@@ -123,25 +120,6 @@ module KeepUp
 
     def gemspec_name
       @gemspec_name ||= Dir.glob('*.gemspec').first
-    end
-
-    # Update lockfile and return resulting spec, or false in case of failure
-    def update_lockfile(update)
-      result = @runner.run "bundle update --conservative #{update.name}"
-      lines = result.split("\n").reject(&:empty?)
-      lines.each do |line|
-        matchdata = UPDATE_MATCHER.match line
-        next unless matchdata
-        name = matchdata[1]
-        next unless name == update.name
-        version = matchdata[2]
-        old_version = matchdata[3]
-        next unless old_version
-        current = Gem::Specification.new(name, old_version)
-        result = Gem::Specification.new(name, version)
-        return result if result.version > current.version
-      end
-      nil
     end
   end
 end
