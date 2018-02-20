@@ -10,6 +10,7 @@ module KeepUp
   # A Gemfile with its current set of locked dependencies.
   class Bundle
     OUTDATED_MATCHER = /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/
+    UPDATE_MATCHER = /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/
 
     def initialize(definition_builder:, runner: Runner)
       @definition_builder = definition_builder
@@ -121,14 +122,21 @@ module KeepUp
 
     # Update lockfile and return resulting spec, or false in case of failure
     def update_lockfile(update)
-      Bundler.clear_gemspec_cache
-      definition = definition_builder.build(gems: [update.name])
-      definition.lock('Gemfile.lock')
-      current = locked_spec(update)
-      result = definition.specs.find { |it| it.name == update.name }
-      result if result.version > current.version
-    rescue Bundler::VersionConflict
-      false
+      result = @runner.run "bundle update --conservative #{update.name}"
+      lines = result.split("\n").reject(&:empty?)
+      lines.each do |line|
+        matchdata = UPDATE_MATCHER.match line
+        next unless matchdata
+        name = matchdata[1]
+        next unless name == update.name
+        version = matchdata[2]
+        old_version = matchdata[3]
+        next unless old_version
+        current = Gem::Specification.new(name, old_version)
+        result = Gem::Specification.new(name, version)
+        return result if result.version > current.version
+      end
+      nil
     end
   end
 end
