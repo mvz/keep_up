@@ -18,13 +18,9 @@ module KeepUp
     end
 
     def dependencies
-      result = @runner.run 'bundle outdated --parseable'
-      lines = result.split("\n").reject(&:empty?)
-      lines.map do |line|
-        matchdata = OUTDATED_MATCHER.match line
-        name = matchdata[1]
-        version = matchdata[3]
-        requirement_list = [matchdata[4]] if matchdata[4]
+      lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
+      lines.map do |name, _newest, version, requirement|
+        requirement_list = [requirement] if requirement
         Dependency.new(name: name, locked_version: version,
                        requirement_list: requirement_list)
       end
@@ -48,16 +44,9 @@ module KeepUp
 
     # Update lockfile and return resulting spec, or false in case of failure
     def update_lockfile(update)
-      result = @runner.run "bundle update --conservative #{update.name}"
-      lines = result.split("\n").reject(&:empty?)
-      lines.each do |line|
-        matchdata = UPDATE_MATCHER.match line
-        next unless matchdata
-        name = matchdata[1]
-        next unless name == update.name
-        version = matchdata[2]
-        old_version = matchdata[3]
-        next unless old_version
+      lines = run_filtered "bundle update --conservative #{update.name}", UPDATE_MATCHER
+      lines.each do |name, version, old_version|
+        next unless name == update.name && old_version
         current = Gem::Specification.new(name, old_version)
         result = Gem::Specification.new(name, version)
         return result if result.version > current.version
@@ -120,6 +109,16 @@ module KeepUp
 
     def gemspec_name
       @gemspec_name ||= Dir.glob('*.gemspec').first
+    end
+
+    def run_filtered(command, regexp)
+      result = @runner.run command
+      lines = result.split("\n").reject(&:empty?)
+      lines.map do |line|
+        matchdata = regexp.match line
+        next unless matchdata
+        matchdata.to_a[1..-1]
+      end.compact
     end
   end
 end
