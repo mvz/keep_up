@@ -21,6 +21,7 @@ module KeepUp
       lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
       lines.map do |name, _newest, version, requirement|
         requirement_list = [requirement] if requirement
+        version = version.split(' ').first
         Dependency.new(name: name, locked_version: version,
                        requirement_list: requirement_list)
       end
