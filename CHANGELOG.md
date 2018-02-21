@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+* Start interfacing with Bundler via its CLI
+* Perform a real `bundle update` for each update dependency. This means gems
+  will actually be installed in each step.
+* Drop support for Bundler versions below 1.15.
+
 ## 0.6.3 / 2017-10-27
 
 * Filter out pre-releases when searching for dependencies to support
