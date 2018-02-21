@@ -4,25 +4,33 @@ require 'spec_helper'
 
 describe KeepUp::Updater do
   describe '#run' do
-    let(:dependency) { 'a dependency' }
-    let(:other_dependency) { 'another dependency' }
+    let(:dependency) { instance_double(KeepUp::Dependency, name: 'dependency') }
+    let(:other_dependency) { instance_double(KeepUp::Dependency, name: 'another') }
     let(:bundle) { instance_double(KeepUp::Bundle, dependencies: dependencies) }
     let(:repository) { instance_double(KeepUp::Repository) }
     let(:version_control) { instance_double(KeepUp::VersionControl) }
-    let(:updated_dependency) { 'the updated dependency' }
-    let(:updated_other_dependency) { 'updated other dependency' }
-    let(:update_result) { 'update result' }
+    let(:updated_dependency) do
+      instance_double(Gem::Specification, 'updated dependency',
+                      name: 'dependency', version: 'foo')
+    end
+    let(:updated_other_dependency) { instance_double(KeepUp::Dependency, name: 'another') }
+    let(:update_result) do
+      instance_double(Gem::Specification, 'update result', version: 'foo')
+    end
 
     let(:updater) do
       described_class.new(bundle: bundle,
                           repository: repository,
-                          version_control: version_control)
+                          version_control: version_control,
+                          out: StringIO.new)
     end
 
     before do
       allow(version_control).to receive(:commit_changes)
       allow(version_control).to receive(:revert_changes)
-      allow(bundle).to receive(:apply_updated_dependency).and_return update_result
+      allow(bundle).to receive(:update_gemfile_contents)
+      allow(bundle).to receive(:update_gemspec_contents)
+      allow(bundle).to receive(:update_lockfile).and_return update_result
       allow(repository).
         to receive(:updated_dependency_for).
         with(dependency).
@@ -33,11 +41,19 @@ describe KeepUp::Updater do
       let(:dependencies) { [dependency] }
 
       context 'when applying the update succeeds' do
+        it 'updates the gemfile' do
+          updater.run
+          expect(bundle).to have_received(:update_gemfile_contents).with(updated_dependency)
+        end
+
+        it 'updates the gemspec' do
+          updater.run
+          expect(bundle).to have_received(:update_gemspec_contents).with(updated_dependency)
+        end
+
         it 'lets the bundle update to the new dependency' do
           updater.run
-          expect(bundle).
-            to have_received(:apply_updated_dependency).
-            with updated_dependency
+          expect(bundle).to have_received(:update_lockfile).with(updated_dependency)
         end
 
         it 'commits the changes' do
@@ -50,13 +66,13 @@ describe KeepUp::Updater do
 
       context 'when applying the update fails' do
         before do
-          allow(bundle).to receive(:apply_updated_dependency).and_return false
+          allow(bundle).to receive(:update_lockfile).and_return false
         end
 
         it 'lets the bundle try to update to the new dependency' do
           updater.run
           expect(bundle).
-            to have_received(:apply_updated_dependency).
+            to have_received(:update_lockfile).
             with updated_dependency
         end
 
@@ -79,6 +95,7 @@ describe KeepUp::Updater do
         described_class.new(bundle: bundle,
                             repository: repository,
                             version_control: version_control,
+                            out: StringIO.new,
                             filter: filter)
       end
 
@@ -87,7 +104,7 @@ describe KeepUp::Updater do
           to receive(:updated_dependency_for).
           with(dependency).
           and_return updated_dependency
-        allow(bundle).to receive(:apply_updated_dependency).and_return update_result
+        allow(bundle).to receive(:update_lockfile).and_return update_result
       end
 
       context 'when the updateable dependency is filtered out' do
@@ -97,7 +114,7 @@ describe KeepUp::Updater do
         end
 
         it 'does not let the bundle update to the new dependency' do
-          expect(bundle).not_to have_received(:apply_updated_dependency)
+          expect(bundle).not_to have_received(:update_lockfile)
         end
 
         it 'does not commit anything' do
@@ -117,7 +134,7 @@ describe KeepUp::Updater do
 
         it 'lets the bundle update to the new dependency' do
           expect(bundle).
-            to have_received(:apply_updated_dependency).
+            to have_received(:update_lockfile).
             with updated_dependency
         end
 
@@ -141,7 +158,7 @@ describe KeepUp::Updater do
 
       it 'does not let the bundle update anything' do
         updater.run
-        expect(bundle).not_to have_received(:apply_updated_dependency)
+        expect(bundle).not_to have_received(:update_lockfile)
       end
     end
 
@@ -159,7 +176,7 @@ describe KeepUp::Updater do
 
       it 'applies each update' do
         updater.run
-        expect(bundle).to have_received(:apply_updated_dependency).twice
+        expect(bundle).to have_received(:update_lockfile).twice
       end
     end
 
@@ -178,7 +195,7 @@ describe KeepUp::Updater do
       it 'applies the update only once' do
         updater.run
         expect(bundle).
-          to have_received(:apply_updated_dependency).
+          to have_received(:update_lockfile).
           with(updated_dependency).once
       end
     end
