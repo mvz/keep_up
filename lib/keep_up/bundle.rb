@@ -59,11 +59,7 @@ module KeepUp
     attr_reader :definition_builder
 
     def gemfile_dependencies
-      raw = if Bundler::VERSION >= '1.15.'
-              bundler_lockfile.dependencies.values
-            else
-              bundler_lockfile.dependencies
-            end
+      raw = bundler_lockfile.dependencies.values
       build_dependencies raw
     end
 
