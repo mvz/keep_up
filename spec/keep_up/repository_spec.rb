@@ -26,15 +26,6 @@ describe KeepUp::Repository do
         result = repository.updated_dependency_for(locked_dependency)
         expect(result.version.to_s).to eq '1.1.0'
       end
-
-      context 'when a pre-release is also available' do
-        let(:version_strings) { ['1.0.0', '1.1.0', '1.2.0.pre.1'] }
-
-        it 'returns the latest regular version found on the remote index' do
-          result = repository.updated_dependency_for(locked_dependency)
-          expect(result.version.to_s).to eq '1.1.0'
-        end
-      end
     end
 
     context 'when the current locked version is the latest' do
@@ -50,6 +41,37 @@ describe KeepUp::Repository do
 
       it 'returns nil' do
         expect(repository.updated_dependency_for(locked_dependency)).to be_nil
+      end
+    end
+
+    context 'when pre-releases are also available' do
+      let(:version_strings) { ['1.0.0', '1.1.0', '1.2.0.pre.1', '1.2.0.pre.2'] }
+
+      context 'when the current version is a not a pre-release' do
+        let(:locked_version_string) { '1.0.0' }
+
+        it 'returns the latest regular version found on the remote index' do
+          result = repository.updated_dependency_for(locked_dependency)
+          expect(result.version.to_s).to eq '1.1.0'
+        end
+      end
+
+      context 'when a current pre-release can be updated to a newer regular release' do
+        let(:locked_version_string) { '1.0.0.pre.1' }
+
+        it 'returns the latest regular version found on the remote index' do
+          result = repository.updated_dependency_for(locked_dependency)
+          expect(result.version.to_s).to eq '1.1.0'
+        end
+      end
+
+      context 'when a current pre-release can only be updated to a newer pre-release' do
+        let(:locked_version_string) { '1.2.0.pre.1' }
+
+        it 'returns the latest pre-release version found on the remote index' do
+          result = repository.updated_dependency_for(locked_dependency)
+          expect(result.version.to_s).to eq '1.2.0.pre.2'
+        end
       end
     end
   end
