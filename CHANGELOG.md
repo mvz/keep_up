@@ -6,6 +6,10 @@
 * Perform a real `bundle update` for each update dependency. This means gems
   will actually be installed in each step.
 * Drop support for Bundler versions below 1.15.
+* Fix handling of git dependencies
+* Allow update to pre-releases if currently on a pre-release and no suitable
+  regular releases are available.
+* Handle absence of version candidates gracefully
 
 ## 0.6.3 / 2017-10-27
 
