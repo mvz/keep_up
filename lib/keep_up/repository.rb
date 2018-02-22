@@ -10,16 +10,18 @@ module KeepUp
     end
 
     def updated_dependency_for(dependency)
-      candidates = index.search(dependency).sort_by(&:version)
+      target_version = dependency.locked_version
+
+      candidates = index.
+        search(dependency).
+        reject { |it| it.version <= target_version }.
+        sort_by(&:version)
+
       regulars = candidates.reject { |it| it.version.prerelease? }
 
       latest = regulars.last
-
-      if dependency.locked_version.prerelease?
-        latest = candidates.last if latest.version <= dependency.locked_version
-      end
-
-      latest unless latest.version <= dependency.locked_version
+      latest = candidates.last if !latest && target_version.prerelease?
+      latest
     end
   end
 end
