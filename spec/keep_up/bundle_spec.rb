@@ -13,14 +13,17 @@ describe KeepUp::Bundle do
     let(:outdated_result) do
       "\n" \
         "foo (newest 0.1.0, installed 0.0.5)\n" \
-        "bar (newest 0.2.1, installed 0.1.5, requested ~> 0.1.2)\n"
+        "bar (newest 0.2.1, installed 0.1.5, requested ~> 0.1.2)\n" \
+        "baz (newest 1.2.1 f1e2d3c, installed 0.2.5 dbabdab)\n"
     end
     let(:expected_dependencies) do
       [
         KeepUp::Dependency.new(name: 'foo', locked_version: '0.0.5',
-                               requirement_list: []),
+                               requirement_list: nil),
         KeepUp::Dependency.new(name: 'bar', locked_version: '0.1.5',
-                               requirement_list: ['~> 0.1.2'])
+                               requirement_list: ['~> 0.1.2']),
+        KeepUp::Dependency.new(name: 'baz', locked_version: '0.2.5',
+                               requirement_list: nil)
       ]
     end
 
@@ -35,7 +38,7 @@ describe KeepUp::Bundle do
 
     it 'returns the correct set of dependencies' do
       result = bundle.dependencies
-      expect(result).to match_array expected_dependencies
+      expect(result).to eq expected_dependencies
     end
   end
 end
