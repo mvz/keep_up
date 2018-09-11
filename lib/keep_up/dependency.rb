@@ -21,8 +21,10 @@ module KeepUp
 
     def generalize_specification(specification)
       return specification if requirement.exact?
+
       segments = specification.version.segments
       return specification if segments.count <= segment_count
+
       version = segments.take(segment_count).join('.')
       Gem::Specification.new(specification.name, version)
     end

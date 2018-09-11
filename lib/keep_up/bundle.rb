@@ -34,12 +34,14 @@ module KeepUp
     def update_gemfile_contents(update)
       update = find_specification_update(gemfile_dependencies, update)
       return unless update
+
       update_specification_contents(update, 'Gemfile', GemfileFilter)
     end
 
     def update_gemspec_contents(update)
       update = find_specification_update(gemspec_dependencies, update)
       return unless update
+
       update_specification_contents(update, gemspec_name, GemspecFilter)
     end
 
@@ -49,6 +51,7 @@ module KeepUp
       lines = run_filtered "bundle update --conservative #{update_name}", UPDATE_MATCHER
       lines.each do |name, version, old_version|
         next unless name == update_name && old_version
+
         current = Gem::Specification.new(name, old_version)
         result = Gem::Specification.new(name, version)
         return result if result.version > current.version
@@ -69,6 +72,7 @@ module KeepUp
       gemspec_source = bundler_lockfile.sources.
         find { |it| it.is_a? Bundler::Source::Gemspec }
       return [] unless gemspec_source
+
       build_dependencies gemspec_source.gemspec.dependencies
     end
 
@@ -79,6 +83,7 @@ module KeepUp
     def build_dependency(dep)
       spec = locked_spec dep
       return unless spec
+
       Dependency.new(name: dep.name, requirement_list: dep.requirement.as_list,
                      locked_version: spec.version)
     end
@@ -98,6 +103,7 @@ module KeepUp
     def find_specification_update(current_dependencies, update)
       current_dependency = current_dependencies.find { |it| it.name == update.name }
       return if !current_dependency || current_dependency.matches_spec?(update)
+
       current_dependency.generalize_specification(update)
     end
 
@@ -115,6 +121,7 @@ module KeepUp
       lines.map do |line|
         matchdata = regexp.match line
         next unless matchdata
+
         matchdata.to_a[1..-1]
       end.compact
     end
