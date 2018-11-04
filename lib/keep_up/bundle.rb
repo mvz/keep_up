@@ -9,8 +9,10 @@ require_relative 'runner'
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
   class Bundle
-    OUTDATED_MATCHER = /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/
-    UPDATE_MATCHER = /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/
+    OUTDATED_MATCHER =
+      /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/.freeze
+    UPDATE_MATCHER =
+      /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/.freeze
 
     def initialize(definition_builder:, runner: Runner)
       @definition_builder = definition_builder
