@@ -11,9 +11,23 @@ options = {
 }
 
 opt_parser = OptionParser.new do |parser|
-  parser.on('--[no-]local') { |local| options[:local] = local }
-  parser.on('--test-command=COMMAND') { |command| options[:test_command] = command }
-  parser.on('--skip=SKIPPED_GEM') { |gemname| options[:skip] << gemname }
+  parser.on('--[no-]local', 'Only consider locally installed gems') do |local|
+    options[:local] = local
+  end
+  parser.on('--test-command=COMMAND', 'Run COMMAND to test each update') do |command|
+    options[:test_command] = command
+  end
+  parser.on('--skip=SKIPPED_GEM', 'Do not consider SKIPPED_GEM for updating') do |gemname|
+    options[:skip] << gemname
+  end
+  parser.on_tail('-h', '--help', 'Show this message') do
+    puts parser
+    exit
+  end
+  parser.on_tail('-v', '--version', 'Show version') do
+    puts "#{parser.program_name} #{KeepUp::VERSION}\n"
+    exit
+  end
 end
 
 opt_parser.parse!
