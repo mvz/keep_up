@@ -58,7 +58,7 @@ module KeepUp
     end
 
     def definition_builder
-      @definition_builder ||= BundlerDefinitionBuilder.new(local: local)
+      @definition_builder ||= BundlerDefinitionBuilder.new
     end
 
     def filter

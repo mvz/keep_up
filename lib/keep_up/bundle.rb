@@ -103,7 +103,7 @@ module KeepUp
     end
 
     def bundler_definition
-      @bundler_definition ||= definition_builder.build(false)
+      @bundler_definition ||= definition_builder.build
     end
 
     def find_specification_update(current_dependencies, update)
