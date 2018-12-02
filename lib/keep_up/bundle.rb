@@ -30,7 +30,8 @@ module KeepUp
     end
 
     def check?
-      bundler_definition.to_lock == File.read('Gemfile.lock')
+      result = @runner.run 'bundle check'
+      result == "The Gemfile's dependencies are satisfied\n"
     end
 
     def update_gemfile_contents(update)
