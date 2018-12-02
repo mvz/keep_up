@@ -4,8 +4,7 @@ require 'spec_helper'
 
 describe KeepUp::Repository do
   describe '#updated_dependency_for' do
-    let(:index) { instance_double(KeepUp::GemIndex) }
-    let(:repository) { described_class.new(index: index) }
+    let(:repository) { described_class.new }
 
     let(:version_string) { '1.1.0' }
     let(:newest_version) { Gem::Version.new version_string }

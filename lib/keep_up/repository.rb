@@ -3,12 +3,6 @@
 module KeepUp
   # Picks updated versions for dependencies.
   class Repository
-    attr_reader :index
-
-    def initialize(index:)
-      @index = index
-    end
-
     def updated_dependency_for(dependency)
       locked_version = dependency.locked_version
       newest_version = dependency.newest_version
