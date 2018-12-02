@@ -20,16 +20,19 @@ module KeepUp
     end
 
     def dependencies
-      lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
-      lines.map do |name, newest, version, requirement|
-        requirement_list = requirement.split(/,\s*/) if requirement
-        version = version.split(' ').first
-        newest = newest.split(' ').first
-        Dependency.new(name: name,
-                       locked_version: version,
-                       newest_version: newest,
-                       requirement_list: requirement_list)
-      end
+      @dependencies ||=
+        begin
+          lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
+          lines.map do |name, newest, version, requirement|
+            requirement_list = requirement.split(/,\s*/) if requirement
+            version = version.split(' ').first
+            newest = newest.split(' ').first
+            Dependency.new(name: name,
+                           locked_version: version,
+                           newest_version: newest,
+                           requirement_list: requirement_list)
+          end
+        end
     end
 
     def check?
