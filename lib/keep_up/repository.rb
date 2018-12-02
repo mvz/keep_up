@@ -10,18 +10,10 @@ module KeepUp
     end
 
     def updated_dependency_for(dependency)
-      target_version = dependency.locked_version
-
-      candidates = index.
-        search(dependency).
-        reject { |it| it.version <= target_version }.
-        sort_by(&:version)
-
-      regulars = candidates.reject { |it| it.version.prerelease? }
-
-      latest = regulars.last
-      latest = candidates.last if !latest && target_version.prerelease?
-      latest
+      locked_version = dependency.locked_version
+      newest_version = dependency.newest_version
+      return unless newest_version > locked_version
+      Gem::Specification.new(dependency.name, newest_version)
     end
   end
 end
