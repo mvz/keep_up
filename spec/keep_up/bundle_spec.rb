@@ -18,11 +18,17 @@ describe KeepUp::Bundle do
     end
     let(:expected_dependencies) do
       [
-        KeepUp::Dependency.new(name: 'foo', locked_version: '0.0.5',
+        KeepUp::Dependency.new(name: 'foo',
+                               locked_version: '0.0.5',
+                               newest_version: '0.1.0',
                                requirement_list: nil),
-        KeepUp::Dependency.new(name: 'bar', locked_version: '0.1.5',
+        KeepUp::Dependency.new(name: 'bar',
+                               locked_version: '0.1.5',
+                               newest_version: '0.2.1',
                                requirement_list: ['~> 0.1.2']),
-        KeepUp::Dependency.new(name: 'baz', locked_version: '0.2.5',
+        KeepUp::Dependency.new(name: 'baz',
+                               locked_version: '0.2.5',
+                               newest_version: '1.2.1',
                                requirement_list: nil)
       ]
     end

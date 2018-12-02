@@ -21,10 +21,13 @@ module KeepUp
 
     def dependencies
       lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
-      lines.map do |name, _newest, version, requirement|
+      lines.map do |name, newest, version, requirement|
         requirement_list = [requirement] if requirement
         version = version.split(' ').first
-        Dependency.new(name: name, locked_version: version,
+        newest = newest.split(' ').first
+        Dependency.new(name: name,
+                       locked_version: version,
+                       newest_version: newest,
                        requirement_list: requirement_list)
       end
     end
@@ -88,7 +91,7 @@ module KeepUp
       return unless spec
 
       Dependency.new(name: dep.name, requirement_list: dep.requirement.as_list,
-                     locked_version: spec.version)
+                     locked_version: spec.version, newest_version: nil)
     end
 
     def locked_spec(dep)
