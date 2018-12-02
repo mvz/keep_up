@@ -5,12 +5,11 @@ require_relative 'null_filter'
 module KeepUp
   # Apply potential updates to a Gemfile.
   class Updater
-    attr_reader :bundle, :repository, :version_control, :filter
+    attr_reader :bundle, :version_control, :filter
 
-    def initialize(bundle:, repository:, version_control:,
+    def initialize(bundle:, version_control:,
                    filter: NullFilter.new, out: STDOUT)
       @bundle = bundle
-      @repository = repository
       @version_control = version_control
       @filter = filter
       @out = out
@@ -30,7 +29,7 @@ module KeepUp
     def possible_updates
       bundle.dependencies.
         select { |dep| filter.call dep }.
-        map { |dep| repository.updated_dependency_for dep }.compact.uniq
+        map { |dep| updated_dependency_for dep }.compact.uniq
     end
 
     private
@@ -55,6 +54,14 @@ module KeepUp
         @out.puts " to #{dependency.version}"
         @out.puts 'Update failed'
       end
+    end
+
+    def updated_dependency_for(dependency)
+      locked_version = dependency.locked_version
+      newest_version = dependency.newest_version
+      return unless newest_version > locked_version
+
+      Gem::Specification.new(dependency.name, newest_version)
     end
   end
 end

@@ -5,7 +5,6 @@ require 'open3'
 require_relative 'bundle'
 require_relative 'bundler_definition_builder'
 require_relative 'null_filter'
-require_relative 'repository'
 require_relative 'skip_filter'
 require_relative 'updater'
 require_relative 'version_control'
@@ -42,7 +41,6 @@ module KeepUp
 
     def update_all_dependencies
       Updater.new(bundle: bundle,
-                  repository: Repository.new,
                   version_control: version_control,
                   filter: filter).run
     end
