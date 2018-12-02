@@ -22,7 +22,7 @@ module KeepUp
     def dependencies
       lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
       lines.map do |name, newest, version, requirement|
-        requirement_list = [requirement] if requirement
+        requirement_list = requirement.split(/,\s*/) if requirement
         version = version.split(' ').first
         newest = newest.split(' ').first
         Dependency.new(name: name,
@@ -38,7 +38,7 @@ module KeepUp
     end
 
     def update_gemfile_contents(update)
-      update = find_specification_update(gemfile_dependencies, update)
+      update = find_specification_update(dependencies, update)
       return unless update
 
       update_specification_contents(update, 'Gemfile', GemfileFilter)
@@ -68,11 +68,6 @@ module KeepUp
     private
 
     attr_reader :definition_builder
-
-    def gemfile_dependencies
-      raw = bundler_lockfile.dependencies.values
-      build_dependencies raw
-    end
 
     def gemspec_dependencies
       gemspec_source = bundler_lockfile.sources.

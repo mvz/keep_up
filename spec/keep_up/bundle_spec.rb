@@ -14,7 +14,8 @@ describe KeepUp::Bundle do
       "\n" \
         "foo (newest 0.1.0, installed 0.0.5)\n" \
         "bar (newest 0.2.1, installed 0.1.5, requested ~> 0.1.2)\n" \
-        "baz (newest 1.2.1 f1e2d3c, installed 0.2.5 dbabdab)\n"
+        "baz (newest 1.2.1 f1e2d3c, installed 0.2.5 dbabdab)\n" \
+        "qux (newest 0.3.4, installed 0.2.8, requested > 0.1.2, <= 0.3.0)\n"
     end
     let(:expected_dependencies) do
       [
@@ -29,7 +30,11 @@ describe KeepUp::Bundle do
         KeepUp::Dependency.new(name: 'baz',
                                locked_version: '0.2.5',
                                newest_version: '1.2.1',
-                               requirement_list: nil)
+                               requirement_list: nil),
+        KeepUp::Dependency.new(name: 'qux',
+                               locked_version: '0.2.8',
+                               newest_version: '0.3.4',
+                               requirement_list: ['> 0.1.2', '<= 0.3.0'])
       ]
     end
 
