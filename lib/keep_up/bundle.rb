@@ -24,7 +24,11 @@ module KeepUp
         begin
           lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
           lines.map do |name, newest, version, requirement|
-            requirement_list = requirement.split(/,\s*/) if requirement
+            requirement_list = if requirement
+                                 requirement.split(/,\s*/)
+                               else
+                                 fetch_gemspec_dependency_requirements(name)
+                               end
             version = version.split(' ').first
             newest = newest.split(' ').first
             Dependency.new(name: name,
@@ -48,7 +52,9 @@ module KeepUp
     end
 
     def update_gemspec_contents(update)
-      update = find_specification_update(gemspec_dependencies, update)
+      return unless gemspec_name
+
+      update = find_specification_update(dependencies, update)
       return unless update
 
       update_specification_contents(update, gemspec_name, GemspecFilter)
@@ -72,24 +78,23 @@ module KeepUp
 
     attr_reader :definition_builder
 
+    def gemspec
+      @gemspec ||= eval File.read(gemspec_name) if gemspec_name
+    end
+
     def gemspec_dependencies
-      gemspec_source = bundler_lockfile.sources.
-        find { |it| it.is_a? Bundler::Source::Gemspec }
-      return [] unless gemspec_source
-
-      build_dependencies gemspec_source.gemspec.dependencies
+      @gemspec_dependencies ||= if gemspec
+                                  gemspec.dependencies
+                                else
+                                  []
+                                end
     end
 
-    def build_dependencies(deps)
-      deps.map { |dep| build_dependency dep }.compact
-    end
+    def fetch_gemspec_dependency_requirements(name)
+      dep = gemspec_dependencies.find { |it| it.name == name }
+      return unless dep
 
-    def build_dependency(dep)
-      spec = locked_spec dep
-      return unless spec
-
-      Dependency.new(name: dep.name, requirement_list: dep.requirement.as_list,
-                     locked_version: spec.version, newest_version: nil)
+      dep.requirements_list
     end
 
     def locked_spec(dep)
