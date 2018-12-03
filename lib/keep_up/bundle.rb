@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'bundler'
 require_relative 'gemfile_filter'
 require_relative 'gemspec_filter'
 require_relative 'dependency'
@@ -14,34 +13,46 @@ module KeepUp
     UPDATE_MATCHER =
       /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/.freeze
 
-    def initialize(definition_builder:, runner: Runner)
-      @definition_builder = definition_builder
+    def initialize(runner: Runner)
       @runner = runner
     end
 
     def dependencies
-      lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
-      lines.map do |name, _newest, version, requirement|
-        requirement_list = [requirement] if requirement
-        version = version.split(' ').first
-        Dependency.new(name: name, locked_version: version,
-                       requirement_list: requirement_list)
-      end
+      @dependencies ||=
+        begin
+          lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
+          lines.map do |name, newest, version, requirement|
+            requirement_list = if requirement
+                                 requirement.split(/,\s*/)
+                               else
+                                 fetch_gemspec_dependency_requirements(name)
+                               end
+            version = version.split(' ').first
+            newest = newest.split(' ').first
+            Dependency.new(name: name,
+                           locked_version: version,
+                           newest_version: newest,
+                           requirement_list: requirement_list)
+          end
+        end
     end
 
     def check?
-      bundler_definition.to_lock == File.read('Gemfile.lock')
+      result = @runner.run 'bundle check'
+      result == "The Gemfile's dependencies are satisfied\n"
     end
 
     def update_gemfile_contents(update)
-      update = find_specification_update(gemfile_dependencies, update)
+      update = find_specification_update(dependencies, update)
       return unless update
 
       update_specification_contents(update, 'Gemfile', GemfileFilter)
     end
 
     def update_gemspec_contents(update)
-      update = find_specification_update(gemspec_dependencies, update)
+      return unless gemspec_name
+
+      update = find_specification_update(dependencies, update)
       return unless update
 
       update_specification_contents(update, gemspec_name, GemspecFilter)
@@ -63,43 +74,23 @@ module KeepUp
 
     private
 
-    attr_reader :definition_builder
-
-    def gemfile_dependencies
-      raw = bundler_lockfile.dependencies.values
-      build_dependencies raw
+    def gemspec
+      @gemspec ||= eval File.read(gemspec_name) if gemspec_name
     end
 
     def gemspec_dependencies
-      gemspec_source = bundler_lockfile.sources.
-        find { |it| it.is_a? Bundler::Source::Gemspec }
-      return [] unless gemspec_source
-
-      build_dependencies gemspec_source.gemspec.dependencies
+      @gemspec_dependencies ||= if gemspec
+                                  gemspec.dependencies
+                                else
+                                  []
+                                end
     end
 
-    def build_dependencies(deps)
-      deps.map { |dep| build_dependency dep }.compact
-    end
+    def fetch_gemspec_dependency_requirements(name)
+      dep = gemspec_dependencies.find { |it| it.name == name }
+      return unless dep
 
-    def build_dependency(dep)
-      spec = locked_spec dep
-      return unless spec
-
-      Dependency.new(name: dep.name, requirement_list: dep.requirement.as_list,
-                     locked_version: spec.version)
-    end
-
-    def locked_spec(dep)
-      bundler_lockfile.specs.find { |it| it.name == dep.name }
-    end
-
-    def bundler_lockfile
-      @bundler_lockfile ||= bundler_definition.locked_gems
-    end
-
-    def bundler_definition
-      @bundler_definition ||= definition_builder.build(false)
+      dep.requirements_list
     end
 
     def find_specification_update(current_dependencies, update)

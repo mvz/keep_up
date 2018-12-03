@@ -4,23 +4,25 @@ require 'spec_helper'
 
 describe KeepUp::Updater do
   describe '#run' do
-    let(:dependency) { instance_double(KeepUp::Dependency, name: 'dependency') }
-    let(:other_dependency) { instance_double(KeepUp::Dependency, name: 'another') }
     let(:bundle) { instance_double(KeepUp::Bundle, dependencies: dependencies) }
-    let(:repository) { instance_double(KeepUp::Repository) }
     let(:version_control) { instance_double(KeepUp::VersionControl) }
-    let(:updated_dependency) do
-      instance_double(Gem::Specification, 'updated dependency',
-                      name: 'dependency', version: 'foo')
+
+    let(:dependency) do
+      KeepUp::Dependency.new(name: 'dependency',
+                             requirement_list: [],
+                             locked_version: '1.1.0',
+                             newest_version: updated_dependency_version)
     end
-    let(:updated_other_dependency) { instance_double(KeepUp::Dependency, name: 'another') }
+    let(:updated_dependency) do
+      Gem::Specification.new('dependency', updated_dependency_version)
+    end
+
     let(:update_result) do
       instance_double(Gem::Specification, 'update result', version: 'foo')
     end
 
     let(:updater) do
       described_class.new(bundle: bundle,
-                          repository: repository,
                           version_control: version_control,
                           out: StringIO.new)
     end
@@ -31,13 +33,10 @@ describe KeepUp::Updater do
       allow(bundle).to receive(:update_gemfile_contents)
       allow(bundle).to receive(:update_gemspec_contents)
       allow(bundle).to receive(:update_lockfile).and_return update_result
-      allow(repository).
-        to receive(:updated_dependency_for).
-        with(dependency).
-        and_return updated_dependency
     end
 
     context 'when an update is available' do
+      let(:updated_dependency_version) { '1.2.0' }
       let(:dependencies) { [dependency] }
 
       context 'when applying the update succeeds' do
@@ -88,22 +87,18 @@ describe KeepUp::Updater do
       end
     end
 
-    context 'when a filter is provided' do
+    context 'when an update is available and a filter is provided' do
+      let(:updated_dependency_version) { '1.2.0' }
       let(:dependencies) { [dependency] }
       let(:filter) { instance_double(KeepUp::SkipFilter) }
       let(:updater) do
         described_class.new(bundle: bundle,
-                            repository: repository,
                             version_control: version_control,
                             out: StringIO.new,
                             filter: filter)
       end
 
       before do
-        allow(repository).
-          to receive(:updated_dependency_for).
-          with(dependency).
-          and_return updated_dependency
         allow(bundle).to receive(:update_lockfile).and_return update_result
       end
 
@@ -146,15 +141,19 @@ describe KeepUp::Updater do
       end
     end
 
-    context 'when no update is available' do
+    context 'when the dependency is already at the latest version' do
+      let(:updated_dependency_version) { '1.1.0' }
       let(:dependencies) { [dependency] }
 
-      before do
-        allow(repository).
-          to receive(:updated_dependency_for).
-          with(dependency).
-          and_return nil
+      it 'does not let the bundle update anything' do
+        updater.run
+        expect(bundle).not_to have_received(:update_lockfile)
       end
+    end
+
+    context 'when the dependency is ahead of the latest version' do
+      let(:updated_dependency_version) { '1.0.0' }
+      let(:dependencies) { [dependency] }
 
       it 'does not let the bundle update anything' do
         updater.run
@@ -163,16 +162,14 @@ describe KeepUp::Updater do
     end
 
     context 'when several dependencies are present with an available update' do
-      let(:dependencies) { [dependency, other_dependency] }
-
-      before do
-        allow(repository).
-          to receive(:updated_dependency_for).with(dependency).
-          and_return updated_dependency
-        allow(repository).
-          to receive(:updated_dependency_for).with(other_dependency).
-          and_return updated_other_dependency
+      let(:other_dependency) do
+        KeepUp::Dependency.new(name: 'another',
+                               requirement_list: [],
+                               locked_version: '0.5.2',
+                               newest_version: '0.6.9')
       end
+      let(:updated_dependency_version) { '1.2.0' }
+      let(:dependencies) { [dependency, other_dependency] }
 
       it 'applies each update' do
         updater.run
@@ -181,16 +178,8 @@ describe KeepUp::Updater do
     end
 
     context 'when two dependencies result in the same update' do
-      let(:dependencies) { [dependency, other_dependency] }
-
-      before do
-        allow(repository).
-          to receive(:updated_dependency_for).with(dependency).
-          and_return updated_dependency
-        allow(repository).
-          to receive(:updated_dependency_for).with(other_dependency).
-          and_return updated_dependency
-      end
+      let(:updated_dependency_version) { '1.2.0' }
+      let(:dependencies) { [dependency, dependency] }
 
       it 'applies the update only once' do
         updater.run

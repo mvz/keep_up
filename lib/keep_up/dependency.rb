@@ -3,13 +3,14 @@
 module KeepUp
   # Single dependency with its current locked version.
   class Dependency
-    def initialize(name:, requirement_list:, locked_version:)
+    def initialize(name:, requirement_list:, locked_version:, newest_version:)
       @name = name
       @requirement_list = requirement_list
       @locked_version = Gem::Version.new locked_version
+      @newest_version = Gem::Version.new newest_version
     end
 
-    attr_reader :name, :locked_version
+    attr_reader :name, :locked_version, :newest_version
 
     def requirement
       @requirement ||= Gem::Requirement.new @requirement_list
@@ -32,6 +33,7 @@ module KeepUp
     def ==(other)
       other.name == name &&
         other.locked_version == locked_version &&
+        other.newest_version == newest_version &&
         other.requirement == requirement
     end
 

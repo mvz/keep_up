@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
-require 'bundler'
 require 'open3'
 require_relative 'bundle'
-require_relative 'bundler_definition_builder'
-require_relative 'gem_index'
 require_relative 'null_filter'
-require_relative 'repository'
 require_relative 'skip_filter'
 require_relative 'updater'
 require_relative 'version_control'
@@ -43,7 +39,6 @@ module KeepUp
 
     def update_all_dependencies
       Updater.new(bundle: bundle,
-                  repository: Repository.new(index: index),
                   version_control: version_control,
                   filter: filter).run
     end
@@ -53,15 +48,11 @@ module KeepUp
     end
 
     def bundle
-      @bundle ||= Bundle.new(definition_builder: definition_builder)
+      @bundle ||= Bundle.new
     end
 
     def report_done
       puts 'All done!'
-    end
-
-    def definition_builder
-      @definition_builder ||= BundlerDefinitionBuilder.new(local: local)
     end
 
     def filter
@@ -70,10 +61,6 @@ module KeepUp
                   else
                     NullFilter.new
                   end
-    end
-
-    def index
-      GemIndex.new(definition_builder: definition_builder)
     end
   end
 end
