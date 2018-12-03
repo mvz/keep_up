@@ -14,8 +14,7 @@ module KeepUp
     UPDATE_MATCHER =
       /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/.freeze
 
-    def initialize(definition_builder:, runner: Runner)
-      @definition_builder = definition_builder
+    def initialize(runner: Runner)
       @runner = runner
     end
 
@@ -76,8 +75,6 @@ module KeepUp
 
     private
 
-    attr_reader :definition_builder
-
     def gemspec
       @gemspec ||= eval File.read(gemspec_name) if gemspec_name
     end
@@ -95,18 +92,6 @@ module KeepUp
       return unless dep
 
       dep.requirements_list
-    end
-
-    def locked_spec(dep)
-      bundler_lockfile.specs.find { |it| it.name == dep.name }
-    end
-
-    def bundler_lockfile
-      @bundler_lockfile ||= bundler_definition.locked_gems
-    end
-
-    def bundler_definition
-      @bundler_definition ||= definition_builder.build
     end
 
     def find_specification_update(current_dependencies, update)

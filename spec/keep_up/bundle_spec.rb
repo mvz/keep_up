@@ -3,10 +3,9 @@
 require 'spec_helper'
 
 describe KeepUp::Bundle do
-  let(:definition_builder) { instance_double KeepUp::BundlerDefinitionBuilder }
   let(:runner) { class_double KeepUp::Runner }
   let(:bundle) do
-    described_class.new definition_builder: definition_builder, runner: runner
+    described_class.new runner: runner
   end
 
   describe '#dependencies' do

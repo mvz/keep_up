@@ -3,7 +3,6 @@
 require 'bundler'
 require 'open3'
 require_relative 'bundle'
-require_relative 'bundler_definition_builder'
 require_relative 'null_filter'
 require_relative 'skip_filter'
 require_relative 'updater'
@@ -50,15 +49,11 @@ module KeepUp
     end
 
     def bundle
-      @bundle ||= Bundle.new(definition_builder: definition_builder)
+      @bundle ||= Bundle.new
     end
 
     def report_done
       puts 'All done!'
-    end
-
-    def definition_builder
-      @definition_builder ||= BundlerDefinitionBuilder.new
     end
 
     def filter
