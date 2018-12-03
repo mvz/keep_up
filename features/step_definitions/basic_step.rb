@@ -63,6 +63,10 @@ When(/^I update the Gemfile to specify:$/) do |string|
   write_local_gemfile(string)
 end
 
+Given(/^the gem named "([^'"]+)" is updated to version "([^"]*)"$/) do |gemname, version|
+  write_gem(gemname, version, [])
+end
+
 When(/^I commit the changes without updating the bundle$/) do
   run_simple "git commit -am 'YOLO!'"
 end
