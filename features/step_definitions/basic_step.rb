@@ -91,6 +91,10 @@ When "I update the Gemfile to specify:" do |string|
   write_local_gemfile(string)
 end
 
+Given "the gem named {string} is updated to version {string}") do |gemname, version|
+  write_gem(gemname, version, [])
+end
+
 When "I commit the changes without updating the bundle" do
   run_command_and_stop "git commit -am 'YOLO!'"
 end

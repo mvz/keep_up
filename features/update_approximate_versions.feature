@@ -1,46 +1,35 @@
 Feature: Update bundle with approximate versions
-  As a developer
-  In order to avoid updating fixed versions very often
-  I want to have approximate versions
+  When updating a bundle with approximate versions, i.e., using ~>, keep_up
+  will keep the specified version string if the latest version matches it. If
+  the latest version exceeds the specified version, it will update the
+  specified version.
 
-  Background: A project with approximate dependency versions
+  Scenario: Updating project with approximate dependency versions
     Given a Gemfile specifying:
       """
       gem 'foo', '~> 1.0.0'
+      gem 'bar', '~> 1.0.0'
       """
     And a gem named "foo" at version "1.0.0"
+    And a gem named "bar" at version "1.0.0"
     And the initial bundle install committed
-
-  Scenario: Updating to a version that matches the current spec
-    Given a gem named "foo" at version "1.0.1"
-    When I run `keep_up`
+    When the gem named "foo" is updated to version "1.0.1"
+    And the gem named "bar" is updated to version "1.1.2"
+    And I run `keep_up`
     Then the output should contain:
       """
+      Updating bar
+      Updated bar to 1.1.2
       Updating foo
       Updated foo to 1.0.1
       """
     And the file "Gemfile" should contain:
       """
       gem 'foo', '~> 1.0.0'
+      gem 'bar', '~> 1.1.2'
       """
     And the file "Gemfile.lock" should contain:
       """
+      bar (1.1.2)
       foo (1.0.1)
-      """
-
-  Scenario: Updating to a version that exceeds the current spec
-    Given a gem named "foo" at version "1.1.2"
-    When I run `keep_up`
-    Then the output should contain:
-      """
-      Updating foo
-      Updated foo to 1.1.2
-      """
-    And the file "Gemfile" should contain:
-      """
-      gem 'foo', '~> 1.1.2'
-      """
-    And the file "Gemfile.lock" should contain:
-      """
-      foo (1.1.2)
       """
