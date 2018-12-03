@@ -5,6 +5,28 @@ def write_local_gemfile(string)
   write_file 'Gemfile', contents
 end
 
+def write_gemspec(base_path, gemname, version, dependencies)
+  spec = Gem::Specification.new do |s|
+    s.name = gemname
+    s.version = version
+    s.authors = ['John Doe']
+    dependencies.each do |depname, depversion|
+      s.add_dependency depname, depversion
+    end
+  end
+  write_file "#{base_path}/#{gemname}.gemspec", spec.to_ruby
+end
+
+def write_local_gemspec(gemname, dependencies)
+  write_gemspec('.', gemname, '0.0.1', dependencies)
+end
+
+def write_gem(gemname, version, dependencies)
+  base_path = "libs/#{gemname}-#{version}"
+  write_gemspec(base_path, gemname, version, dependencies)
+  write_file "#{base_path}/lib/#{gemname}.rb", 'true'
+end
+
 Given(/^a Gemfile specifying:$/) do |string|
   write_local_gemfile(string)
 end
@@ -12,38 +34,17 @@ end
 Given(
   /^a gemspec for "([^"]*)" depending on "([^"]*)" at version "([^"]*)"$/
 ) do |gemname, depname, depversion|
-  spec = Gem::Specification.new do |s|
-    s.name = gemname
-    s.version = '0.0.1'
-    s.authors = ['John Doe']
-    s.add_dependency depname, depversion
-  end
-  write_file "#{gemname}.gemspec", spec.to_ruby
+  write_local_gemspec(gemname, depname => depversion)
 end
 
 Given(/^a gem named "([^'"]+)" at version "([^"]*)"$/) do |gemname, version|
-  base_path = "libs/#{gemname}-#{version}"
-  spec = Gem::Specification.new do |s|
-    s.name = gemname
-    s.version = version
-    s.authors = ['John Doe']
-  end
-  write_file "#{base_path}/#{gemname}.gemspec", spec.to_ruby
-  write_file "#{base_path}/lib/#{gemname}.rb", 'true'
+  write_gem(gemname, version, [])
 end
 
 Given(
   /^a gem named "([^"]*)" at version "([^"]*)" depending on "([^"]*)" at version "([^"]*)"$/
 ) do |gemname, version, depname, depversion|
-  base_path = "libs/#{gemname}-#{version}"
-  spec = Gem::Specification.new do |s|
-    s.name = gemname
-    s.version = version
-    s.authors = ['John Doe']
-    s.add_dependency depname, depversion
-  end
-  write_file "#{base_path}/#{gemname}.gemspec", spec.to_ruby
-  write_file "#{base_path}/lib/#{gemname}.rb", 'true'
+  write_gem(gemname, version, depname => depversion)
 end
 
 Given(/^the initial bundle install committed$/) do
