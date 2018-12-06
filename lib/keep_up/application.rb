@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'open3'
 require_relative 'bundle'
 require_relative 'null_filter'
 require_relative 'skip_filter'
@@ -21,7 +20,8 @@ module KeepUp
     end
 
     def run
-      sanity_check
+      check_version_control_clean
+      check_bundle_lockfile
       update_all_dependencies
       report_done
     end
@@ -30,11 +30,17 @@ module KeepUp
 
     attr_reader :skip, :local
 
-    def sanity_check
-      version_control.clean? or
-        raise BailOut, "Commit or stash your work before running 'keep_up'"
-      bundle.check? or
-        raise BailOut, "Make sure your Gemfile.lock is up-to-date before running 'keep_up'"
+    def check_version_control_clean
+      return if version_control.clean?
+
+      raise BailOut, "Commit or stash your work before running 'keep_up'"
+    end
+
+    def check_bundle_lockfile
+      return if bundle.check? && version_control.clean?
+
+      version_control.revert_changes
+      raise BailOut, "Make sure your Gemfile.lock is up-to-date before running 'keep_up'"
     end
 
     def update_all_dependencies

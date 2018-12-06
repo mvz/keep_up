@@ -38,8 +38,8 @@ module KeepUp
     end
 
     def check?
-      result = @runner.run 'bundle check'
-      result == "The Gemfile's dependencies are satisfied\n"
+      _, status = @runner.run2 'bundle check'
+      status == 0
     end
 
     def update_gemfile_contents(update)
