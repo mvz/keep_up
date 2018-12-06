@@ -44,3 +44,8 @@ Feature: Sanity check
       """
       Make sure your Gemfile.lock is up-to-date before running 'keep_up'
       """
+    When I run `git status`
+    Then the output should contain:
+      """
+      nothing to commit, working tree clean
+      """
