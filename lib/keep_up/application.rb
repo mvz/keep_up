@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'open3'
 require_relative 'bundle'
 require_relative 'null_filter'
 require_relative 'skip_filter'
