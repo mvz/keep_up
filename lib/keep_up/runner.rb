@@ -8,7 +8,7 @@ module KeepUp
     module_function
 
     def run(command)
-      stdout, _ = run2 command
+      stdout, = run2 command
       stdout
     end
 
