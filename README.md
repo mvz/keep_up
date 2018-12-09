@@ -17,7 +17,7 @@ Before running KeepUp, it's probably nice to start a new branch. Also, KeepUp
 will refuse to run if your checkout directory is not clean, or if your
 Gemfile.lock is not up-to-date.
 
-Run keep_up in your project directory:
+Run `keep_up` in your project directory:
 
     $ keep_up
 
@@ -64,8 +64,9 @@ git commits and tags, and push the `.gem` file to
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at
-https://github.com/mvz/keep_up. This project is intended to be a safe,
+Bug reports and pull requests are welcome at
+[`keep_up`'s repository](https://github.com/mvz/keep_up) on GitHub.
+This project is intended to be a safe,
 welcoming space for collaboration, and contributors are expected to adhere to
 the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
