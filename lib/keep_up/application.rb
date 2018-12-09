@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'runner'
 require_relative 'bundle'
 require_relative 'null_filter'
 require_relative 'skip_filter'
@@ -13,10 +14,11 @@ module KeepUp
 
   # Main application
   class Application
-    def initialize(local:, test_command:, skip:)
+    def initialize(local:, test_command:, skip:, runner: Runner)
       @test_command = test_command
       @local = local
       @skip = skip
+      @runner = runner
     end
 
     def run
@@ -28,7 +30,7 @@ module KeepUp
 
     private
 
-    attr_reader :skip, :local
+    attr_reader :skip, :local, :runner
 
     def check_version_control_clean
       return if version_control.clean?
@@ -50,11 +52,11 @@ module KeepUp
     end
 
     def version_control
-      @version_control ||= VersionControl.new
+      @version_control ||= VersionControl.new(runner: runner)
     end
 
     def bundle
-      @bundle ||= Bundle.new
+      @bundle ||= Bundle.new(runner: runner)
     end
 
     def report_done

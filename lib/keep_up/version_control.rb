@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'runner'
-
 module KeepUp
   # Interface to the version control system (only Git is supported).
   class VersionControl
-    def initialize(runner: Runner)
+    def initialize(runner:)
       @runner = runner
     end
 
