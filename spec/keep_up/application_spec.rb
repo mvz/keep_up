@@ -20,7 +20,7 @@ RSpec.describe KeepUp::Application do
       allow(runner).to receive(:run2).with('bundle check').and_return ['', 0]
 
       allow(runner).to receive(:run).
-        with(a_string_matching(/bundle outdated/)).and_return outdated_result
+        with(a_string_matching(/bundle outdated/)).once.and_return outdated_result
       allow(runner).to receive(:run).
         with(a_string_matching(/bundle update/)).once.and_return update_result
       allow(runner).to receive(:run).
@@ -32,12 +32,8 @@ RSpec.describe KeepUp::Application do
 
       it 'does not pass the --local option to bundle outdated' do
         application.run
-        aggregate_failures do
-          expect(runner).to have_received(:run).
-            with('bundle outdated --parseable')
-          expect(runner).not_to have_received(:run).
-            with('bundle outdated --parseable --local')
-        end
+        expect(runner).to have_received(:run).
+          with('bundle outdated --parseable')
       end
 
       it 'does not pass the --local option to bundle update' do
@@ -52,12 +48,8 @@ RSpec.describe KeepUp::Application do
 
       it 'passes the --local option to bundle outdated' do
         application.run
-        aggregate_failures do
-          expect(runner).to have_received(:run).
-            with('bundle outdated --parseable --local')
-          expect(runner).not_to have_received(:run).
-            with('bundle outdated --parseable')
-        end
+        expect(runner).to have_received(:run).
+          with('bundle outdated --parseable --local')
       end
 
       it 'passes the --local option to bundle update' do
