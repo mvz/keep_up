@@ -40,5 +40,26 @@ describe KeepUp::GemfileFilter do
       result = described_class.apply(contents, dependency)
       expect(result).to eq "\tgem\t'foo',\t'1.2.0'\t"
     end
+
+    it 'keeps extra options intact' do
+      contents = "gem 'foo', '1.1.0', platform: :ruby"
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "gem 'foo', '1.2.0', platform: :ruby"
+    end
+
+    it 'handles single-element dependency lists' do
+      contents = "gem 'foo', ['= 1.1.0']"
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "gem 'foo', ['= 1.2.0']"
+    end
+
+    it 'skips multi-element dependency lists' do
+      contents = "gem 'foo', ['>= 1.1.0', '< 1.1.9']"
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "gem 'foo', ['>= 1.1.0', '< 1.1.9']"
+    end
   end
 end

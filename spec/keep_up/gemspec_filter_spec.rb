@@ -55,6 +55,13 @@ describe KeepUp::GemspecFilter do
       expect(result).to eq "spec.add_runtime_dependency 'foo', ['= 1.2.0']"
     end
 
+    it 'skips multi-element dependency lists' do
+      contents = "spec.add_runtime_dependency 'foo', ['>= 1.1.0', '<= 1.1.9']"
+
+      result = described_class.apply(contents, dependency)
+      expect(result).to eq "spec.add_runtime_dependency 'foo', ['>= 1.1.0', '<= 1.1.9']"
+    end
+
     it 'keeps line endings intact' do
       contents = "spec.add_runtime_dependency 'foo', '1.1.0'\n"
 
