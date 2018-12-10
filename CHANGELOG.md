@@ -1,15 +1,15 @@
 # Changelog
 
-## Unreleased
+## 0.7.0 / 2018-12-10
 
-* Start interfacing with Bundler via its CLI
+* Interface with Bundler via its CLI
 * Perform a real `bundle update` for each update dependency. This means gems
   will actually be installed in each step.
 * Drop support for Bundler versions below 1.15.
-* Fix handling of git dependencies
-* Allow update to pre-releases if currently on a pre-release and no suitable
-  regular releases are available.
-* Handle absence of version candidates gracefully
+* Delegate finding available update candidates to Bundler.
+* Gracefully handle git dependencies when collecting update candidates
+* Do not attempt to update requirements with more than one element
+* Restore effect of the `--local` flag.
 
 ## 0.6.3 / 2017-10-27
 
