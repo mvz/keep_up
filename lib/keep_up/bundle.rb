@@ -3,7 +3,6 @@
 require_relative 'gemfile_filter'
 require_relative 'gemspec_filter'
 require_relative 'dependency'
-require_relative 'runner'
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
@@ -13,20 +12,19 @@ module KeepUp
     UPDATE_MATCHER =
       /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/.freeze
 
-    def initialize(runner: Runner)
+    def initialize(runner:, local:)
       @runner = runner
+      @local = local
     end
 
     def dependencies
       @dependencies ||=
         begin
-          lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
+          command = "bundle outdated --parseable#{' --local' if @local}"
+          lines = run_filtered command, OUTDATED_MATCHER
           lines.map do |name, newest, version, requirement|
-            requirement_list = if requirement
-                                 requirement.split(/,\s*/)
-                               else
-                                 fetch_gemspec_dependency_requirements(name)
-                               end
+            requirement_list = requirement&.split(/,\s*/)
+            requirement_list ||= fetch_gemspec_dependency_requirements(name)
             version = version.split(' ').first
             newest = newest.split(' ').first
             Dependency.new(name: name,
@@ -61,7 +59,8 @@ module KeepUp
     # Update lockfile and return resulting spec, or false in case of failure
     def update_lockfile(update)
       update_name = update.name
-      lines = run_filtered "bundle update --conservative #{update_name}", UPDATE_MATCHER
+      command = "bundle update#{' --local' if @local} --conservative #{update_name}"
+      lines = run_filtered command, UPDATE_MATCHER
       lines.each do |name, version, old_version|
         next unless name == update_name && old_version
 
