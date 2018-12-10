@@ -15,8 +15,8 @@ RSpec.describe KeepUp::Application do
     before do
       allow(runner).to receive(:run).with('git status -s').and_return ''
       allow(runner).to receive(:run2).with('bundle check').and_return ['', 0]
-      allow(runner).to receive(:run).with('bundle outdated --parseable').and_return ''
-      allow(runner).to receive(:run).with('bundle outdated --parseable --local').and_return ''
+      allow(runner).to receive(:run).
+        with(a_string_matching(/bundle outdated/)).and_return ''
     end
 
     context 'when not requested to run locally' do
