@@ -12,11 +12,19 @@ RSpec.describe KeepUp::Application do
   end
 
   describe '#run' do
+    let(:outdated_result) { "\nfoo (newest 0.1.0, installed 0.0.5)\n" }
+    let(:update_result) { "Using foo 0.1.0 (was 0.0.5)\n" }
+
     before do
       allow(runner).to receive(:run).with('git status -s').and_return ''
       allow(runner).to receive(:run2).with('bundle check').and_return ['', 0]
+
       allow(runner).to receive(:run).
-        with(a_string_matching(/bundle outdated/)).and_return ''
+        with(a_string_matching(/bundle outdated/)).and_return outdated_result
+      allow(runner).to receive(:run).
+        with(a_string_matching(/bundle update/)).once.and_return update_result
+      allow(runner).to receive(:run).
+        with(a_string_matching(/git commit/)).and_return ''
     end
 
     context 'when not requested to run locally' do
@@ -31,6 +39,12 @@ RSpec.describe KeepUp::Application do
             with('bundle outdated --parseable --local')
         end
       end
+
+      it 'does not pass the --local option to bundle update' do
+        application.run
+        expect(runner).to have_received(:run).
+          with('bundle update --conservative foo')
+      end
     end
 
     context 'when requested to run locally' do
@@ -44,6 +58,12 @@ RSpec.describe KeepUp::Application do
           expect(runner).not_to have_received(:run).
             with('bundle outdated --parseable')
         end
+      end
+
+      it 'passes the --local option to bundle update' do
+        application.run
+        expect(runner).to have_received(:run).
+          with('bundle update --local --conservative foo')
       end
     end
   end

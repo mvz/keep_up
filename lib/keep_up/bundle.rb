@@ -62,7 +62,8 @@ module KeepUp
     # Update lockfile and return resulting spec, or false in case of failure
     def update_lockfile(update)
       update_name = update.name
-      lines = run_filtered "bundle update --conservative #{update_name}", UPDATE_MATCHER
+      command = "bundle update#{' --local' if @local} --conservative #{update_name}"
+      lines = run_filtered command, UPDATE_MATCHER
       lines.each do |name, version, old_version|
         next unless name == update_name && old_version
 
