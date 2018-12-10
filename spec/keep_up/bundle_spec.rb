@@ -5,7 +5,7 @@ require 'spec_helper'
 describe KeepUp::Bundle do
   let(:runner) { class_double KeepUp::Runner }
   let(:bundle) do
-    described_class.new runner: runner
+    described_class.new runner: runner, local: false
   end
 
   describe '#dependencies' do

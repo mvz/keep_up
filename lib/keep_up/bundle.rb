@@ -12,14 +12,16 @@ module KeepUp
     UPDATE_MATCHER =
       /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/.freeze
 
-    def initialize(runner:)
+    def initialize(runner:, local:)
       @runner = runner
+      @local = local
     end
 
     def dependencies
       @dependencies ||=
         begin
-          lines = run_filtered 'bundle outdated --parseable', OUTDATED_MATCHER
+          command = "bundle outdated --parseable#{' --local' if @local}"
+          lines = run_filtered command, OUTDATED_MATCHER
           lines.map do |name, newest, version, requirement|
             requirement_list = if requirement
                                  requirement.split(/,\s*/)

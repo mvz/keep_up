@@ -56,7 +56,7 @@ module KeepUp
     end
 
     def bundle
-      @bundle ||= Bundle.new(runner: runner)
+      @bundle ||= Bundle.new(runner: runner, local: local)
     end
 
     def report_done
