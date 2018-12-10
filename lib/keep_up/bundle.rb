@@ -23,11 +23,8 @@ module KeepUp
           command = "bundle outdated --parseable#{' --local' if @local}"
           lines = run_filtered command, OUTDATED_MATCHER
           lines.map do |name, newest, version, requirement|
-            requirement_list = if requirement
-                                 requirement.split(/,\s*/)
-                               else
-                                 fetch_gemspec_dependency_requirements(name)
-                               end
+            requirement_list = requirement&.split(/,\s*/)
+            requirement_list ||= fetch_gemspec_dependency_requirements(name)
             version = version.split(' ').first
             newest = newest.split(' ').first
             Dependency.new(name: name,
