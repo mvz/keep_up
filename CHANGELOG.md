@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.1 / 2019-01-16
+
+* Support Ruby 2.6
+* Support Bundler 2.x
+
 ## 0.7.0 / 2018-12-10
 
 * Interface with Bundler via its CLI
