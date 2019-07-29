@@ -47,11 +47,11 @@ Given(
 end
 
 Given(/^the initial bundle install committed$/) do
-  run_simple 'bundle install'
+  run_command_and_stop 'bundle install'
   write_file '.gitignore', 'libs/'
-  run_simple 'git init'
-  run_simple 'git add .'
-  run_simple "git commit -am 'Initial'"
+  run_command_and_stop 'git init'
+  run_command_and_stop 'git add .'
+  run_command_and_stop "git commit -am 'Initial'"
 end
 
 When(/^I add a file without checking it in$/) do
@@ -63,7 +63,7 @@ When(/^I update the Gemfile to specify:$/) do |string|
 end
 
 When(/^I commit the changes without updating the bundle$/) do
-  run_simple "git commit -am 'YOLO!'"
+  run_command_and_stop "git commit -am 'YOLO!'"
 end
 
 Then(
