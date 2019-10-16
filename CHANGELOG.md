@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0 / 2019-10-16
+
+* Drop support for Ruby 2.3
+* Handle use of `require_relative` in gemspec files
+
 ## 0.7.1 / 2019-01-16
 
 * Support Ruby 2.6
