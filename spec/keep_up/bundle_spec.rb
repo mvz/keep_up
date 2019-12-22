@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe KeepUp::Bundle do
   let(:runner) { class_double KeepUp::Runner }
@@ -8,7 +8,7 @@ describe KeepUp::Bundle do
     described_class.new runner: runner, local: false
   end
 
-  describe '#dependencies' do
+  describe "#dependencies" do
     let(:outdated_result) do
       "\n" \
         "foo (newest 0.1.0, installed 0.0.5)\n" \
@@ -18,22 +18,22 @@ describe KeepUp::Bundle do
     end
     let(:expected_dependencies) do
       [
-        KeepUp::Dependency.new(name: 'foo',
-                               locked_version: '0.0.5',
-                               newest_version: '0.1.0',
+        KeepUp::Dependency.new(name: "foo",
+                               locked_version: "0.0.5",
+                               newest_version: "0.1.0",
                                requirement_list: nil),
-        KeepUp::Dependency.new(name: 'bar',
-                               locked_version: '0.1.5',
-                               newest_version: '0.2.1',
-                               requirement_list: ['~> 0.1.2']),
-        KeepUp::Dependency.new(name: 'baz',
-                               locked_version: '0.2.5',
-                               newest_version: '1.2.1',
+        KeepUp::Dependency.new(name: "bar",
+                               locked_version: "0.1.5",
+                               newest_version: "0.2.1",
+                               requirement_list: ["~> 0.1.2"]),
+        KeepUp::Dependency.new(name: "baz",
+                               locked_version: "0.2.5",
+                               newest_version: "1.2.1",
                                requirement_list: nil),
-        KeepUp::Dependency.new(name: 'qux',
-                               locked_version: '0.2.8',
-                               newest_version: '0.3.4',
-                               requirement_list: ['> 0.1.2', '<= 0.3.0'])
+        KeepUp::Dependency.new(name: "qux",
+                               locked_version: "0.2.8",
+                               newest_version: "0.3.4",
+                               requirement_list: ["> 0.1.2", "<= 0.3.0"])
       ]
     end
 
@@ -41,12 +41,12 @@ describe KeepUp::Bundle do
       allow(runner).to receive(:run).and_return(outdated_result)
     end
 
-    it 'runs bundle outdated with parseable results' do
+    it "runs bundle outdated with parseable results" do
       bundle.dependencies
-      expect(runner).to have_received(:run).with('bundle outdated --parseable')
+      expect(runner).to have_received(:run).with("bundle outdated --parseable")
     end
 
-    it 'returns the correct set of dependencies' do
+    it "returns the correct set of dependencies" do
       result = bundle.dependencies
       expect(result).to eq expected_dependencies
     end

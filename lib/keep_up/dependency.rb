@@ -26,7 +26,7 @@ module KeepUp
       segments = specification.version.segments
       return specification if segments.count <= segment_count
 
-      version = segments.take(segment_count).join('.')
+      version = segments.take(segment_count).join(".")
       Gem::Specification.new(specification.name, version)
     end
 

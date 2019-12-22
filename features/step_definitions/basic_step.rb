@@ -2,7 +2,7 @@
 
 def write_local_gemfile(string)
   contents = "path 'libs'\n\n#{string}"
-  write_file 'Gemfile', contents
+  write_file "Gemfile", contents
 end
 
 Given(/^a Gemfile specifying:$/) do |string|
@@ -14,8 +14,8 @@ Given(
 ) do |gemname, depname, depversion|
   spec = Gem::Specification.new do |s|
     s.name = gemname
-    s.version = '0.0.1'
-    s.authors = ['John Doe']
+    s.version = "0.0.1"
+    s.authors = ["John Doe"]
     s.add_dependency depname, depversion
   end
   write_file "#{gemname}.gemspec", spec.to_ruby
@@ -26,10 +26,10 @@ Given(/^a gem named "([^'"]+)" at version "([^"]*)"$/) do |gemname, version|
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = version
-    s.authors = ['John Doe']
+    s.authors = ["John Doe"]
   end
   write_file "#{base_path}/#{gemname}.gemspec", spec.to_ruby
-  write_file "#{base_path}/lib/#{gemname}.rb", 'true'
+  write_file "#{base_path}/lib/#{gemname}.rb", "true"
 end
 
 Given(
@@ -39,23 +39,23 @@ Given(
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = version
-    s.authors = ['John Doe']
+    s.authors = ["John Doe"]
     s.add_dependency depname, depversion
   end
   write_file "#{base_path}/#{gemname}.gemspec", spec.to_ruby
-  write_file "#{base_path}/lib/#{gemname}.rb", 'true'
+  write_file "#{base_path}/lib/#{gemname}.rb", "true"
 end
 
 Given(/^the initial bundle install committed$/) do
-  run_command_and_stop 'bundle install'
-  write_file '.gitignore', 'libs/'
-  run_command_and_stop 'git init'
-  run_command_and_stop 'git add .'
+  run_command_and_stop "bundle install"
+  write_file ".gitignore", "libs/"
+  run_command_and_stop "git init"
+  run_command_and_stop "git add ."
   run_command_and_stop "git commit -am 'Initial'"
 end
 
 When(/^I add a file without checking it in$/) do
-  write_file 'some_file.rb', '# This is a new file'
+  write_file "some_file.rb", "# This is a new file"
 end
 
 When(/^I update the Gemfile to specify:$/) do |string|

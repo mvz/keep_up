@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'null_filter'
+require_relative "null_filter"
 
 module KeepUp
   # Apply potential updates to a Gemfile.
@@ -52,7 +52,7 @@ module KeepUp
         @out.puts " to #{result.version}"
       else
         @out.puts " to #{dependency.version}"
-        @out.puts 'Update failed'
+        @out.puts "Update failed"
       end
     end
 
