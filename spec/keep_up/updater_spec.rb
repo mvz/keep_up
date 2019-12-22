@@ -57,9 +57,9 @@ describe KeepUp::Updater do
 
         it "commits the changes" do
           updater.run
-          expect(version_control).
-            to have_received(:commit_changes).
-            with update_result
+          expect(version_control)
+            .to have_received(:commit_changes)
+            .with update_result
         end
       end
 
@@ -70,9 +70,9 @@ describe KeepUp::Updater do
 
         it "lets the bundle try to update to the new dependency" do
           updater.run
-          expect(bundle).
-            to have_received(:update_lockfile).
-            with updated_dependency
+          expect(bundle)
+            .to have_received(:update_lockfile)
+            .with updated_dependency
         end
 
         it "does not commit the changes" do
@@ -128,15 +128,15 @@ describe KeepUp::Updater do
         end
 
         it "lets the bundle update to the new dependency" do
-          expect(bundle).
-            to have_received(:update_lockfile).
-            with updated_dependency
+          expect(bundle)
+            .to have_received(:update_lockfile)
+            .with updated_dependency
         end
 
         it "commits the changes" do
-          expect(version_control).
-            to have_received(:commit_changes).
-            with update_result
+          expect(version_control)
+            .to have_received(:commit_changes)
+            .with update_result
         end
       end
     end
@@ -183,9 +183,9 @@ describe KeepUp::Updater do
 
       it "applies the update only once" do
         updater.run
-        expect(bundle).
-          to have_received(:update_lockfile).
-          with(updated_dependency).once
+        expect(bundle)
+          .to have_received(:update_lockfile)
+          .with(updated_dependency).once
       end
     end
   end
