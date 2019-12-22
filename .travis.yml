@@ -1,10 +1,13 @@
-sudo: false
 language: ruby
 
-before_install:
+dist: xenial
+
+before_script:
   - git config --global user.email "you@example.com"
   - git config --global user.name "Your Name"
-  - gem update --system
+
+cache:
+  bundler: true
 
 rvm:
   - 2.4
