@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'runner'
-require_relative 'bundle'
-require_relative 'null_filter'
-require_relative 'skip_filter'
-require_relative 'updater'
-require_relative 'version_control'
+require_relative "runner"
+require_relative "bundle"
+require_relative "null_filter"
+require_relative "skip_filter"
+require_relative "updater"
+require_relative "version_control"
 
 module KeepUp
   # Error thrown when we can't go any further.
@@ -60,7 +60,7 @@ module KeepUp
     end
 
     def report_done
-      puts 'All done!'
+      puts "All done!"
     end
 
     def filter

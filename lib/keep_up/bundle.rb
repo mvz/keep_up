@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'gemfile_filter'
-require_relative 'gemspec_filter'
-require_relative 'dependency'
+require_relative "gemfile_filter"
+require_relative "gemspec_filter"
+require_relative "dependency"
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
@@ -25,8 +25,8 @@ module KeepUp
           lines.map do |name, newest, version, requirement|
             requirement_list = requirement&.split(/,\s*/)
             requirement_list ||= fetch_gemspec_dependency_requirements(name)
-            version = version.split(' ').first
-            newest = newest.split(' ').first
+            version = version.split(" ").first
+            newest = newest.split(" ").first
             Dependency.new(name: name,
                            locked_version: version,
                            newest_version: newest,
@@ -36,7 +36,7 @@ module KeepUp
     end
 
     def check?
-      _, status = @runner.run2 'bundle check'
+      _, status = @runner.run2 "bundle check"
       status == 0
     end
 
@@ -44,7 +44,7 @@ module KeepUp
       update = find_specification_update(dependencies, update)
       return unless update
 
-      update_specification_contents(update, 'Gemfile', GemfileFilter)
+      update_specification_contents(update, "Gemfile", GemfileFilter)
     end
 
     def update_gemspec_contents(update)
@@ -107,7 +107,7 @@ module KeepUp
     end
 
     def gemspec_name
-      @gemspec_name ||= Dir.glob('*.gemspec').first
+      @gemspec_name ||= Dir.glob("*.gemspec").first
     end
 
     def run_filtered(command, regexp)

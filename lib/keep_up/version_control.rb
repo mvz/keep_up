@@ -12,11 +12,11 @@ module KeepUp
     end
 
     def revert_changes
-      @runner.run 'git reset --hard'
+      @runner.run "git reset --hard"
     end
 
     def clean?
-      @runner.run('git status -s') == ''
+      @runner.run("git status -s") == ""
     end
   end
 end

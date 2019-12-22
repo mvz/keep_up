@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'null_filter'
+require_relative "null_filter"
 
 module KeepUp
   # Apply potential updates to a Gemfile.
@@ -27,9 +27,9 @@ module KeepUp
     end
 
     def possible_updates
-      bundle.dependencies.
-        select { |dep| filter.call dep }.
-        map { |dep| updated_dependency_for dep }.compact.uniq
+      bundle.dependencies
+        .select { |dep| filter.call dep }
+        .map { |dep| updated_dependency_for dep }.compact.uniq
     end
 
     private
@@ -52,7 +52,7 @@ module KeepUp
         @out.puts " to #{result.version}"
       else
         @out.puts " to #{dependency.version}"
-        @out.puts 'Update failed'
+        @out.puts "Update failed"
       end
     end
 

@@ -9,19 +9,31 @@ AllCops:
     - 'tmp/**/*'
   TargetRubyVersion: 2.4
 
-# Dot at end of line makes it clearer that the line is not done
-Layout/DotPosition:
-  EnforcedStyle: trailing
+# Require lines to fit in pull requests.
+Layout/LineLength:
+  Max: 92
+
+# Don't force lonely closing parentheses
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: same_line
+
+# Multi-line method calls should be simply indented. Aligning them makes it
+# even harder to keep a sane line length.
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
 
 # Multi-line assignment should be simply indented. Aligning them makes it even
 # harder to keep a sane line length.
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
-# Multi-line method calls should be simply indented. Aligning them makes it
-# even harder to keep a sane line length.
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
+# Force consistent spacing independent of block contents
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyleForEmptyBraces: space
+
+# This cop gives bad advice
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
 
 # Allow if (foo = get_foo) style
 Lint/AssignmentInCondition:
@@ -31,14 +43,6 @@ Lint/AssignmentInCondition:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
-
-# Require lines to fit in pull requests.
-Metrics/LineLength:
-  Max: 92
-
-# Allow deeper nesting for spec organization
-RSpec/NestedGroups:
-  Max: 4
 
 # Allow and/or for control flow only
 Style/AndOr:
@@ -56,6 +60,16 @@ Style/NumericPredicate:
 Style/RedundantReturn:
   AllowMultipleReturnValues: true
 
-# I prefer to have symbols look like symbols
+# Do not commit to use of interpolation
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Prefer symbols to look like symbols
 Style/SymbolArray:
   EnforcedStyle: brackets
+
+# Project-specific configuration goes here.
+
+# Allow deeper nesting for spec organization
+RSpec/NestedGroups:
+  Max: 4
