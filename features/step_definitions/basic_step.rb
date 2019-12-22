@@ -5,13 +5,12 @@ def write_local_gemfile(string)
   write_file "Gemfile", contents
 end
 
-Given(/^a Gemfile specifying:$/) do |string|
+Given "a Gemfile specifying:" do |string|
   write_local_gemfile(string)
 end
 
-Given(
-  /^a gemspec for "([^"]*)" depending on "([^"]*)" at version "([^"]*)"$/
-) do |gemname, depname, depversion|
+Given "a gemspec for {string} depending on {string} at version {string}" \
+  do |gemname, depname, depversion|
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = "0.0.1"
@@ -21,7 +20,7 @@ Given(
   write_file "#{gemname}.gemspec", spec.to_ruby
 end
 
-Given(/^a gem named "([^'"]+)" at version "([^"]*)"$/) do |gemname, version|
+Given "a gem named {string} at version {string}" do |gemname, version|
   base_path = "libs/#{gemname}-#{version}"
   spec = Gem::Specification.new do |s|
     s.name = gemname
@@ -32,9 +31,8 @@ Given(/^a gem named "([^'"]+)" at version "([^"]*)"$/) do |gemname, version|
   write_file "#{base_path}/lib/#{gemname}.rb", "true"
 end
 
-Given(
-  /^a gem named "([^"]*)" at version "([^"]*)" depending on "([^"]*)" at version "([^"]*)"$/
-) do |gemname, version, depname, depversion|
+Given "a gem named {string} at version {string} depending on {string} at version {string}" \
+  do |gemname, version, depname, depversion|
   base_path = "libs/#{gemname}-#{version}"
   spec = Gem::Specification.new do |s|
     s.name = gemname
@@ -46,7 +44,7 @@ Given(
   write_file "#{base_path}/lib/#{gemname}.rb", "true"
 end
 
-Given(/^the initial bundle install committed$/) do
+Given "the initial bundle install committed" do
   run_command_and_stop "bundle install"
   write_file ".gitignore", "libs/"
   run_command_and_stop "git init"
@@ -54,21 +52,20 @@ Given(/^the initial bundle install committed$/) do
   run_command_and_stop "git commit -am 'Initial'"
 end
 
-When(/^I add a file without checking it in$/) do
+When "I add a file without checking it in" do
   write_file "some_file.rb", "# This is a new file"
 end
 
-When(/^I update the Gemfile to specify:$/) do |string|
+When "I update the Gemfile to specify:" do |string|
   write_local_gemfile(string)
 end
 
-When(/^I commit the changes without updating the bundle$/) do
+When "I commit the changes without updating the bundle" do
   run_command_and_stop "git commit -am 'YOLO!'"
 end
 
-Then(
-  /^the gemspec for "([^"]*)" should depend on "([^"]*)" at version "([^"]*)"$/
-) do |gemname, depname, depversion|
+Then "the gemspec for {string} should depend on {string} at version {string}" \
+  do |gemname, depname, depversion|
   depversion = "= #{depversion}" unless /^[~<>=]/.match?(depversion)
   matcher = /s.add_runtime_dependency\(%q<#{depname}>(.freeze)?, \["#{depversion}"\]\)/
   expect("#{gemname}.gemspec").to have_file_content matcher
