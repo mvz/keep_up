@@ -18,8 +18,6 @@ Feature: Update bundle with no depenency versions
       """
     And the file "Gemfile" should contain:
       """
-      path 'libs'
-
       gem 'foo'
       """
     And the file "Gemfile.lock" should contain:
