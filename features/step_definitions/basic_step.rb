@@ -13,11 +13,14 @@ def create_gem_in_local_source(spec)
   base_path = "libs/#{versioned_name}"
   write_file "#{base_path}/lib/#{gemname}.rb", "true"
   Dir.chdir expand_path(base_path) do
-    Gem::Package.build spec, true
+    ui = Gem::SilentUI.new
+    Gem::DefaultUserInteraction.use_ui ui do
+      Gem::Package.build spec, true
+    end
   end
   create_directory "libs/gems"
   copy "#{base_path}/#{versioned_name}.gem", "libs/gems"
-  run_command_and_stop "gem generate_index --directory=libs"
+  run_command_and_stop "gem generate_index --silent --directory=libs"
 end
 
 Given "a Gemfile specifying:" do |string|
@@ -58,11 +61,11 @@ Given "a gem named {string} at version {string} depending on {string} at version
 end
 
 Given "the initial bundle install committed" do
-  run_command_and_stop "bundle install --path=vendor"
+  run_command_and_stop "bundle install --quiet --path=vendor"
   write_file ".gitignore", "libs/\nvendor/"
-  run_command_and_stop "git init"
+  run_command_and_stop "git init -q"
   run_command_and_stop "git add ."
-  run_command_and_stop "git commit -am 'Initial'"
+  run_command_and_stop "git commit -q -a -m 'Initial'"
 end
 
 When "I add a file without checking it in" do

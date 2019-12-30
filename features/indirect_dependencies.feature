@@ -13,9 +13,10 @@ Feature: Updating indirect dependencies
     And the initial bundle install committed
     And a gem named "bar" at version "1.0.1"
     When I run `keep_up`
-    Then the output should contain:
+    Then the output should contain exactly:
       """
       Updating bar to 1.0.1
+      All done!
       """
     And the file "Gemfile.lock" should contain:
       """
