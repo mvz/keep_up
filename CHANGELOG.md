@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1 / 2019-12-30
+
+* Silence keyword arguments deprecation on Ruby 2.7
+
 ## 0.8.0 / 2019-10-16
 
 * Drop support for Ruby 2.3
