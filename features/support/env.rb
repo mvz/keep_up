@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rubygems/package'
+require "rubygems/package"
 
 Before do
   delete_environment_variable "RUBYOPT"
