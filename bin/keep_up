@@ -33,7 +33,7 @@ end
 opt_parser.parse!
 
 begin
-  KeepUp::Application.new(options).run
+  KeepUp::Application.new(**options).run
 rescue KeepUp::BailOut => e
   warn e.message
   exit 1
