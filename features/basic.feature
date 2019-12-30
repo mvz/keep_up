@@ -13,11 +13,7 @@ Feature: Update bundle
 
   Scenario: Nothing to do
     When I run `keep_up`
-    Then the output should not contain:
-      """
-      Updating foo to 1.0.0
-      """
-    And the output should contain:
+    Then the output from "keep_up" should contain exactly:
       """
       All done!
       """
@@ -36,8 +32,6 @@ Feature: Update bundle
       """
     And the file "Gemfile" should contain:
       """
-      path 'libs'
-
       gem 'foo', '1.0.1'
       """
     And the file "Gemfile.lock" should contain:

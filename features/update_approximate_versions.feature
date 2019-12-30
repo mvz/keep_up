@@ -20,8 +20,6 @@ Feature: Update bundle with approximate versions
       """
     And the file "Gemfile" should contain:
       """
-      path 'libs'
-
       gem 'foo', '~> 1.0.0'
       """
     And the file "Gemfile.lock" should contain:
@@ -38,8 +36,6 @@ Feature: Update bundle with approximate versions
       """
     And the file "Gemfile" should contain:
       """
-      path 'libs'
-
       gem 'foo', '~> 1.1.2'
       """
     And the file "Gemfile.lock" should contain:
