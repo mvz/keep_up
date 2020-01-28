@@ -1,7 +1,6 @@
 SimpleCov.start do
   track_files 'lib/**/*.rb'
   add_filter 'spec/'
-  coverage_dir 'tmp/coverage'
   enable_coverage :branch
 end
 
