@@ -1,15 +1,15 @@
 inherit_from: .rubocop_todo.yml
 
 require:
-  - rubocop-rspec
   - rubocop-performance
+  - rubocop-rspec
 
 AllCops:
   Exclude:
     - 'tmp/**/*'
   TargetRubyVersion: 2.4
 
-# Require lines to fit in pull requests.
+# Be lenient with line length
 Layout/LineLength:
   Max: 92
 
@@ -31,7 +31,7 @@ Layout/MultilineOperationIndentation:
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyleForEmptyBraces: space
 
-# This cop gives bad advice
+# Assume the programmer knows how bracketed block syntax works
 Lint/AmbiguousBlockAssociation:
   Enabled: false
 
@@ -52,9 +52,24 @@ Style/AndOr:
 Style/GuardClause:
   MinBodyLength: 2
 
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
 # Explicite numbers are often clearer, and more robust.
 Style/NumericPredicate:
   Enabled: false
+
+# Use older RuboCop default
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%W': ()
+    '%w': ()
 
 # Allow explicit return with multiple return values
 Style/RedundantReturn:
