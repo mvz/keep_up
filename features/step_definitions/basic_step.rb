@@ -64,6 +64,8 @@ Given "the initial bundle install committed" do
   run_command_and_stop "bundle install --quiet --path=vendor"
   write_file ".gitignore", "libs/\nvendor/"
   run_command_and_stop "git init -q"
+  run_command_and_stop "git config user.name 'Foo Bar'"
+  run_command_and_stop "git config user.email 'foo@bar.net'"
   run_command_and_stop "git add ."
   run_command_and_stop "git commit -q -a -m 'Initial'"
 end
