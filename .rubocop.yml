@@ -70,12 +70,6 @@ Style/StringLiterals:
 Style/SymbolArray:
   EnforcedStyle: brackets
 
-# Project-specific configuration goes here.
-
-# Allow deeper nesting for spec organization
-RSpec/NestedGroups:
-  Max: 4
-
 # Activate new cops from RuboCop 0.80 - 0.83
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
