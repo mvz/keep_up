@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 SimpleCov.start do
-  track_files 'lib/**/*.rb'
-  add_filter 'spec/'
+  track_files "lib/**/*.rb"
+  add_filter "spec/"
   enable_coverage :branch
 end
 
