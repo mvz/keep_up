@@ -8,7 +8,7 @@ module KeepUp
     end
 
     def commit_changes(dependency)
-      @runner.run "git commit -am 'Auto-update #{dependency.name} to #{dependency.version}'"
+      @runner.run "git commit -am 'Update #{dependency.name} to version #{dependency.version}'"
     end
 
     def revert_changes

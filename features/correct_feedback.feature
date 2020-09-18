@@ -26,7 +26,7 @@ Feature: Correct feedback
     When I run `git log`
     Then the output should contain:
       """
-      Auto-update bar to 1.1.0
+      Update bar to version 1.1.0
       """
 
   Scenario: Gem not updated at all

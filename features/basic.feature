@@ -41,5 +41,5 @@ Feature: Update bundle
     When I run `git log`
     Then the output should contain:
       """
-      Auto-update foo to 1.0.1
+      Update foo to version 1.0.1
       """
