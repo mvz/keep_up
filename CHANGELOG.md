@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0 / 2020-09-18
+
+* Drop support for Ruby 2.4
+* Improve wording for commit messages
+
 ## 0.8.1 / 2019-12-30
 
 * Silence keyword arguments deprecation on Ruby 2.7
