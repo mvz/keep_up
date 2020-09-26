@@ -8,7 +8,8 @@ module KeepUp
     end
 
     def commit_changes(dependency)
-      @runner.run "git commit -am 'Update #{dependency.name} to version #{dependency.version}'"
+      message = "Update #{dependency.name} to version #{dependency.version}"
+      @runner.run "git commit -am '#{message}'"
     end
 
     def revert_changes
