@@ -25,8 +25,8 @@ module KeepUp
           lines.map do |name, newest, version, requirement|
             requirement_list = requirement&.split(/,\s*/)
             requirement_list ||= fetch_gemspec_dependency_requirements(name)
-            version = version.split(" ").first
-            newest = newest.split(" ").first
+            version = version.split.first
+            newest = newest.split.first
             Dependency.new(name: name,
                            locked_version: version,
                            newest_version: newest,
