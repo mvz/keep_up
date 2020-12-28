@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "cucumber", "~> 5.0"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "rubocop", "~> 1.6.0"
+  spec.add_development_dependency "rubocop", "~> 1.7.0"
   spec.add_development_dependency "rubocop-performance", "~> 1.9.0"
   spec.add_development_dependency "rubocop-rspec", "~> 2.1.0"
   spec.add_development_dependency "simplecov", "~> 0.20.0"
