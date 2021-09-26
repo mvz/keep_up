@@ -20,34 +20,34 @@ jobs:
 
     strategy:
       matrix:
-        ruby: [2.5, 2.6, 2.7, head]
+        ruby: [2.6, 2.7, head]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Configure git user
-      run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
-    - name: Install builder gem
-      run: gem install builder
-    - name: Run tests
-      run: bundle exec rake
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Configure git user
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+      - name: Install builder gem
+        run: gem install builder
+      - name: Run tests
+        run: bundle exec rake
 
   rubocop:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
-        bundler-cache: true
-    - name: Run RuboCop
-      run: bundle exec rubocop -P
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          bundler-cache: true
+      - name: Run RuboCop
+        run: bundle exec rubocop -P

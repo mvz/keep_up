@@ -117,7 +117,7 @@ module KeepUp
         matchdata = regexp.match line
         next unless matchdata
 
-        matchdata.to_a[1..-1]
+        matchdata.to_a[1..]
       end.compact
     end
   end
