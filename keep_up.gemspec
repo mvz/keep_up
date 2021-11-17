@@ -17,6 +17,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/mvz/keep_up"
   spec.license       = "MIT"
 
+  spec.metadata["rubygems_mfa_required"] = "true"
+
   spec.files = `git ls-files -z`.split("\x0")
     .reject { |f| f.match(%r{^(test|script|spec|features)/}) }
 
