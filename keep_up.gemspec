@@ -19,9 +19,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  spec.files = `git ls-files -z`.split("\x0")
-    .reject { |f| f.match(%r{^(test|script|spec|features)/}) }
-
+  spec.files = File.read("Manifest.txt").split
   spec.bindir = "bin"
   spec.executables = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
@@ -31,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "aruba", "~> 2.0"
   spec.add_development_dependency "cucumber", "~> 7.0"
   spec.add_development_dependency "rake", "~> 13.0"
+  spec.add_development_dependency "rake-manifest", "~> 0.2.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rubocop", "~> 1.23.0"
   spec.add_development_dependency "rubocop-performance", "~> 1.12.0"
