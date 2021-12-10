@@ -15,7 +15,8 @@ Feature: Sanity check
     And I run `keep_up`
     Then the output should not contain:
       """
-      Updating foo to 1.0.1
+      Updating foo
+      Updated foo to 1.0.1
       """
     And the output should contain:
       """
@@ -38,7 +39,8 @@ Feature: Sanity check
     And I run `keep_up`
     Then the output should not contain:
       """
-      Updating foo to 1.0.1
+      Updating foo
+      Updated foo to 1.0.1
       """
     And the output should contain:
       """

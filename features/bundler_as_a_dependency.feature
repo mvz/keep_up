@@ -17,7 +17,8 @@ Feature: Update bundle with bundler as a dependency
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating foo to 1.0.1
+      Updating foo
+      Updated foo to 1.0.1
       """
     And the file "Gemfile" should contain:
       """

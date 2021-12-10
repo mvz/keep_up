@@ -16,7 +16,8 @@ Feature: Update bundle with approximate versions
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating foo to 1.0.1
+      Updating foo
+      Updated foo to 1.0.1
       """
     And the file "Gemfile" should contain:
       """
@@ -32,7 +33,8 @@ Feature: Update bundle with approximate versions
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating foo to 1.1.2
+      Updating foo
+      Updated foo to 1.1.2
       """
     And the file "Gemfile" should contain:
       """

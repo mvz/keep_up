@@ -15,7 +15,8 @@ Feature: Correct feedback
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating bar to 1.1.0
+      Updating bar
+      Updated bar to 1.1.0
       All done!
       """
 
@@ -40,7 +41,7 @@ Feature: Correct feedback
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating bar to 1.2.0
-      Update failed
+      Updating bar
+      Failed updating bar to 1.2.0
       All done!
       """

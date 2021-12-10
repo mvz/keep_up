@@ -15,7 +15,8 @@ Feature: Matching specificity correctly
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating foo to 2.1.1
+      Updating foo
+      Updated foo to 2.1.1
       """
     And the gemspec for "bar" should depend on "foo" at version "~> 2.1"
     And the file "Gemfile.lock" should contain:
@@ -39,7 +40,8 @@ Feature: Matching specificity correctly
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating foo to 2.1.1
+      Updating foo
+      Updated foo to 2.1.1
       """
     And the file "Gemfile" should contain:
       """

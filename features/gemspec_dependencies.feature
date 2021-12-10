@@ -19,7 +19,8 @@ Feature: Gemspec dependencies
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating foo to 1.0.1
+      Updating foo
+      Updated foo to 1.0.1
       """
     And the gemspec for "bar" should depend on "foo" at version "1.0.1"
     And the file "Gemfile.lock" should contain:
