@@ -15,7 +15,8 @@ Feature: Updating indirect dependencies
     When I run `keep_up`
     Then the output should contain exactly:
       """
-      Updating bar to 1.0.1
+      Updating bar
+      Updated bar to 1.0.1
       All done!
       """
     And the file "Gemfile.lock" should contain:

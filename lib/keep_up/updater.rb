@@ -44,15 +44,14 @@ module KeepUp
     end
 
     def report_intent(dependency)
-      @out.print "Updating #{dependency.name}"
+      @out.puts "Updating #{dependency.name}"
     end
 
     def report_result(dependency, result)
       if result
-        @out.puts " to #{result.version}"
+        @out.puts "Updated #{dependency.name} to #{result.version}"
       else
-        @out.puts " to #{dependency.version}"
-        @out.puts "Update failed"
+        @out.puts "Failed updating #{dependency.name} to #{dependency.version}"
       end
     end
 

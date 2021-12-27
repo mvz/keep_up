@@ -17,7 +17,8 @@ Feature: Skipping dependencies
     When I run `keep_up --skip bar`
     Then the output should contain:
       """
-      Updating foo to 1.2.0
+      Updating foo
+      Updated foo to 1.2.0
       All done!
       """
     And the file "Gemfile.lock" should contain:

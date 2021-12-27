@@ -17,9 +17,10 @@ Feature: Skip failing updates
     When I run `keep_up`
     Then the output should contain:
       """
-      Updating bar to 1.2.0
-      Update failed
-      Updating foo to 1.2.0
+      Updating bar
+      Failed updating bar to 1.2.0
+      Updating foo
+      Updated foo to 1.2.0
       """
     And the output should contain:
       """
