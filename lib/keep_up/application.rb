@@ -64,11 +64,12 @@ module KeepUp
     end
 
     def filter
-      @filter ||= if skip.any?
-                    SkipFilter.new(skip)
-                  else
-                    NullFilter.new
-                  end
+      @filter ||=
+        if skip.any?
+          SkipFilter.new(skip)
+        else
+          NullFilter.new
+        end
     end
   end
 end

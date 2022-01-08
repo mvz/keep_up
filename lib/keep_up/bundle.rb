@@ -74,18 +74,20 @@ module KeepUp
     private
 
     def gemspec
-      @gemspec ||= if gemspec_name
-                     gemspec_path = File.expand_path(gemspec_name)
-                     eval File.read(gemspec_name), nil, gemspec_path
-                   end
+      @gemspec ||=
+        if gemspec_name
+          gemspec_path = File.expand_path(gemspec_name)
+          eval File.read(gemspec_name), nil, gemspec_path
+        end
     end
 
     def gemspec_dependencies
-      @gemspec_dependencies ||= if gemspec
-                                  gemspec.dependencies
-                                else
-                                  []
-                                end
+      @gemspec_dependencies ||=
+        if gemspec
+          gemspec.dependencies
+        else
+          []
+        end
     end
 
     def fetch_gemspec_dependency_requirements(name)
