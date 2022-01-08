@@ -7,10 +7,12 @@ describe KeepUp::Updater do
     let(:bundle) { instance_double(KeepUp::Bundle, dependencies: dependencies) }
     let(:version_control) { instance_double(KeepUp::VersionControl) }
     let(:dependency) do
-      KeepUp::Dependency.new(name: "dependency",
-                             requirement_list: [],
-                             locked_version: "1.1.0",
-                             newest_version: updated_dependency_version)
+      KeepUp::Dependency.new(
+        name: "dependency",
+        requirement_list: [],
+        locked_version: "1.1.0",
+        newest_version: updated_dependency_version
+      )
     end
     let(:updated_dependency) do
       Gem::Specification.new("dependency", updated_dependency_version)
@@ -20,10 +22,12 @@ describe KeepUp::Updater do
     end
     let(:filter) { instance_double(KeepUp::SkipFilter) }
     let(:updater) do
-      described_class.new(bundle: bundle,
-                          version_control: version_control,
-                          out: StringIO.new,
-                          filter: filter)
+      described_class.new(
+        bundle: bundle,
+        version_control: version_control,
+        out: StringIO.new,
+        filter: filter
+      )
     end
 
     before do
@@ -133,10 +137,12 @@ describe KeepUp::Updater do
 
     context "when several dependencies are present with an available update" do
       let(:other_dependency) do
-        KeepUp::Dependency.new(name: "another",
-                               requirement_list: [],
-                               locked_version: "0.5.2",
-                               newest_version: "0.6.9")
+        KeepUp::Dependency.new(
+          name: "another",
+          requirement_list: [],
+          locked_version: "0.5.2",
+          newest_version: "0.6.9"
+        )
       end
       let(:updated_dependency_version) { "1.2.0" }
       let(:dependencies) { [dependency, other_dependency] }

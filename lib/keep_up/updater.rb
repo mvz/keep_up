@@ -7,8 +7,7 @@ module KeepUp
   class Updater
     attr_reader :bundle, :version_control, :filter
 
-    def initialize(bundle:, version_control:,
-                   filter: NullFilter.new, out: $stdout)
+    def initialize(bundle:, version_control:, filter: NullFilter.new, out: $stdout)
       @bundle = bundle
       @version_control = version_control
       @filter = filter

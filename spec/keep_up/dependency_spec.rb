@@ -4,10 +4,12 @@ require "spec_helper"
 
 RSpec.describe KeepUp::Dependency do
   let(:dep) do
-    described_class.new(name: "foo",
-                        locked_version: "0.5.2",
-                        newest_version: "0.6.8",
-                        requirement_list: [])
+    described_class.new(
+      name: "foo",
+      locked_version: "0.5.2",
+      newest_version: "0.6.8",
+      requirement_list: []
+    )
   end
 
   describe "#locked_version" do

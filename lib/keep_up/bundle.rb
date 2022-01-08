@@ -23,14 +23,7 @@ module KeepUp
           command = "bundle outdated --parseable#{" --local" if @local}"
           lines = run_filtered command, OUTDATED_MATCHER
           lines.map do |name, newest, version, requirement|
-            requirement_list = requirement&.split(/,\s*/)
-            requirement_list ||= fetch_gemspec_dependency_requirements(name)
-            version = version.split.first
-            newest = newest.split.first
-            Dependency.new(name: name,
-                           locked_version: version,
-                           newest_version: newest,
-                           requirement_list: requirement_list)
+            build_dependency(name, newest, version, requirement)
           end
         end
     end
@@ -74,18 +67,33 @@ module KeepUp
     private
 
     def gemspec
-      @gemspec ||= if gemspec_name
-                     gemspec_path = File.expand_path(gemspec_name)
-                     eval File.read(gemspec_name), nil, gemspec_path
-                   end
+      @gemspec ||=
+        if gemspec_name
+          gemspec_path = File.expand_path(gemspec_name)
+          eval File.read(gemspec_name), nil, gemspec_path
+        end
     end
 
     def gemspec_dependencies
-      @gemspec_dependencies ||= if gemspec
-                                  gemspec.dependencies
-                                else
-                                  []
-                                end
+      @gemspec_dependencies ||=
+        if gemspec
+          gemspec.dependencies
+        else
+          []
+        end
+    end
+
+    def build_dependency(name, newest, version, requirement)
+      requirement_list = requirement&.split(/,\s*/)
+      requirement_list ||= fetch_gemspec_dependency_requirements(name)
+      version = version.split.first
+      newest = newest.split.first
+      Dependency.new(
+        name: name,
+        locked_version: version,
+        newest_version: newest,
+        requirement_list: requirement_list
+      )
     end
 
     def fetch_gemspec_dependency_requirements(name)

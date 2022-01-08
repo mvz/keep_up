@@ -46,9 +46,11 @@ module KeepUp
     end
 
     def update_all_dependencies
-      Updater.new(bundle: bundle,
-                  version_control: version_control,
-                  filter: filter).run
+      Updater.new(
+        bundle: bundle,
+        version_control: version_control,
+        filter: filter
+      ).run
     end
 
     def version_control
@@ -64,11 +66,12 @@ module KeepUp
     end
 
     def filter
-      @filter ||= if skip.any?
-                    SkipFilter.new(skip)
-                  else
-                    NullFilter.new
-                  end
+      @filter ||=
+        if skip.any?
+          SkipFilter.new(skip)
+        else
+          NullFilter.new
+        end
     end
   end
 end
