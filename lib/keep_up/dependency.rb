@@ -44,10 +44,11 @@ module KeepUp
     end
 
     def segment_count
-      @segment_count ||= begin
-                           _, ver = requirement.requirements.first
-                           ver.segments.count
-                         end
+      @segment_count ||=
+        begin
+          _, ver = requirement.requirements.first
+          ver.segments.count
+        end
     end
   end
 end
