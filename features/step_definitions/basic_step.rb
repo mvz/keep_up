@@ -6,6 +6,19 @@ def write_local_gemfile(string)
   write_file "Gemfile", contents
 end
 
+def write_gem(gemname, version, dependencies)
+  spec = Gem::Specification.new do |s|
+    s.name = gemname
+    s.version = version
+    s.authors = ["John Doe"]
+    s.files = ["lib/#{gemname}.rb"]
+    dependencies.each do |depname, depversion|
+      s.add_dependency depname, depversion
+    end
+  end
+  create_gem_in_local_source(spec)
+end
+
 def create_gem_in_local_source(spec)
   gemname = spec.name
   version = spec.version
@@ -23,6 +36,18 @@ def create_gem_in_local_source(spec)
   run_command_and_stop "gem generate_index --silent --directory=libs"
 end
 
+def write_gemspec(gemname, version, dependencies)
+  spec = Gem::Specification.new do |s|
+    s.name = gemname
+    s.version = version
+    s.authors = ["John Doe"]
+    dependencies.each do |depname, depversion|
+      s.add_dependency depname, depversion
+    end
+  end
+  write_file "#{gemname}.gemspec", spec.to_ruby
+end
+
 Given "a Gemfile specifying:" do |string|
   write_local_gemfile(string)
 end
@@ -30,36 +55,17 @@ end
 Given(
   "a gemspec for {string} depending on {string} at version {string}"
 ) do |gemname, depname, depversion|
-  spec = Gem::Specification.new do |s|
-    s.name = gemname
-    s.version = "0.0.1"
-    s.authors = ["John Doe"]
-    s.add_dependency depname, depversion
-  end
-  write_file "#{gemname}.gemspec", spec.to_ruby
+  write_gemspec gemname, "0.0.1", depname => depversion
 end
 
 Given "a gem named {string} at version {string}" do |gemname, version|
-  spec = Gem::Specification.new do |s|
-    s.name = gemname
-    s.version = version
-    s.authors = ["John Doe"]
-    s.files = ["lib/#{gemname}.rb"]
-  end
-  create_gem_in_local_source(spec)
+  write_gem(gemname, version, {})
 end
 
 Given(
   "a gem named {string} at version {string} depending on {string} at version {string}"
 ) do |gemname, version, depname, depversion|
-  spec = Gem::Specification.new do |s|
-    s.name = gemname
-    s.version = version
-    s.authors = ["John Doe"]
-    s.add_dependency depname, depversion
-    s.files = ["lib/#{gemname}.rb"]
-  end
-  create_gem_in_local_source(spec)
+  write_gem(gemname, version, depname => depversion)
 end
 
 Given "the initial bundle install committed" do
