@@ -27,8 +27,9 @@ Given "a Gemfile specifying:" do |string|
   write_local_gemfile(string)
 end
 
-Given "a gemspec for {string} depending on {string} at version {string}" \
-  do |gemname, depname, depversion|
+Given(
+  "a gemspec for {string} depending on {string} at version {string}"
+) do |gemname, depname, depversion|
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = "0.0.1"
@@ -48,8 +49,9 @@ Given "a gem named {string} at version {string}" do |gemname, version|
   create_gem_in_local_source(spec)
 end
 
-Given "a gem named {string} at version {string} depending on {string} at version {string}" \
-  do |gemname, version, depname, depversion|
+Given(
+  "a gem named {string} at version {string} depending on {string} at version {string}"
+) do |gemname, version, depname, depversion|
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = version
@@ -87,8 +89,9 @@ When "I commit the changes without updating the bundle" do
   run_command_and_stop "git commit -am 'YOLO!'"
 end
 
-Then "the gemspec for {string} should depend on {string} at version {string}" \
-  do |gemname, depname, depversion|
+Then(
+  "the gemspec for {string} should depend on {string} at version {string}"
+) do |gemname, depname, depversion|
   depversion = "= #{depversion}" unless /^[~<>=]/.match?(depversion)
   matcher = /s.add_runtime_dependency\(%q<#{depname}>(.freeze)?, \["#{depversion}"\]\)/
   expect("#{gemname}.gemspec").to have_file_content matcher

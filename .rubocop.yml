@@ -20,10 +20,6 @@ Layout/BeginEndAlignment:
 Layout/LineLength:
   Max: 92
 
-# Don't force lonely closing parentheses
-Layout/MultilineMethodCallBraceLayout:
-  EnforcedStyle: same_line
-
 # Multi-line method calls should be simply indented. Aligning them makes it
 # even harder to keep a sane line length.
 Layout/MultilineMethodCallIndentation:
