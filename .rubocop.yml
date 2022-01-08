@@ -85,6 +85,10 @@ Style/RedundantReturn:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
+# Consistency
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
 # Prefer symbols to look like symbols
 Style/SymbolArray:
   EnforcedStyle: brackets

@@ -20,7 +20,7 @@ module KeepUp
     def dependencies
       @dependencies ||=
         begin
-          command = "bundle outdated --parseable#{' --local' if @local}"
+          command = "bundle outdated --parseable#{" --local" if @local}"
           lines = run_filtered command, OUTDATED_MATCHER
           lines.map do |name, newest, version, requirement|
             requirement_list = requirement&.split(/,\s*/)
@@ -59,7 +59,7 @@ module KeepUp
     # Update lockfile and return resulting spec, or false in case of failure
     def update_lockfile(update)
       update_name = update.name
-      command = "bundle update#{' --local' if @local} --conservative #{update_name}"
+      command = "bundle update#{" --local" if @local} --conservative #{update_name}"
       lines = run_filtered command, UPDATE_MATCHER
       lines.each do |name, version, old_version|
         next unless name == update_name && old_version
