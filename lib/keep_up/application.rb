@@ -46,9 +46,11 @@ module KeepUp
     end
 
     def update_all_dependencies
-      Updater.new(bundle: bundle,
-                  version_control: version_control,
-                  filter: filter).run
+      Updater.new(
+        bundle: bundle,
+        version_control: version_control,
+        filter: filter
+      ).run
     end
 
     def version_control
