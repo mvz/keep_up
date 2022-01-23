@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 / 2022-01-23
+
+* Drop support for Ruby 2.5 and 2.6
+* Add support for Ruby 3.0 and 3.1
+* Avoid interrupting half-printed lines when bundle update fails
+
 ## 0.9.0 / 2020-09-18
 
 * Drop support for Ruby 2.4
