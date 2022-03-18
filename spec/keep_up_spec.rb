@@ -4,6 +4,6 @@ require "spec_helper"
 
 describe KeepUp do
   it "has a version number" do
-    expect(KeepUp::VERSION).not_to be nil
+    expect(KeepUp::VERSION).not_to be_nil
   end
 end
