@@ -35,11 +35,12 @@ module KeepUp
 
     def apply_updated_dependency(dependency)
       report_intent dependency
-      bundle.update_gemfile_contents(dependency)
-      bundle.update_gemspec_contents(dependency)
+      update = bundle.update_gemspec_contents(dependency)
+      update2 = bundle.update_gemfile_contents(dependency)
+      update ||= update2
       result = bundle.update_lockfile(dependency)
       report_result dependency, result
-      result
+      update || result if result
     end
 
     def report_intent(dependency)

@@ -56,3 +56,7 @@ Feature: Matching specificity correctly
       """
       Update foo to version 2.1
       """
+    And the output should not contain:
+      """
+      Update foo to version 2.1.1
+      """
