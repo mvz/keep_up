@@ -5,6 +5,7 @@ inherit_mode:
     - Exclude
 
 require:
+  - rubocop-packaging
   - rubocop-performance
   - rubocop-rspec
 
