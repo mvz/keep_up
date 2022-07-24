@@ -5,6 +5,7 @@ inherit_mode:
     - Exclude
 
 require:
+  - rubocop-packaging
   - rubocop-performance
   - rubocop-rspec
 
@@ -15,6 +16,10 @@ AllCops:
 # Make BeginEndAlignment behavior match EndAlignment
 Layout/BeginEndAlignment:
   EnforcedStyleAlignWith: begin
+
+# Spaces in strings with line continuations go at the beginning of the line.
+Layout/LineContinuationLeadingSpace:
+  EnforcedStyle: leading
 
 # Be lenient with line length
 Layout/LineLength:
@@ -85,7 +90,7 @@ Style/RedundantReturn:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-# Consistency
+# Make quoting outside and inside interpolation consistent
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
 
