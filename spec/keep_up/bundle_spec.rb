@@ -59,4 +59,48 @@ describe KeepUp::Bundle do
       expect(result).to eq expected_dependencies
     end
   end
+
+  describe "#update_lockfile" do
+    let(:update_spec) { Gem::Dependency.new("bar", "2.0.0") }
+
+    before do
+      allow(runner).to receive(:run).and_return(run_result)
+    end
+
+    context "when bundler shows the old version" do
+      let(:run_result) do
+        <<~OUTPUT
+          Using foo 1.0.1
+          Using bar 2.0.0 (was 1.0.0)
+          Using baz 3.2.1
+        OUTPUT
+      end
+
+      it "detects the update by comparing with the old version" do
+        result = bundle.update_lockfile(update_spec, Gem::Version.new("1.0.0"))
+        aggregate_failures do
+          expect(result.name).to eq "bar"
+          expect(result.version).to eq Gem::Version.new("2.0.0")
+        end
+      end
+    end
+
+    context "when bundler does not show the old version" do
+      let(:run_result) do
+        <<~OUTPUT
+          Using foo 1.0.1
+          Using bar 2.0.0
+          Using baz 3.2.1
+        OUTPUT
+      end
+
+      it "detects the update by comparing with the old version" do
+        result = bundle.update_lockfile(update_spec, Gem::Version.new("1.0.0"))
+        aggregate_failures do
+          expect(result.name).to eq "bar"
+          expect(result.version).to eq Gem::Version.new("2.0.0")
+        end
+      end
+    end
+  end
 end
