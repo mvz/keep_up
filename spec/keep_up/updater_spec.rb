@@ -99,7 +99,6 @@ describe KeepUp::Updater do
       let(:dependencies) { [dependency] }
 
       before do
-        allow(bundle).to receive(:update_lockfile).and_return update_result
         allow(filter).to receive(:call).with(dependency).and_return false
         updater.run
       end
