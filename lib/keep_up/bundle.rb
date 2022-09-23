@@ -10,7 +10,7 @@ module KeepUp
     OUTDATED_MATCHER =
       /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/.freeze
     UPDATE_MATCHER =
-      /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*))?\)/.freeze
+      /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*)\))?/.freeze
 
     def initialize(runner:, local:)
       @runner = runner
@@ -50,11 +50,11 @@ module KeepUp
     end
 
     # Update lockfile and return resulting spec, or false in case of failure
-    def update_lockfile(update)
+    def update_lockfile(update, old_version)
       update_name = update.name
       command = "bundle update#{" --local" if @local} --conservative #{update_name}"
       lines = run_filtered command, UPDATE_MATCHER
-      lines.each do |name, version, old_version|
+      lines.each do |name, version, _old_version|
         next unless name == update_name && old_version
 
         current = Gem::Specification.new(name, old_version)

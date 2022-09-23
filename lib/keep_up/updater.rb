@@ -28,18 +28,21 @@ module KeepUp
     def possible_updates
       bundle.dependencies
         .select { |dep| filter.call dep }
-        .map { |dep| updated_dependency_for dep }.compact.uniq
+        .select { |dep| updateable_dependency? dep }.uniq
     end
 
     private
 
     def apply_updated_dependency(dependency)
       report_intent dependency
-      update = bundle.update_gemspec_contents(dependency)
-      update2 = bundle.update_gemfile_contents(dependency)
+
+      specification = updated_specification_for(dependency)
+
+      update = bundle.update_gemspec_contents(specification)
+      update2 = bundle.update_gemfile_contents(specification)
       update ||= update2
-      result = bundle.update_lockfile(dependency)
-      report_result dependency, result
+      result = bundle.update_lockfile(specification, dependency.locked_version)
+      report_result specification, result
       update || result if result
     end
 
@@ -55,12 +58,14 @@ module KeepUp
       end
     end
 
-    def updated_dependency_for(dependency)
+    def updateable_dependency?(dependency)
       locked_version = dependency.locked_version
       newest_version = dependency.newest_version
-      return unless newest_version > locked_version
+      newest_version > locked_version
+    end
 
-      Gem::Specification.new(dependency.name, newest_version)
+    def updated_specification_for(dependency)
+      Gem::Specification.new(dependency.name, dependency.newest_version)
     end
   end
 end

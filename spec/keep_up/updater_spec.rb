@@ -6,11 +6,12 @@ describe KeepUp::Updater do
   describe "#run" do
     let(:bundle) { instance_double(KeepUp::Bundle, dependencies: dependencies) }
     let(:version_control) { instance_double(KeepUp::VersionControl) }
+    let(:locked_version) { "1.1.0" }
     let(:dependency) do
       KeepUp::Dependency.new(
         name: "dependency",
         requirement_list: [],
-        locked_version: "1.1.0",
+        locked_version: locked_version,
         newest_version: updated_dependency_version
       )
     end
@@ -55,7 +56,8 @@ describe KeepUp::Updater do
 
       it "lets the bundle update to the new dependency" do
         updater.run
-        expect(bundle).to have_received(:update_lockfile).with(updated_dependency)
+        expect(bundle).to have_received(:update_lockfile)
+          .with(updated_dependency, Gem::Version.new(locked_version))
       end
 
       it "commits the changes" do
@@ -78,7 +80,7 @@ describe KeepUp::Updater do
         updater.run
         expect(bundle)
           .to have_received(:update_lockfile)
-          .with updated_dependency
+          .with(updated_dependency, Gem::Version.new(locked_version))
       end
 
       it "does not commit the changes" do
@@ -97,7 +99,6 @@ describe KeepUp::Updater do
       let(:dependencies) { [dependency] }
 
       before do
-        allow(bundle).to receive(:update_lockfile).and_return update_result
         allow(filter).to receive(:call).with(dependency).and_return false
         updater.run
       end
@@ -136,16 +137,16 @@ describe KeepUp::Updater do
     end
 
     context "when several dependencies are present with an available update" do
-      let(:other_dependency) do
-        KeepUp::Dependency.new(
+      let(:updated_dependency_version) { "1.2.0" }
+      let(:dependencies) do
+        other_dependency = KeepUp::Dependency.new(
           name: "another",
           requirement_list: [],
           locked_version: "0.5.2",
           newest_version: "0.6.9"
         )
+        [dependency, other_dependency]
       end
-      let(:updated_dependency_version) { "1.2.0" }
-      let(:dependencies) { [dependency, other_dependency] }
 
       it "applies each update" do
         updater.run
@@ -161,7 +162,7 @@ describe KeepUp::Updater do
         updater.run
         expect(bundle)
           .to have_received(:update_lockfile)
-          .with(updated_dependency).once
+          .with(updated_dependency, Gem::Version.new(locked_version)).once
       end
     end
   end
