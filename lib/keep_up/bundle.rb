@@ -42,7 +42,7 @@ module KeepUp
       update = dependency_set.find_specification_update(update)
       return unless update
 
-      update if update_specification_contents(update, "Gemfile", GemfileFilter)
+      update if GemfileFilter.apply_to_file("Gemfile", update)
     end
 
     def update_gemspec_contents(update)
@@ -51,7 +51,7 @@ module KeepUp
       update = dependency_set.find_specification_update(update)
       return unless update
 
-      update if update_specification_contents(update, gemspec_name, GemspecFilter)
+      update if GemspecFilter.apply_to_file(gemspec_name, update)
     end
 
     # Update lockfile and return resulting spec, or false in case of failure
@@ -106,17 +106,6 @@ module KeepUp
       return unless dep
 
       dep.requirements_list
-    end
-
-    def update_specification_contents(update, file, filter)
-      contents = File.read(file)
-      updated_contents = filter.apply(contents, update)
-      if contents == updated_contents
-        false
-      else
-        File.write file, updated_contents
-        true
-      end
     end
 
     def gemspec_name

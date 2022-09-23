@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require_relative "file_filter"
+
 module KeepUp
   # Filter to update dependency information in a Gemfile.
-  module GemfileFilter
+  class GemfileFilter < FileFilter
     def self.apply(contents, dependency)
       matcher = dependency_matcher(dependency)
       contents.each_line.map do |line|
