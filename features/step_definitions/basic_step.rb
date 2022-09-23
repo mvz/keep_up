@@ -21,13 +21,11 @@ end
 
 def create_gem_in_local_source(spec)
   gemname = spec.name
-  version = spec.version
-  versioned_name = "#{gemname}-#{version}"
+  versioned_name = "#{gemname}-#{spec.version}"
   base_path = "libs/#{versioned_name}"
   write_file "#{base_path}/lib/#{gemname}.rb", "true"
   Dir.chdir expand_path(base_path) do
-    ui = Gem::SilentUI.new
-    Gem::DefaultUserInteraction.use_ui ui do
+    Gem::DefaultUserInteraction.use_ui Gem::SilentUI.new do
       Gem::Package.build spec, true
     end
   end
