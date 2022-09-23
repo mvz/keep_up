@@ -137,16 +137,16 @@ describe KeepUp::Updater do
     end
 
     context "when several dependencies are present with an available update" do
-      let(:other_dependency) do
-        KeepUp::Dependency.new(
+      let(:updated_dependency_version) { "1.2.0" }
+      let(:dependencies) do
+        other_dependency = KeepUp::Dependency.new(
           name: "another",
           requirement_list: [],
           locked_version: "0.5.2",
           newest_version: "0.6.9"
         )
+        [dependency, other_dependency]
       end
-      let(:updated_dependency_version) { "1.2.0" }
-      let(:dependencies) { [dependency, other_dependency] }
 
       it "applies each update" do
         updater.run
