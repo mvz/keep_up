@@ -1,12 +1,16 @@
 # Changelog
 
+## 0.10.2 / 2022-09-23
+
+* Detect version update even if `bundle update` does not print old version
+
 ## 0.10.1 / 2022-05-20
 
 * Adjust commit message to match update specificity
 
 ## 0.10.0 / 2022-01-23
 
-* Drop support for Ruby 2.5 and 2.6
+* Drop support for Ruby 2.5
 * Add support for Ruby 3.0 and 3.1
 * Avoid interrupting half-printed lines when bundle update fails
 
