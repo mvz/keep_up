@@ -94,7 +94,7 @@ describe KeepUp::Updater do
       end
     end
 
-    context "when the updateable dependency is filtered out" do
+    context "when the updatable dependency is filtered out" do
       let(:updated_dependency_version) { "1.2.0" }
       let(:dependencies) { [dependency] }
 

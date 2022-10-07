@@ -6,7 +6,7 @@ describe KeepUp::GemspecFilter do
   describe ".apply" do
     let(:dependency) { instance_double(Gem::Specification, name: "foo", version: "1.2.0") }
 
-    it "works with old-stype dependency specifications" do
+    it "works with old-style dependency specifications" do
       contents = "spec.add_dependency 'foo', '1.1.0'"
 
       result = described_class.apply(contents, dependency)

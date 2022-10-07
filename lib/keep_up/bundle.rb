@@ -116,10 +116,10 @@ module KeepUp
       result = @runner.run command
       lines = result.split("\n").reject(&:empty?)
       lines.map do |line|
-        matchdata = regexp.match line
-        next unless matchdata
+        match_data = regexp.match line
+        next unless match_data
 
-        matchdata.to_a[1..]
+        match_data.to_a[1..]
       end.compact
     end
   end
