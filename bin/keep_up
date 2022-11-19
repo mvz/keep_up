@@ -17,8 +17,8 @@ opt_parser = OptionParser.new do |parser|
   parser.on("--test-command=COMMAND", "Run COMMAND to test each update") do |command|
     options[:test_command] = command
   end
-  parser.on("--skip=SKIPPED_GEM", "Do not consider SKIPPED_GEM for updating") do |gemname|
-    options[:skip] << gemname
+  parser.on("--skip=SKIPPED_GEM", "Do not consider SKIPPED_GEM for updating") do |gem_name|
+    options[:skip] << gem_name
   end
   parser.on_tail("-h", "--help", "Show this message") do
     puts parser

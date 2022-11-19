@@ -28,7 +28,7 @@ module KeepUp
     def possible_updates
       bundle.dependencies
         .select { |dep| filter.call dep }
-        .select { |dep| updateable_dependency? dep }.uniq
+        .select { |dep| updatable_dependency? dep }.uniq
     end
 
     private
@@ -58,7 +58,7 @@ module KeepUp
       end
     end
 
-    def updateable_dependency?(dependency)
+    def updatable_dependency?(dependency)
       locked_version = dependency.locked_version
       newest_version = dependency.newest_version
       newest_version > locked_version
