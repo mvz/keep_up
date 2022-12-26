@@ -115,12 +115,12 @@ module KeepUp
     def run_filtered(command, regexp)
       result = @runner.run command
       lines = result.split("\n").reject(&:empty?)
-      lines.map do |line|
+      lines.filter_map do |line|
         matchdata = regexp.match line
         next unless matchdata
 
         matchdata.to_a[1..]
-      end.compact
+      end
     end
   end
 end
