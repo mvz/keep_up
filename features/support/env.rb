@@ -4,7 +4,7 @@ require "rubygems/package"
 
 Before do
   # Set Aruba environment to match unbundled environment
-  empty_env = with_environment { ::Bundler.with_unbundled_env { ENV.to_h } }
+  empty_env = with_environment { Bundler.with_unbundled_env { ENV.to_h } }
   aruba_env = aruba.environment.to_h
   (aruba_env.keys - empty_env.keys).each do |key|
     delete_environment_variable key
