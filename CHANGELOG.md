@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.11.0 / 2023-09-22
+
+* Drop support for Ruby 2.6 ([#102] by [mvz])
+* Add support for Ruby 3.2 ([#103] by [mvz])
+
+[mvz]: https://github.com/mvz
+[#102]: https://github.com/mvz/keep_up/pull/102
+[#103]: https://github.com/mvz/keep_up/pull/103
+
 ## 0.10.2 / 2022-09-23
 
 * Detect version update even if `bundle update` does not print old version
