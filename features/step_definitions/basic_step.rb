@@ -97,6 +97,10 @@ Then(
   "the gemspec for {string} should depend on {string} at version {string}"
 ) do |gemname, depname, depversion|
   depversion = "= #{depversion}" unless /^[~<>=]/.match?(depversion)
-  matcher = /s.add_runtime_dependency\(%q<#{depname}>(.freeze)?, \["#{depversion}"\]\)/
+  matcher = /
+    s.add_runtime_dependency\(
+    %q<#{Regexp.escape depname}>(.freeze)?,         # Matches the dependency name
+    \ \["#{Regexp.escape depversion}"(.freeze)?\]   # Matches the dependency version
+    \)/x
   expect("#{gemname}.gemspec").to have_file_content matcher
 end

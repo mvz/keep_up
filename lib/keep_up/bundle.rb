@@ -9,9 +9,9 @@ module KeepUp
   # A Gemfile with its current set of locked dependencies.
   class Bundle
     OUTDATED_MATCHER =
-      /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/.freeze
+      /([^ ]*) \(newest ([^,]*), installed ([^,]*)(?:, requested (.*))?\)/
     UPDATE_MATCHER =
-      /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*)\))?/.freeze
+      /(?:Using|Installing|Fetching) ([^ ]*) ([^ ]*)(?: \(was (.*)\))?/
 
     def initialize(runner:, local:)
       @runner = runner
