@@ -5,24 +5,35 @@ require_relative "null_filter"
 module KeepUp
   # Apply potential updates to a Gemfile.
   class Updater
-    attr_reader :bundle, :version_control, :filter
+    attr_reader :bundle, :version_control, :filter, :test_command
 
-    def initialize(bundle:, version_control:, filter: NullFilter.new, out: $stdout)
+    def initialize(bundle:, version_control:, test_command: nil,
+                   filter: NullFilter.new, out: $stdout)
       @bundle = bundle
       @version_control = version_control
       @filter = filter
+      @test_command = test_command
       @out = out
     end
 
     def run
       possible_updates.each do |update|
-        result = apply_updated_dependency update
-        if result
-          version_control.commit_changes result
+        gem_update_result = apply_updated_dependency(update)
+        if gem_update_result && test_successfull?
+          version_control.commit_changes gem_update_result
         else
           version_control.revert_changes
         end
       end
+    end
+
+    def test_successfull?
+      return true unless @test_command
+
+      test_status = Runner.run_and_return_status @test_command
+
+      puts "Running Test - Result: #{test_status.exitstatus}"
+      test_status.success?
     end
 
     def possible_updates

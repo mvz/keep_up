@@ -12,6 +12,11 @@ module KeepUp
       stdout
     end
 
+    def run_and_return_status(command)
+      _stdout, status = run2 command
+      status
+    end
+
     def run2(command)
       Open3.capture2 command
     end

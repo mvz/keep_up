@@ -6,7 +6,7 @@ require "keep_up"
 
 options = {
   local: false,
-  test_command: "bundle exec rake",
+  test_command: nil,
   skip: []
 }
 

@@ -14,7 +14,7 @@ module KeepUp
 
   # Main application
   class Application
-    def initialize(local:, test_command:, skip:, runner: Runner)
+    def initialize(local:, skip:, test_command: nil, runner: Runner)
       @test_command = test_command
       @local = local
       @skip = skip
@@ -24,6 +24,7 @@ module KeepUp
     def run
       check_version_control_clean
       check_bundle_lockfile
+      check_test_command_success
       update_all_dependencies
       report_done
     end
@@ -45,12 +46,27 @@ module KeepUp
       raise BailOut, "Make sure your Gemfile.lock is up-to-date before running 'keep_up'"
     end
 
+    def check_test_command_success
+      return unless @test_command
+
+      puts "Test command set: #{@test_command}"
+
+      return if updater.test_successfull?
+
+      raise BailOut, "Test command failed. Fix your tests before running 'keep_up'"
+    end
+
     def update_all_dependencies
-      Updater.new(
+      updater.run
+    end
+
+    def updater
+      @updater ||= Updater.new(
         bundle: bundle,
         version_control: version_control,
-        filter: filter
-      ).run
+        filter: filter,
+        test_command: @test_command
+      )
     end
 
     def version_control
