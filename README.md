@@ -35,6 +35,8 @@ to find any updates that cause problems and remove or fix them.
   option can be passed multiple times.
 * You can pass `--local` to make KeepUp not try to fetch remote gem version
   information.
+* You can pass `--test-command <COMMAND>` to make KeepUp run the given command
+  to test each update before commiting.
 
 ## Planned Features
 
