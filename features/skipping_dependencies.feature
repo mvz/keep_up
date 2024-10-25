@@ -15,7 +15,7 @@ Feature: Skipping dependencies
     And a gem named "bar" at version "1.2.0"
     And a gem named "foo" at version "1.2.0"
     When I run `keep_up --skip bar`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating foo
       Updated foo to 1.2.0

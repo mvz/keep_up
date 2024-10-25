@@ -13,7 +13,7 @@ Feature: Updating indirect dependencies
     And the initial bundle install committed
     And a gem named "bar" at version "1.0.1"
     When I run `keep_up`
-    Then the output should contain exactly:
+    Then the stdout should contain exactly:
       """
       Updating bar
       Updated bar to 1.0.1

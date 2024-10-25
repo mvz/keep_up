@@ -13,7 +13,7 @@ Feature: Matching specificity correctly
     And the initial bundle install committed
     And a gem named "foo" at version "2.1.1"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating foo
       Updated foo to 2.1.1
@@ -24,7 +24,7 @@ Feature: Matching specificity correctly
       foo (2.1.1)
       """
     When I run `git log`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Update foo to version 2.1
       """
@@ -38,7 +38,7 @@ Feature: Matching specificity correctly
     And the initial bundle install committed
     And a gem named "foo" at version "2.1.1"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating foo
       Updated foo to 2.1.1
@@ -52,11 +52,11 @@ Feature: Matching specificity correctly
       foo (2.1.1)
       """
     When I run `git log`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Update foo to version 2.1
       """
-    And the output should not contain:
+    And the stdout should not contain:
       """
       Update foo to version 2.1.1
       """

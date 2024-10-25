@@ -14,7 +14,7 @@ Feature: Update bundle with approximate versions
   Scenario: Updating to a version that matches the current spec
     Given a gem named "foo" at version "1.0.1"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating foo
       Updated foo to 1.0.1
@@ -31,7 +31,7 @@ Feature: Update bundle with approximate versions
   Scenario: Updating to a version that exceeds the current spec
     Given a gem named "foo" at version "1.1.2"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating foo
       Updated foo to 1.1.2

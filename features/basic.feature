@@ -13,7 +13,7 @@ Feature: Update bundle
 
   Scenario: Nothing to do
     When I run `keep_up`
-    Then the output from "keep_up" should contain exactly:
+    Then the stdout from "keep_up" should contain exactly:
       """
       All done!
       """
@@ -25,7 +25,7 @@ Feature: Update bundle
   Scenario: Updating a gem with a fixed version
     Given a gem named "foo" at version "1.0.1"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating foo
       Updated foo to 1.0.1
@@ -40,7 +40,7 @@ Feature: Update bundle
       foo (1.0.1)
       """
     When I run `git log`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Update foo to version 1.0.1
       """

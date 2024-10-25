@@ -17,7 +17,7 @@ Feature: Gemspec dependencies
       """
     Given a gem named "foo" at version "1.0.1"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating foo
       Updated foo to 1.0.1
