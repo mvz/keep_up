@@ -38,9 +38,9 @@ module KeepUp
 
       specification = updated_specification_for(dependency)
 
-      update = bundle.update_gemspec_contents(specification)
-      update2 = bundle.update_gemfile_contents(specification)
-      update ||= update2
+      update =
+        bundle.update_gemspec_contents(specification) ||
+        bundle.update_gemfile_contents(specification)
       result = bundle.update_lockfile(specification, dependency.locked_version)
       report_result specification, result
       update || result if result
