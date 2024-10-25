@@ -15,14 +15,14 @@ Feature: Skip failing updates
     And a gem named "bar" at version "1.2.0" depending on "foo" at version "1.2.0"
     And a gem named "foo" at version "1.2.0"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating bar
       Failed updating bar to 1.2.0
       Updating foo
       Updated foo to 1.2.0
       """
-    And the output should contain:
+    And the stdout should contain:
       """
       All done!
       """

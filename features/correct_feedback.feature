@@ -13,7 +13,7 @@ Feature: Correct feedback
     And a gem named "bar" at version "1.1.0"
     And a gem named "bar" at version "1.2.0"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating bar
       Updated bar to 1.1.0
@@ -25,7 +25,7 @@ Feature: Correct feedback
           bar (1.1.0)
       """
     When I run `git log`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Update bar to version 1.1.0
       """
@@ -39,7 +39,7 @@ Feature: Correct feedback
     And the initial bundle install committed
     And a gem named "bar" at version "1.2.0"
     When I run `keep_up`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       Updating bar
       Failed updating bar to 1.2.0

@@ -13,12 +13,12 @@ Feature: Sanity check
     And a gem named "foo" at version "1.0.1"
     When I add a file without checking it in
     And I run `keep_up`
-    Then the output should not contain:
+    Then the stdout should not contain:
       """
       Updating foo
       Updated foo to 1.0.1
       """
-    And the output should contain:
+    And the stderr should contain:
       """
       Commit or stash your work before running 'keep_up'
       """
@@ -37,17 +37,17 @@ Feature: Sanity check
       """
     And I commit the changes without updating the bundle
     And I run `keep_up`
-    Then the output should not contain:
+    Then the stdout should not contain:
       """
       Updating foo
       Updated foo to 1.0.1
       """
-    And the output should contain:
+    And the stderr should contain:
       """
       Make sure your Gemfile.lock is up-to-date before running 'keep_up'
       """
     When I run `git status`
-    Then the output should contain:
+    Then the stdout should contain:
       """
       nothing to commit, working tree clean
       """
