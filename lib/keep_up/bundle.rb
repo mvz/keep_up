@@ -3,7 +3,6 @@
 require_relative "gemfile_filter"
 require_relative "gemspec_filter"
 require_relative "dependency"
-require_relative "dependency_set"
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
@@ -29,17 +28,13 @@ module KeepUp
         end
     end
 
-    def dependency_set
-      @dependency_set ||= DependencySet.new(outdated_dependencies)
-    end
-
     def check?
       _, status = @runner.run2 "bundle check"
       status == 0
     end
 
     def update_gemfile_contents(update)
-      update = dependency_set.find_specification_update(update)
+      update = find_specification_update(update)
       return unless update
 
       update if GemfileFilter.apply_to_file("Gemfile", update)
@@ -48,7 +43,7 @@ module KeepUp
     def update_gemspec_contents(update)
       return unless gemspec_name
 
-      update = dependency_set.find_specification_update(update)
+      update = find_specification_update(update)
       return unless update
 
       update if GemspecFilter.apply_to_file(gemspec_name, update)
@@ -110,6 +105,13 @@ module KeepUp
 
     def gemspec_name
       @gemspec_name ||= Dir.glob("*.gemspec").first
+    end
+
+    def find_specification_update(update)
+      current_dependency = outdated_dependencies.find { |it| it.name == update.name }
+      return if !current_dependency || current_dependency.matches_spec?(update)
+
+      current_dependency.generalize_specification(update)
     end
 
     def run_filtered(command, regexp)
