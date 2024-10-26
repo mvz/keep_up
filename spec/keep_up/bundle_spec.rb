@@ -8,7 +8,7 @@ describe KeepUp::Bundle do
     described_class.new runner: runner, local: false
   end
 
-  describe "#dependencies" do
+  describe "#outdated_dependencies" do
     let(:outdated_result) do
       "\n" \
         "foo (newest 0.1.0, installed 0.0.5)\n" \
@@ -50,12 +50,12 @@ describe KeepUp::Bundle do
     end
 
     it "runs bundle outdated with parseable results" do
-      bundle.dependencies
+      bundle.outdated_dependencies
       expect(runner).to have_received(:run).with("bundle outdated --parseable")
     end
 
     it "returns the correct set of dependencies" do
-      result = bundle.dependencies
+      result = bundle.outdated_dependencies
       expect(result).to eq expected_dependencies
     end
   end

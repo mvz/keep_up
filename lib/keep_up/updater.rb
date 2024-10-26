@@ -26,7 +26,7 @@ module KeepUp
     end
 
     def possible_updates
-      bundle.dependencies
+      bundle.outdated_dependencies
         .select { |dep| filter.call dep }
         .select { |dep| updateable_dependency? dep }.uniq
     end

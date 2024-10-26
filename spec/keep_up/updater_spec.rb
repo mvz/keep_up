@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe KeepUp::Updater do
   describe "#run" do
-    let(:bundle) { instance_double(KeepUp::Bundle, dependencies: dependencies) }
+    let(:bundle) { instance_double(KeepUp::Bundle, outdated_dependencies: dependencies) }
     let(:version_control) { instance_double(KeepUp::VersionControl) }
     let(:locked_version) { "1.1.0" }
     let(:dependency) do

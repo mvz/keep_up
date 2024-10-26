@@ -18,8 +18,8 @@ module KeepUp
       @local = local
     end
 
-    def dependencies
-      @dependencies ||=
+    def outdated_dependencies
+      @outdated_dependencies ||=
         begin
           command = "bundle outdated --parseable#{" --local" if @local}"
           lines = run_filtered command, OUTDATED_MATCHER
@@ -30,7 +30,7 @@ module KeepUp
     end
 
     def dependency_set
-      @dependency_set ||= DependencySet.new(dependencies)
+      @dependency_set ||= DependencySet.new(outdated_dependencies)
     end
 
     def check?
