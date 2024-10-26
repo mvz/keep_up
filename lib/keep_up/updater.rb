@@ -35,17 +35,10 @@ module KeepUp
 
     def apply_updated_dependency(dependency)
       report_intent dependency
+      spec_result, lock_result = *bundle.update_dependency(dependency)
+      final_result = spec_result || lock_result if lock_result
 
-      specification = bundle.updated_specification_for(dependency)
-
-      update =
-        bundle.update_gemspec_contents(specification) ||
-        bundle.update_gemfile_contents(specification)
-
-      result = bundle.update_lockfile(specification, dependency.locked_version)
-      final_result = update || result if result
-
-      report_result specification, result
+      report_result dependency, lock_result
       final_result
     end
 
@@ -57,7 +50,7 @@ module KeepUp
       if result
         @out.puts "Updated #{dependency.name} to #{result.version}"
       else
-        @out.puts "Failed updating #{dependency.name} to #{dependency.version}"
+        @out.puts "Failed updating #{dependency.name} to #{dependency.newest_version}"
       end
     end
 
