@@ -64,6 +64,10 @@ module KeepUp
       nil
     end
 
+    def updated_specification_for(dependency)
+      Gem::Specification.new(dependency.name, dependency.newest_version)
+    end
+
     private
 
     def gemspec

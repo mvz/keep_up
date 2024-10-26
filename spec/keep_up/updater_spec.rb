@@ -37,6 +37,7 @@ describe KeepUp::Updater do
       allow(version_control).to receive(:revert_changes)
       allow(bundle).to receive(:update_gemfile_contents)
       allow(bundle).to receive(:update_gemspec_contents)
+      allow(bundle).to receive(:updated_specification_for).and_return updated_dependency
       allow(bundle).to receive(:update_lockfile).and_return update_result
     end
 
