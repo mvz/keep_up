@@ -35,9 +35,10 @@ module KeepUp
 
     def update_dependency(dependency)
       specification = updated_specification_for(dependency)
+      spec_update = find_specification_update(specification)
       spec_result =
-        update_gemspec_contents(specification) ||
-        update_gemfile_contents(specification)
+        update_gemspec_contents(spec_update) ||
+        update_gemfile_contents(spec_update)
       lock_result = update_lockfile(specification, dependency.locked_version)
       [spec_result, lock_result]
     end
@@ -45,17 +46,13 @@ module KeepUp
     private
 
     def update_gemfile_contents(update)
-      update = find_specification_update(update)
       return unless update
 
       update if GemfileFilter.apply_to_file("Gemfile", update)
     end
 
     def update_gemspec_contents(update)
-      return unless gemspec_name
-
-      update = find_specification_update(update)
-      return unless update
+      return unless update && gemspec_name
 
       update if GemspecFilter.apply_to_file(gemspec_name, update)
     end
