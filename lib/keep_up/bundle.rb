@@ -57,8 +57,6 @@ module KeepUp
       update if GemspecFilter.apply_to_file(gemspec_name, update)
     end
 
-    public
-
     # Update lockfile and return resulting spec, or false in case of failure
     def update_lockfile(update, old_version)
       update_name = update.name
@@ -73,8 +71,6 @@ module KeepUp
       end
       nil
     end
-
-    private
 
     def updated_specification_for(dependency)
       Gem::Specification.new(dependency.name, dependency.newest_version)

@@ -60,8 +60,11 @@ describe KeepUp::Bundle do
     end
   end
 
-  describe "#update_lockfile" do
-    let(:update_spec) { Gem::Dependency.new("bar", "2.0.0") }
+  describe "#update_dependency" do
+    let(:dependency) do
+      KeepUp::Dependency.new(name: "bar", locked_version: "1.0.0", newest_version: "2.0.0",
+                             requirement_list: [])
+    end
 
     before do
       allow(runner).to receive(:run).and_return(run_result)
@@ -76,11 +79,11 @@ describe KeepUp::Bundle do
         OUTPUT
       end
 
-      it "detects the update by comparing with the old version" do
-        result = bundle.update_lockfile(update_spec, Gem::Version.new("1.0.0"))
+      it "detects the lockfile update by comparing with the old version" do
+        _, lock_result = bundle.update_dependency(dependency)
         aggregate_failures do
-          expect(result.name).to eq "bar"
-          expect(result.version).to eq Gem::Version.new("2.0.0")
+          expect(lock_result.name).to eq "bar"
+          expect(lock_result.version).to eq Gem::Version.new("2.0.0")
         end
       end
     end
@@ -94,11 +97,11 @@ describe KeepUp::Bundle do
         OUTPUT
       end
 
-      it "detects the update by comparing with the old version" do
-        result = bundle.update_lockfile(update_spec, Gem::Version.new("1.0.0"))
+      it "detects the lockfile update by comparing with the old version" do
+        _, lock_result = bundle.update_dependency(dependency)
         aggregate_failures do
-          expect(result.name).to eq "bar"
-          expect(result.version).to eq Gem::Version.new("2.0.0")
+          expect(lock_result.name).to eq "bar"
+          expect(lock_result.version).to eq Gem::Version.new("2.0.0")
         end
       end
     end
