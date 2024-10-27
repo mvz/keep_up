@@ -16,9 +16,9 @@ module KeepUp
 
     def run
       possible_updates.each do |update|
-        result = apply_updated_dependency update
-        if result
-          version_control.commit_changes result
+        updated_dependency = apply_updated_dependency update
+        if updated_dependency
+          version_control.commit_changes updated_dependency
         else
           version_control.revert_changes
         end
@@ -26,7 +26,7 @@ module KeepUp
     end
 
     def possible_updates
-      bundle.dependencies
+      bundle.outdated_dependencies
         .select { |dep| filter.call dep }
         .select { |dep| updateable_dependency? dep }.uniq
     end
@@ -35,15 +35,11 @@ module KeepUp
 
     def apply_updated_dependency(dependency)
       report_intent dependency
+      spec_result, lock_result = *bundle.update_dependency(dependency)
+      final_result = spec_result || lock_result if lock_result
 
-      specification = updated_specification_for(dependency)
-
-      update =
-        bundle.update_gemspec_contents(specification) ||
-        bundle.update_gemfile_contents(specification)
-      result = bundle.update_lockfile(specification, dependency.locked_version)
-      report_result specification, result
-      update || result if result
+      report_result dependency, lock_result
+      final_result
     end
 
     def report_intent(dependency)
@@ -54,7 +50,7 @@ module KeepUp
       if result
         @out.puts "Updated #{dependency.name} to #{result.version}"
       else
-        @out.puts "Failed updating #{dependency.name} to #{dependency.version}"
+        @out.puts "Failed updating #{dependency.name} to #{dependency.newest_version}"
       end
     end
 
@@ -62,10 +58,6 @@ module KeepUp
       locked_version = dependency.locked_version
       newest_version = dependency.newest_version
       newest_version > locked_version
-    end
-
-    def updated_specification_for(dependency)
-      Gem::Specification.new(dependency.name, dependency.newest_version)
     end
   end
 end

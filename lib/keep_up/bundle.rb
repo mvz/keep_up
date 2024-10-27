@@ -3,7 +3,6 @@
 require_relative "gemfile_filter"
 require_relative "gemspec_filter"
 require_relative "dependency"
-require_relative "dependency_set"
 
 module KeepUp
   # A Gemfile with its current set of locked dependencies.
@@ -18,8 +17,8 @@ module KeepUp
       @local = local
     end
 
-    def dependencies
-      @dependencies ||=
+    def outdated_dependencies
+      @outdated_dependencies ||=
         begin
           command = "bundle outdated --parseable#{" --local" if @local}"
           lines = run_filtered command, OUTDATED_MATCHER
@@ -29,27 +28,31 @@ module KeepUp
         end
     end
 
-    def dependency_set
-      @dependency_set ||= DependencySet.new(dependencies)
-    end
-
     def check?
       _, status = @runner.run2 "bundle check"
       status == 0
     end
 
+    def update_dependency(dependency)
+      specification = updated_specification_for(dependency)
+      spec_update = find_specification_update(specification)
+      spec_result =
+        update_gemspec_contents(spec_update) ||
+        update_gemfile_contents(spec_update)
+      lock_result = update_lockfile(specification, dependency.locked_version)
+      [spec_result, lock_result]
+    end
+
+    private
+
     def update_gemfile_contents(update)
-      update = dependency_set.find_specification_update(update)
       return unless update
 
       update if GemfileFilter.apply_to_file("Gemfile", update)
     end
 
     def update_gemspec_contents(update)
-      return unless gemspec_name
-
-      update = dependency_set.find_specification_update(update)
-      return unless update
+      return unless update && gemspec_name
 
       update if GemspecFilter.apply_to_file(gemspec_name, update)
     end
@@ -69,23 +72,18 @@ module KeepUp
       nil
     end
 
-    private
+    def updated_specification_for(dependency)
+      Gem::Specification.new(dependency.name, dependency.newest_version)
+    end
 
     def gemspec
-      @gemspec ||=
-        if gemspec_name
-          gemspec_path = File.expand_path(gemspec_name)
-          eval File.read(gemspec_name), nil, gemspec_path
-        end
+      @gemspec ||= if gemspec_name
+                     eval File.read(gemspec_name), nil, File.expand_path(gemspec_name)
+                   end
     end
 
     def gemspec_dependencies
-      @gemspec_dependencies ||=
-        if gemspec
-          gemspec.dependencies
-        else
-          []
-        end
+      @gemspec_dependencies ||= gemspec&.dependencies || []
     end
 
     def build_dependency(name, newest, version, requirement)
@@ -110,6 +108,13 @@ module KeepUp
 
     def gemspec_name
       @gemspec_name ||= Dir.glob("*.gemspec").first
+    end
+
+    def find_specification_update(update)
+      current_dependency = outdated_dependencies.find { |it| it.name == update.name }
+      return if !current_dependency || current_dependency.matches_spec?(update)
+
+      current_dependency.generalize_specification(update)
     end
 
     def run_filtered(command, regexp)
