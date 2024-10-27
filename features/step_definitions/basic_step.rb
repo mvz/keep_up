@@ -67,12 +67,8 @@ Given(
 end
 
 Given "the initial bundle install committed" do
-  if Bundler::VERSION < "2.0"
-    run_command_and_stop "bundle install --quiet --path 'vendor'"
-  else
-    run_command_and_stop "bundle config set path 'vendor'"
-    run_command_and_stop "bundle install --quiet"
-  end
+  run_command_and_stop "bundle config set path 'vendor'"
+  run_command_and_stop "bundle install --quiet"
   write_file ".gitignore", "libs/\nvendor/"
   run_command_and_stop "git init -q"
   run_command_and_stop "git config user.name 'Foo Bar'"
