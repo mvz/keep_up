@@ -6,7 +6,7 @@ def write_local_gemfile(string)
   write_file "Gemfile", contents
 end
 
-def write_gem(gemname, version, dependencies)
+def write_gem(gemname, version, dependencies = {})
   spec = Gem::Specification.new do |s|
     s.name = gemname
     s.version = version
@@ -31,7 +31,6 @@ def create_gem_in_local_source(spec)
   end
   create_directory "libs/gems"
   copy "#{base_path}/#{versioned_name}.gem", "libs/gems"
-  run_command_and_stop "gem generate_index --silent --directory=libs"
 end
 
 def write_gemspec(gemname, version, dependencies)
@@ -50,20 +49,26 @@ Given "a Gemfile specifying:" do |string|
   write_local_gemfile(string)
 end
 
+Given "a Gemfile.lock specifying:" do |string|
+  write_file "Gemfile.lock", string
+end
+
 Given(
   "a gemspec for {string} depending on {string} at version {string}"
 ) do |gemname, depname, depversion|
   write_gemspec gemname, "0.0.1", depname => depversion
 end
 
-Given "a gem named {string} at version {string}" do |gemname, version|
-  write_gem(gemname, version, {})
-end
-
-Given(
-  "a gem named {string} at version {string} depending on {string} at version {string}"
-) do |gemname, version, depname, depversion|
-  write_gem(gemname, version, depname => depversion)
+Given "the following remote gems:" do |table|
+  table.rows.each do |gemname, version, dep_name, dep_version|
+    dependencies = if dep_name && !dep_name.empty?
+                     { dep_name => dep_version }
+                   else
+                     {}
+                   end
+    write_gem(gemname, version, dependencies)
+  end
+  run_command_and_stop "gem generate_index --silent --directory=libs"
 end
 
 Given "the initial bundle install committed" do

@@ -4,13 +4,22 @@ Feature: Update bundle with no depenency versions
   I want to specify no versions
 
   Scenario: Updating an unversioned depedency
-    Given a Gemfile specifying:
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 1.0.1   |
+    And a Gemfile specifying:
       """
       gem 'foo'
       """
-    And a gem named "foo" at version "1.0.0"
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.0)
+
+      """
     And the initial bundle install committed
-    And a gem named "foo" at version "1.0.1"
     When I run `keep_up`
     Then the stdout should contain:
       """

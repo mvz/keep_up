@@ -4,13 +4,22 @@ Feature: Sanity check
   I want to have some checks done before keep_up starts
 
   Scenario: Check clean checkout directory
-    Given a Gemfile specifying:
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 1.0.1   |
+    And a Gemfile specifying:
       """
       gem 'foo', '1.0.0'
       """
-    And a gem named "foo" at version "1.0.0"
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.0)
+
+      """
     And the initial bundle install committed
-    And a gem named "foo" at version "1.0.1"
     When I add a file without checking it in
     And I run `keep_up`
     Then the stdout should not contain:
@@ -24,12 +33,21 @@ Feature: Sanity check
       """
 
   Scenario: Check bundle status
-    Given a Gemfile specifying:
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 1.0.1   |
+    And a Gemfile specifying:
       """
       gem 'foo', '1.0.1'
       """
-    And a gem named "foo" at version "1.0.0"
-    And a gem named "foo" at version "1.0.1"
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.1)
+
+      """
     And the initial bundle install committed
     When I update the Gemfile to specify:
       """
