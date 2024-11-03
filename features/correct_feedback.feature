@@ -4,16 +4,25 @@ Feature: Correct feedback
   I want correct feedback in unusal cases
 
   Scenario: Gem not updated to its latest version
-    Given a Gemfile specifying:
+    Given the following remote gems:
+      | name | version |
+      | bar  | 1.0.0   |
+      | bar  | 1.1.0   |
+      | bar  | 1.2.0   |
+    And a Gemfile specifying:
       """
       gem 'bar', ['>= 1.0.0', '< 1.2.0']
       """
-    And a gem named "bar" at version "1.0.0"
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          bar (1.0.0)
+
+      """
     And the initial bundle install committed
-    And a gem named "bar" at version "1.1.0"
-    And a gem named "bar" at version "1.2.0"
     When I run `keep_up`
-    Then the stdout should contain:
+    Then the output should contain:
       """
       Updating bar
       Updated bar to 1.1.0
@@ -31,13 +40,22 @@ Feature: Correct feedback
       """
 
   Scenario: Gem not updated at all
-    Given a Gemfile specifying:
+    Given the following remote gems:
+      | name | version |
+      | bar  | 1.0.0   |
+      | bar  | 1.2.0   |
+    And a Gemfile specifying:
       """
       gem 'bar', ['>= 1.0.0', '< 1.2.0']
       """
-    And a gem named "bar" at version "1.0.0"
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          bar (1.0.0)
+
+      """
     And the initial bundle install committed
-    And a gem named "bar" at version "1.2.0"
     When I run `keep_up`
     Then the stdout should contain:
       """

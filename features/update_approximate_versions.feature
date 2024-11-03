@@ -8,11 +8,20 @@ Feature: Update bundle with approximate versions
       """
       gem 'foo', '~> 1.0.0'
       """
-    And a gem named "foo" at version "1.0.0"
-    And the initial bundle install committed
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.0)
+
+      """
 
   Scenario: Updating to a version that matches the current spec
-    Given a gem named "foo" at version "1.0.1"
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 1.0.1   |
+    And the initial bundle install committed
     When I run `keep_up`
     Then the stdout should contain:
       """
@@ -29,7 +38,11 @@ Feature: Update bundle with approximate versions
       """
 
   Scenario: Updating to a version that exceeds the current spec
-    Given a gem named "foo" at version "1.1.2"
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 1.1.2   |
+    And the initial bundle install committed
     When I run `keep_up`
     Then the stdout should contain:
       """

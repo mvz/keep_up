@@ -3,15 +3,22 @@ Feature: Update bundle
   In order to avoid tedious work
   I want to automatically update dependencies
 
-  Background: A project with fixed dependency versions
-    Given a Gemfile specifying:
+  Scenario: Nothing to do
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+    And a Gemfile specifying:
       """
       gem 'foo', '1.0.0'
       """
-    And a gem named "foo" at version "1.0.0"
-    And the initial bundle install committed
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.0)
 
-  Scenario: Nothing to do
+      """
+    And the initial bundle install committed
     When I run `keep_up`
     Then the stdout from "keep_up" should contain exactly:
       """
@@ -23,7 +30,22 @@ Feature: Update bundle
       """
 
   Scenario: Updating a gem with a fixed version
-    Given a gem named "foo" at version "1.0.1"
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 1.0.1   |
+    And a Gemfile specifying:
+      """
+      gem 'foo', '1.0.0'
+      """
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.0)
+
+      """
+    And the initial bundle install committed
     When I run `keep_up`
     Then the stdout should contain:
       """

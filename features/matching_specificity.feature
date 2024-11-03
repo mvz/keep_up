@@ -4,14 +4,23 @@ Feature: Matching specificity correctly
   I want to trust semantic versioning
 
   Scenario: Matching specificity while updating a gemspec
-    Given a Gemfile specifying:
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 2.1.1   |
+    And a Gemfile specifying:
       """
       gemspec
       """
     And a gemspec for "bar" depending on "foo" at version "~> 1.0"
-    And a gem named "foo" at version "1.0.0"
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.0)
+
+      """
     And the initial bundle install committed
-    And a gem named "foo" at version "2.1.1"
     When I run `keep_up`
     Then the stdout should contain:
       """
@@ -30,13 +39,22 @@ Feature: Matching specificity correctly
       """
 
   Scenario: Matching specificity while updating a Gemfile
-    Given a Gemfile specifying:
+    Given the following remote gems:
+      | name | version |
+      | foo  | 1.0.0   |
+      | foo  | 2.1.1   |
+    And a Gemfile specifying:
       """
       gem 'foo', '~> 1.0'
       """
-    And a gem named "foo" at version "1.0.0"
+    And a Gemfile.lock specifying:
+      """
+      GEM
+        specs:
+          foo (1.0.0)
+
+      """
     And the initial bundle install committed
-    And a gem named "foo" at version "2.1.1"
     When I run `keep_up`
     Then the stdout should contain:
       """
