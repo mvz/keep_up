@@ -13,8 +13,9 @@ Gem::Specification.new do |spec|
     "Automatically update the dependencies listed in your Gemfile," \
     " Gemfile.lock, and gemspec."
   spec.homepage = "https://github.com/mvz/keep_up"
+
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.0.0"
+  spec.required_ruby_version = ">= 3.1.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["rubygems_mfa_required"] = "true"
