@@ -64,6 +64,9 @@ Metrics/BlockLength:
 Performance/StartWith:
   AutoCorrect: true
 
+RSpec/ExampleLength:
+  Max: 7
+
 # Allow and/or for control flow only
 Style/AndOr:
   EnforcedStyle: conditionals
