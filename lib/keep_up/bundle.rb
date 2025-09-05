@@ -100,7 +100,7 @@ module KeepUp
     end
 
     def fetch_gemspec_dependency_requirements(name)
-      dep = gemspec_dependencies.find { |it| it.name == name }
+      dep = gemspec_dependencies.find { _1.name == name }
       return unless dep
 
       dep.requirements_list
@@ -111,7 +111,7 @@ module KeepUp
     end
 
     def find_specification_update(update)
-      current_dependency = outdated_dependencies.find { |it| it.name == update.name }
+      current_dependency = outdated_dependencies.find { _1.name == update.name }
       return if !current_dependency || current_dependency.matches_spec?(update)
 
       current_dependency.generalize_specification(update)
