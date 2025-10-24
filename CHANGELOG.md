@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.12.0 / 2025-10-24
+
+* Support Ruby 3.2 through 3.4, dropping support for Ruby 2.7, 3.0 and 3.1
+  ([#107], [#117] and [#122] by [mvz])
+* Drop support for Bundler 1.x ([#115] by [mvz])
+
+[#107]: https://github.com/mvz/keep_up/pull/107
+[#115]: https://github.com/mvz/keep_up/pull/115
+[#117]: https://github.com/mvz/keep_up/pull/117
+[#122]: https://github.com/mvz/keep_up/pull/122
+
 ## 0.11.0 / 2023-09-22
 
 * Drop support for Ruby 2.6 ([#102] by [mvz])
