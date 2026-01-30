@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.1 / 2026-01-30
+
+* Support Ruby 4.0 and loosen Bundler dependency ([#128] by [mvz])
+
+[#128]: https://github.com/mvz/keep_up/pull/128
+
 ## 0.12.0 / 2025-10-24
 
 * Support Ruby 3.2 through 3.4, dropping support for Ruby 2.7, 3.0 and 3.1

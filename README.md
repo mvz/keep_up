@@ -7,7 +7,9 @@ Automatically update your dependencies.
 KeepUp is not intended to be part of your application's bundle. You should
 install it yourself as:
 
-    $ gem install keep_up
+```bash
+$ gem install keep_up
+```
 
 ## Basic Usage
 
@@ -19,7 +21,9 @@ Gemfile.lock is not up-to-date.
 
 Run `keep_up` in your project directory:
 
-    $ keep_up
+```bash
+$ keep_up
+```
 
 KeepUp will proceed to update your dependencies one by one, committing each
 change if updating the bundle is succesful.
@@ -71,6 +75,8 @@ welcoming space for collaboration, and contributors are expected to adhere to
 the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
+
+Copyright &copy; 2016&ndash;2026 [Matijs van Zuijlen](http://www.matijs.net)
 
 The gem is available as open source under the terms of the
 [MIT License](http://opensource.org/licenses/MIT).
