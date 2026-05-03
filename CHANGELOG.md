@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.2 / 2026-05-03
+
+* Improve generated commit message ([#131] by [mvz])
+
+[#131]: https://github.com/mvz/keep_up/pull/131
+
 ## 0.12.1 / 2026-01-30
 
 * Support Ruby 4.0 and loosen Bundler dependency ([#128] by [mvz])
