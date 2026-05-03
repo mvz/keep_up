@@ -36,7 +36,7 @@ Feature: Correct feedback
     When I run `git log`
     Then the stdout should contain:
       """
-      Update bar to version 1.1.0
+      Update bar dependency to version 1.1.0
       """
 
   Scenario: Gem not updated at all

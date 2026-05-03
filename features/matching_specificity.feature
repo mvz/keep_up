@@ -35,7 +35,7 @@ Feature: Matching specificity correctly
     When I run `git log`
     Then the stdout should contain:
       """
-      Update foo to version 2.1
+      Update foo dependency to version 2.1
       """
 
   Scenario: Matching specificity while updating a Gemfile
@@ -72,9 +72,9 @@ Feature: Matching specificity correctly
     When I run `git log`
     Then the stdout should contain:
       """
-      Update foo to version 2.1
+      Update foo dependency to version 2.1
       """
     And the stdout should not contain:
       """
-      Update foo to version 2.1.1
+      Update foo dependency to version 2.1.1
       """

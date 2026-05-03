@@ -8,7 +8,7 @@ module KeepUp
     end
 
     def commit_changes(dependency)
-      message = "Update #{dependency.name} to version #{dependency.version}"
+      message = "Update #{dependency.name} dependency to version #{dependency.version}"
       @runner.run "git commit -am '#{message}'"
     end
 

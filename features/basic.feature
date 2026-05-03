@@ -64,5 +64,5 @@ Feature: Update bundle
     When I run `git log`
     Then the stdout should contain:
       """
-      Update foo to version 1.0.1
+      Update foo dependency to version 1.0.1
       """
