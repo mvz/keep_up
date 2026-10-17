@@ -23,6 +23,7 @@ Feature: Update bundle
     Then the stdout from "keep_up" should contain exactly:
       """
       All done!
+
       """
     And the file "Gemfile.lock" should contain:
       """
